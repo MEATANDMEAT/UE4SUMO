@@ -20,8 +20,8 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::Move, MoveTimer, true, MoveTimer+1.0f);
-	posX = GetActorLocation().X;
-	posY = GetActorLocation().Y;
+	posX = GetActorLocation().X / 100.f;
+	posY = GetActorLocation().Y / 100.f;
 }
 
 // Called every frame
@@ -33,8 +33,7 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::Move(){
 	if (!bMoving) {
-	bool test{false};
-		test = (Trace())?true:false;
+	bool test = (Trace())?true:false;
 		do {
 		char r = rand()%4;
 		switch (r){
@@ -65,27 +64,24 @@ void AEnemy::Move(){
 	}
 
 	else {
-			FVector newLocation (100 * posX, 100 * posY, 100);
-			SetActorLocation(newLocation);
+			SetActorLocation(FVector(100*posX, 100*posY, 100));
 		bMoving = false;
 	}
 }
 
 bool AEnemy::Trace(){
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-	TraceParams.bTraceComplex = true;
-	TraceParams.bReturnPhysicalMaterial = false;
 
-	FHitResult HitOut = FHitResult(ForceInit);
+	FHitResult HitOut = FHitResult(0);
 	FVector End;
 	End.X = posX * 100.f;
 	End.Y = posY * 100.f;
 	End.Z = 100.f;
-	GetWorld()->LineTraceSingleByChannel(
+	GetWorld()->LineTraceSingleByObjectType(
 	HitOut,
 	GetActorLocation(),
 	End,
-	ECC_Pawn,
+	ECC_WorldStatic,
 	TraceParams
 	);
 
