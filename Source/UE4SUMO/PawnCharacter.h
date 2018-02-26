@@ -4,7 +4,9 @@
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
-#include "Runtime/Engine/Classes/Components/TextRenderComponent.h"
+#include "Runtime/Engine/Classes/Components/InputComponent.h"
+#include "Runtime/Engine/Public/TimerManager.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PawnCharacter.generated.h"
@@ -50,5 +52,5 @@ private:
 	void MoveDown();
 	void MoveRight();
 	void MoveLeft();
-
+	bool RayTrace(FVector myVector);
 };

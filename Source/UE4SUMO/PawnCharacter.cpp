@@ -1,19 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "PawnCharacter.h"
-#include "Runtime/Engine/Classes/Components/SphereComponent.h"
-#include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
-#include "Runtime/Engine/Classes/Camera/CameraComponent.h"
-#include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
-#include "Runtime/Engine/Classes/Components/InputComponent.h"
-#include "Runtime/Engine/Public/TimerManager.h"
-#include "Runtime/Engine/Classes/Engine/World.h"
 #define OUT
 
 // Sets default values
 APawnCharacter::APawnCharacter()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	// We initialize our Mesh and Root components
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -45,16 +38,13 @@ void APawnCharacter::BeginPlay()
 void APawnCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	GetActorEyesViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
-	//UE_LOG(LogTemp, Warning, TEXT("Playing is looking at %s, Rotation is at %s"), *PlayerViewPointLocation.ToString(),*PlayerViewPointRotation.Vector().ToString())
-
 }
 
 // Called to bind functionality to input
 void APawnCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// We set up movement for our pawn actor
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	InputComponent->BindAction("MoveUp", IE_Pressed, this, &APawnCharacter::MoveUp);
 	InputComponent->BindAction("MoveDown", IE_Pressed, this, &APawnCharacter::MoveDown);
 	InputComponent->BindAction("MoveRight", IE_Pressed, this, &APawnCharacter::MoveRight);
@@ -63,14 +53,16 @@ void APawnCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void APawnCharacter::Movement()
 {
 	// We set PlayerCanMove to true since we want the player to be able to move at the start
-PlayerCanMove = true;
+	PlayerCanMove = true;
 UE_LOG(LogTemp,Error,TEXT("Player can move!"))
 }
 void APawnCharacter::MoveUp()
 {
 	// We check if PlayerCanMove is true, if it is we move the actor and then set PlayerCanMove to false
-	if (PlayerCanMove == true)
+	// We create 
+	if (PlayerCanMove == true && !RayTrace(FVector(100.f, 0.f, 0.f)))
 	{
+		// Add animation here
 		AddActorLocalOffset(MOVE_UP, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_UP"))
 		PlayerCanMove = false;
@@ -78,7 +70,7 @@ void APawnCharacter::MoveUp()
 }
 void APawnCharacter::MoveDown()
 {
-	if (PlayerCanMove == true)
+	if (PlayerCanMove == true && !RayTrace(FVector(-100.f, 0.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_DOWN, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_DOWN"))
@@ -87,7 +79,7 @@ void APawnCharacter::MoveDown()
 }
 void APawnCharacter::MoveRight()
 {
-	if (PlayerCanMove == true)
+	if (PlayerCanMove == true && !RayTrace(FVector(0.f, -100.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_RIGHT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_RIGHT"))
@@ -96,10 +88,27 @@ void APawnCharacter::MoveRight()
 }
 void APawnCharacter::MoveLeft()
 {
-	if (PlayerCanMove == true)
+	if (PlayerCanMove == true && !RayTrace(FVector(0.f, 100.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_LEFT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_LEFT"))
 		PlayerCanMove = false;
 	}
+}
+bool APawnCharacter::RayTrace(FVector myVector) {
+	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
+	TraceParams.bTraceComplex = true;
+	TraceParams.bReturnPhysicalMaterial = false;
+	FHitResult HitOut = FHitResult(ForceInit);
+	FVector End = GetActorLocation() + myVector;
+	GetWorld()->LineTraceSingleByObjectType(
+		HitOut,
+		GetActorLocation(),
+		End,
+		ECC_PhysicsBody,
+		TraceParams
+	);
+	if (HitOut.IsValidBlockingHit()) { UE_LOG(LogTemp, Warning, TEXT("HIT")); }
+	else { UE_LOG(LogTemp, Warning, TEXT("MISS")); }
+	return (HitOut.IsValidBlockingHit());
 }
