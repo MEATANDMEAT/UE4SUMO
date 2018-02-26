@@ -52,5 +52,5 @@ private:
 	void MoveDown();
 	void MoveRight();
 	void MoveLeft();
-	bool RayTrace(FVector myVector);
+	bool Object(FVector myVector);
 };

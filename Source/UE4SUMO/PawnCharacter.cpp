@@ -15,7 +15,7 @@ APawnCharacter::APawnCharacter()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->RelativeRotation = FRotator(-45.f, 0.f, 0.f);
-	SpringArm->TargetArmLength = 900.0f;
+	SpringArm->TargetArmLength = 500.0f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 8.0f;
 
@@ -32,6 +32,7 @@ void APawnCharacter::BeginPlay()
 	Super::BeginPlay();
 	// Each 0.8 second, we set PlayerCanMove to true
 	GetWorldTimerManager().SetTimer(MovementHandle, this, &APawnCharacter::Movement, 0.8f,true);
+	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 300.f));
 }
 
 // Called every frame
@@ -58,9 +59,8 @@ UE_LOG(LogTemp,Error,TEXT("Player can move!"))
 }
 void APawnCharacter::MoveUp()
 {
-	// We check if PlayerCanMove is true, if it is we move the actor and then set PlayerCanMove to false
-	// We create 
-	if (PlayerCanMove == true && !RayTrace(FVector(100.f, 0.f, 0.f)))
+	// We check if PlayerCanMove and if there is an object in front,  
+	if (PlayerCanMove && !Object(FVector(100.f, 0.f, 0.f)))
 	{
 		// Add animation here
 		AddActorLocalOffset(MOVE_UP, true);
@@ -70,7 +70,7 @@ void APawnCharacter::MoveUp()
 }
 void APawnCharacter::MoveDown()
 {
-	if (PlayerCanMove == true && !RayTrace(FVector(-100.f, 0.f, 0.f)))
+	if (PlayerCanMove && !Object(FVector(-100.f, 0.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_DOWN, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_DOWN"))
@@ -79,7 +79,7 @@ void APawnCharacter::MoveDown()
 }
 void APawnCharacter::MoveRight()
 {
-	if (PlayerCanMove == true && !RayTrace(FVector(0.f, -100.f, 0.f)))
+	if (PlayerCanMove && !Object(FVector(0.f, -100.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_RIGHT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_RIGHT"))
@@ -88,19 +88,18 @@ void APawnCharacter::MoveRight()
 }
 void APawnCharacter::MoveLeft()
 {
-	if (PlayerCanMove == true && !RayTrace(FVector(0.f, 100.f, 0.f)))
+	if (PlayerCanMove && !Object(FVector(0.f, 100.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_LEFT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_LEFT"))
 		PlayerCanMove = false;
 	}
 }
-bool APawnCharacter::RayTrace(FVector myVector) {
+/// Ray Trace to see if Player Pawn collides with a PhysicsBody. 
+bool APawnCharacter::Object(FVector Direction) {
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-	TraceParams.bTraceComplex = true;
-	TraceParams.bReturnPhysicalMaterial = false;
-	FHitResult HitOut = FHitResult(ForceInit);
-	FVector End = GetActorLocation() + myVector;
+	FHitResult HitOut = FHitResult(0);
+	FVector End = GetActorLocation() + Direction;
 	GetWorld()->LineTraceSingleByObjectType(
 		HitOut,
 		GetActorLocation(),
@@ -108,7 +107,7 @@ bool APawnCharacter::RayTrace(FVector myVector) {
 		ECC_PhysicsBody,
 		TraceParams
 	);
-	if (HitOut.IsValidBlockingHit()) { UE_LOG(LogTemp, Warning, TEXT("HIT")); }
-	else { UE_LOG(LogTemp, Warning, TEXT("MISS")); }
+	if (HitOut.IsValidBlockingHit()) { UE_LOG(LogTemp, Warning, TEXT("PLAYER_COLLIDING")); }
+	else { UE_LOG(LogTemp, Warning, TEXT("PLAYER_NOT_COLLIDING")); }
 	return (HitOut.IsValidBlockingHit());
 }
