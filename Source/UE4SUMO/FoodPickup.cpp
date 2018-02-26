@@ -40,9 +40,8 @@ TArray<UStaticMeshComponent*> Comps;
  if(Comps.Num() > 0)
  {
      UStaticMeshComponent* FoundComp = Comps[0];
-        Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale()+FVector(0.1f, 0.1f, 0.1f));
+        Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale()+SizeIncrease);
  }
-//SetActorScale3D((OtherActor->GetActorScale3D() + FVector(0.5f, 0.5f, 0.5f)));
 	Destroy();
 }
 

@@ -60,7 +60,7 @@ UE_LOG(LogTemp,Error,TEXT("Player can move!"))
 void APawnCharacter::MoveUp()
 {
 	// We check if PlayerCanMove and if there is an object in front,  
-	if (PlayerCanMove && !Object(FVector(100.f, 0.f, 0.f)))
+	if (PlayerCanMove && !Object(FVector(0.f, 100.f, 0.f)))
 	{
 		// Add animation here
 		AddActorLocalOffset(MOVE_UP, true);
@@ -70,7 +70,7 @@ void APawnCharacter::MoveUp()
 }
 void APawnCharacter::MoveDown()
 {
-	if (PlayerCanMove && !Object(FVector(-100.f, 0.f, 0.f)))
+	if (PlayerCanMove && !Object(FVector(0.f, -100.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_DOWN, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_DOWN"))
@@ -79,7 +79,7 @@ void APawnCharacter::MoveDown()
 }
 void APawnCharacter::MoveRight()
 {
-	if (PlayerCanMove && !Object(FVector(0.f, -100.f, 0.f)))
+	if (PlayerCanMove && !Object(FVector(100.f, 0.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_RIGHT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_RIGHT"))
@@ -88,14 +88,14 @@ void APawnCharacter::MoveRight()
 }
 void APawnCharacter::MoveLeft()
 {
-	if (PlayerCanMove && !Object(FVector(0.f, 100.f, 0.f)))
+	if (PlayerCanMove && !Object(FVector(-100.f, 0.f, 0.f)))
 	{
 		AddActorLocalOffset(MOVE_LEFT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_LEFT"))
 		PlayerCanMove = false;
 	}
 }
-/// Ray Trace to see if Player Pawn collides with a PhysicsBody. 
+/// Ray Trace to see if Player Pawn collides with static geometry. 
 bool APawnCharacter::Object(FVector Direction) {
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
 	FHitResult HitOut = FHitResult(0);
@@ -104,7 +104,7 @@ bool APawnCharacter::Object(FVector Direction) {
 		HitOut,
 		GetActorLocation(),
 		End,
-		ECC_PhysicsBody,
+		ECC_WorldStatic,
 		TraceParams
 	);
 	if (HitOut.IsValidBlockingHit()) { UE_LOG(LogTemp, Warning, TEXT("PLAYER_COLLIDING")); }
