@@ -34,6 +34,9 @@ public:
 	USceneComponent* FoodRoot;
 	UPROPERTY(EditAnywhere)
     UShapeComponent* FoodBox;
+
+	UPROPERTY(EditAnywhere)
+    float SizeIncrease = 0.1f;
 private:
 
 	UFUNCTION()

@@ -7,7 +7,7 @@
 AFoodPickup::AFoodPickup()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	FoodRoot = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	RootComponent = FoodRoot;
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FoodMesh"));
@@ -34,7 +34,14 @@ void AFoodPickup::Tick(float DeltaTime)
 
 void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	OtherActor->SetActorScale3D((OtherActor->GetActorScale3D() + FVector(0.5f, 0.5f, 0.5f)));
+TArray<UStaticMeshComponent*> Comps;
+ 
+ OtherActor->GetComponents(Comps);
+ if(Comps.Num() > 0)
+ {
+     UStaticMeshComponent* FoundComp = Comps[0];
+        Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale()+SizeIncrease);
+ }
 	Destroy();
 }
 
