@@ -4,6 +4,7 @@
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/TextRenderComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PawnCharacter.generated.h"
@@ -35,15 +36,19 @@ private:
 	UStaticMeshComponent* MeshComponent;
 	USpringArmComponent* SpringArm;
 	UCameraComponent* Camera;
+	FTimerHandle MovementHandle;
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
 	FVector MOVE_UP = FVector(100.f, 0.f, 0.f);
 	FVector MOVE_DOWN = FVector(-100.f, 0.f, 0.f);
 	FVector MOVE_RIGHT = FVector(0.f, -100.f, 0.f);
 	FVector MOVE_LEFT = FVector(0.f, 100.f, 0.f);
-	bool Pressed = false;
+	float Reach = 100.f;
+	bool PlayerCanMove;
+	void Movement();
 	void MoveUp();
 	void MoveDown();
 	void MoveRight();
 	void MoveLeft();
-	void Release();
 
 };
