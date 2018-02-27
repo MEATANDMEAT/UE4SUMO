@@ -100,8 +100,14 @@ bool AEnemy::Trace()
 }
 void AEnemy::OnEnemyHitPawn(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (OtherActor->GetName().Contains(TEXT("PawnCharacter")))
-	{
-		OtherActor->Destroy();
+	if (OtherActor->GetName().Contains(TEXT("PawnCharacter"))) {
+		TArray<UStaticMeshComponent*> Comps;
+		OtherActor->GetComponents(Comps);
+		if (Comps.Num() > 0) {
+			UStaticMeshComponent* FoundComp = Comps[0];
+		}
+		FVector Size = Comps[0]->GetComponentScale();
+		if (Size.X<1.2) OtherActor->Destroy();
+		else Destroy();
 	}
 }

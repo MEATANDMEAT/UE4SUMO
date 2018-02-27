@@ -82,7 +82,7 @@ void APawnCharacter::MoveRight()
 	if (PlayerCanMove && !Object(MOVE_RIGHT))
 	{
 		AddActorLocalOffset(MOVE_RIGHT, true);
-		UE_LOG(LogTemp, Warning, TEXT("MOVE_RIGHT"))
+		UE_LOG(LogTemp, Warning, TEXT("MOVE_LEFT"))
 		PlayerCanMove = false;
 	}
 }
@@ -91,7 +91,7 @@ void APawnCharacter::MoveLeft()
 	if (PlayerCanMove && !Object(MOVE_LEFT))
 	{
 		AddActorLocalOffset(MOVE_LEFT, true);
-		UE_LOG(LogTemp, Warning, TEXT("MOVE_LEFT"))
+		UE_LOG(LogTemp, Warning, TEXT("MOVE_RIGHT"))
 		PlayerCanMove = false;
 	}
 }
@@ -112,4 +112,8 @@ bool APawnCharacter::Object(FVector Direction)
 	if (HitOut.IsValidBlockingHit()) { UE_LOG(LogTemp, Warning, TEXT("PLAYER_COLLIDING")); }
 	else { UE_LOG(LogTemp, Warning, TEXT("PLAYER_NOT_COLLIDING")); }
 	return (HitOut.IsValidBlockingHit());
+}
+
+void APawnCharacter::Destroyed(){
+	UE_LOG(LogTemp, Warning, TEXT("You got caught by a store employee--Game Over!"));
 }
