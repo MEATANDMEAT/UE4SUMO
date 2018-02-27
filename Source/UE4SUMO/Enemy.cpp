@@ -73,11 +73,10 @@ void AEnemy::Move()
 bool AEnemy::Trace()
 {
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-	FHitResult HitOut = FHitResult(0);
 	FVector End;
 	End.X = posX * 100.f;
 	End.Y = posY * 100.f;
-	End.Z = 100.f;
+	End.Z = 100.f;	
 	GetWorld()->LineTraceSingleByObjectType(
 	HitOut,
 	GetActorLocation(),

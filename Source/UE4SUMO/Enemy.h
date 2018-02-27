@@ -35,6 +35,7 @@ private:
     UPROPERTY(EditAnywhere)
     float MoveTimer = 0.3;
 	APawn* Pawn;
+	FHitResult HitOut = FHitResult(0);
 	int posX;
 	int posY;
     bool bMoving = false;
