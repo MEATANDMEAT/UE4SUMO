@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "PawnCharacter.h"
 #include "Enemy.h"
 
 
@@ -33,10 +32,6 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::Move()
 {
-	if (LookForPlayer())
-	{
-		UE_LOG(LogTemp,Warning,TEXT("FOUND_PAWN"))
-	} else UE_LOG(LogTemp, Warning, TEXT("SEARCHING_FOR_PAWN"))
 	if (!bMoving) {
 	bool test = (Trace())?true:false;
 		do {
@@ -91,22 +86,4 @@ bool AEnemy::Trace()
 	TraceParams
 	);
 	return HitOut.bBlockingHit;
-}
-
-bool AEnemy::LookForPlayer() 
-{
-	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-
-	FHitResult HitOut = FHitResult(0);
-	FVector End;
-	End.X = posX * 100.f;
-	End.Y = posY * 100.f;
-	GetWorld()->LineTraceSingleByObjectType(
-		HitOut,
-		GetActorLocation(),
-		End,
-		ECC_Pawn,
-		TraceParams
-	);
-	return (HitOut.IsValidBlockingHit());
 }

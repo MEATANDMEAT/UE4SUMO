@@ -38,8 +38,6 @@ private:
 	int posX;
 	int posY;
     bool bMoving = false;
-
 	void Move();
 	bool Trace();
-	bool LookForPlayer();
 };
