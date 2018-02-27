@@ -96,8 +96,10 @@ void APawnCharacter::MoveLeft()
 	}
 }
 /// Ray Trace to see if Player Pawn collides with static geometry. 
-bool APawnCharacter::Object(FVector Direction) {
+bool APawnCharacter::Object(FVector Direction) 
+{
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
+
 	FHitResult HitOut = FHitResult(0);
 	FVector End = GetActorLocation() + Direction;
 	GetWorld()->LineTraceSingleByObjectType(
