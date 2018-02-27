@@ -31,8 +31,8 @@ void APawnCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	// Each 0.8 second, we set PlayerCanMove to true
-	GetWorldTimerManager().SetTimer(MovementHandle, this, &APawnCharacter::Movement, 0.8f,true);
-	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 500.f));
+	GetWorldTimerManager().SetTimer(MovementHandle, this, &APawnCharacter::Movement, 0.1f,true);
+	SpringArm->SetRelativeLocation(FVector(-200.f, -200.f, 500.f));
 }
 
 // Called every frame
