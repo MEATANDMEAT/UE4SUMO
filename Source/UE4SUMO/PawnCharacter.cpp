@@ -14,8 +14,8 @@ APawnCharacter::APawnCharacter()
 	// We want to use a spring arm to create a natual motion for our camera.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->RelativeRotation = FRotator(-45.f, 0.f, 0.f);
-	SpringArm->TargetArmLength = 500.0f;
+	SpringArm->RelativeRotation = FRotator(-45.f, 45.f, 0.f);
+	SpringArm->TargetArmLength = 200.0f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 8.0f;
 
@@ -32,7 +32,7 @@ void APawnCharacter::BeginPlay()
 	Super::BeginPlay();
 	// Each 0.8 second, we set PlayerCanMove to true
 	GetWorldTimerManager().SetTimer(MovementHandle, this, &APawnCharacter::Movement, 0.8f,true);
-	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 300.f));
+	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 500.f));
 }
 
 // Called every frame
@@ -101,11 +101,10 @@ bool APawnCharacter::Object(FVector Direction)
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
 
 	FHitResult HitOut = FHitResult(0);
-	FVector End = GetActorLocation() + Direction;
 	GetWorld()->LineTraceSingleByObjectType(
 		HitOut,
 		GetActorLocation(),
-		End,
+		GetActorLocation() + Direction,
 		ECC_WorldStatic,
 		TraceParams
 	);
