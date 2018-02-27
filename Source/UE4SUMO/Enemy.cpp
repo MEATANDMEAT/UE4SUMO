@@ -64,7 +64,7 @@ void AEnemy::Move()
 	}
 	else 
 	{
-		SetActorLocation(FVector(100*posX, 100*posY, 100));
+		SetActorLocation(FVector(100*posX.f, 100*posY, 100));
 		bMoving = false;
 	}
 	
