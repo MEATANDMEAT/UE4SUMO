@@ -1,70 +1,67 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <None Include="..\..\UE4SUMO.uproject" />
-    <Filter Include="Source">
-      <UniqueIdentifier>{AC304FED-7DFB-412C-AFA0-B547BFA995E4}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Source\UE4SUMO.Target.cs">
-      <Filter>Source</Filter>
-    </None>
-    <None Include="..\..\Source\UE4SUMOEditor.Target.cs">
-      <Filter>Source</Filter>
-    </None>
-    <Filter Include="Config">
-      <UniqueIdentifier>{1E395CAE-9CBB-4B77-A544-5F6506F092B9}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Config\DefaultEditor.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultEngine.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultGame.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultInput.ini">
-      <Filter>Config</Filter>
-    </None>
-    <Filter Include="Source\UE4SUMO">
-      <UniqueIdentifier>{38C25101-7AE3-4185-89E7-2B170E9FDFA0}</UniqueIdentifier>
-    </Filter>
-    <ClCompile Include="..\..\Source\UE4SUMO\FoodPickup.cpp">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\UE4SUMO\FoodPickup.h">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\UE4SUMO\PawnCharacter.cpp">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\UE4SUMO\PawnCharacter.h">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClInclude>
-    <None Include="..\..\Source\UE4SUMO\UE4SUMO.Build.cs">
-      <Filter>Source\UE4SUMO</Filter>
-    </None>
-    <ClCompile Include="..\..\Source\UE4SUMO\UE4SUMO.cpp">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\UE4SUMO\UE4SUMO.h">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\UE4SUMO\UE4SUMOGameModeBase.cpp">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\UE4SUMO\UE4SUMOGameModeBase.h">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\UE4SUMO\Enemy.cpp">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\UE4SUMO\Enemy.h">
-      <Filter>Source\UE4SUMO</Filter>
-    </ClInclude>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\UE4SUMO.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{DDD5125D-39A9-45C3-8AE8-5CB0D9D4FBE0}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\UE4SUMO.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\UE4SUMOEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{7CA40C22-352C-40B5-A8F1-8747C59A502B}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEditor.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultInput.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\UE4SUMO">
+			<UniqueIdentifier>{19A7D68C-6FAA-4581-8C2A-2CB3514C863D}</UniqueIdentifier>
+		</Filter>
+		<ClCompile Include="..\..\Source\UE4SUMO\Enemy.cpp">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\UE4SUMO\Enemy.h">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\UE4SUMO\FoodPickup.cpp">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\UE4SUMO\FoodPickup.h">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\UE4SUMO\PawnCharacter.cpp">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\UE4SUMO\PawnCharacter.h">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClInclude >
+		<None Include="..\..\Source\UE4SUMO\UE4SUMO.Build.cs">
+			<Filter>Source\UE4SUMO</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\UE4SUMO\UE4SUMO.cpp">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\UE4SUMO\UE4SUMO.h">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\UE4SUMO\UE4SUMOGameModeBase.cpp">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\UE4SUMO\UE4SUMOGameModeBase.h">
+			<Filter>Source\UE4SUMO</Filter>
+		</ClInclude >
+	</ItemGroup>
 </Project>

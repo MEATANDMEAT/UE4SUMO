@@ -27,20 +27,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-int posX;
-int posY;
+private:
+	FTimerHandle MemberTimerHandle;
 
-UPROPERTY(EditAnywhere, Category = "Mesh")
-UStaticMeshComponent* MeshComponent;
+    UPROPERTY(EditAnywhere, Category = "Mesh")
+    UStaticMeshComponent* MeshComponent;  
+    UPROPERTY(EditAnywhere)
+    float MoveTimer = 0.3;
+	APawn* Pawn;
+	int posX;
+	int posY;
+    bool bMoving = false;
 
-UPROPERTY(EditAnywhere)
-float MoveTimer = 0.3;
-
-void Move();
-
-bool Trace();
-
-bool bMoving = false;
-
-FTimerHandle MemberTimerHandle;
+	void Move();
+	bool Trace();
+	bool LookForPlayer();
 };
