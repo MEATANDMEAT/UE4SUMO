@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Enemy.h"
 
 
@@ -31,14 +30,9 @@ void AEnemy::Tick(float DeltaTime)
 
 }
 
-void AEnemy::Move(){
+void AEnemy::Move()
+{
 	if (!bMoving) {
-		Trace(); 
-	if (bSeesPlayer){
-		if (GetActorLocation().X > playerDistance) posX++;
-		if (GetActorLocation().Y > playerDistance) posY++;
-	}
-	else {
 	bool test = (Trace())?true:false;
 		do {
 		char r = rand()%4;
@@ -65,25 +59,24 @@ void AEnemy::Move(){
 			break;
 		}
 		} while(test);
-		}
 
 		bMoving = true;
 	}
-
-	else {
-			SetActorLocation(FVector(100*posX, 100*posY, 100));
+	else 
+	{
+		SetActorLocation(FVector(100*posX, 100*posY, 100));
 		bMoving = false;
 	}
+	
 }
 
-bool AEnemy::Trace(){
+bool AEnemy::Trace()
+{
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-
-	FHitResult HitOut = FHitResult(0);
 	FVector End;
-	End.X = posX * 1000.f;
-	End.Y = posY * 1000.f;
-	End.Z = 100.f;
+	End.X = posX * 100.f;
+	End.Y = posY * 100.f;
+	End.Z = 100.f;	
 	GetWorld()->LineTraceSingleByObjectType(
 	HitOut,
 	GetActorLocation(),
@@ -91,12 +84,5 @@ bool AEnemy::Trace(){
 	ECC_WorldStatic,
 	TraceParams
 	);
-
-	//if(HitOut.IsValidBlockingHit())
-	//if (HitOut.Actor->HasActivePawnControlCameraComponent()){ bSeesPlayer=true; playerDistance = HitOut.Distance;}
-	
-	//else bSeesPlayer=false;
-
-	return HitOut.IsValidBlockingHit();
-	}
+	return HitOut.bBlockingHit;
 }
