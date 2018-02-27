@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Runtime/Engine/Public/TimerManager.h"
+#include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Classes/Engine/World.h"
 
 #include "Enemy.generated.h"
@@ -31,14 +33,20 @@ private:
 	FTimerHandle MemberTimerHandle;
 
     UPROPERTY(EditAnywhere, Category = "Mesh")
-    UStaticMeshComponent* MeshComponent;  
+    UStaticMeshComponent* EnemyMesh;  
     UPROPERTY(EditAnywhere)
     float MoveTimer = 0.3;
+	UPROPERTY(EditAnywhere)
+	UShapeComponent* EnemyBox;
 	APawn* Pawn;
 	FHitResult HitOut = FHitResult(0);
+	FHitResult PawnHit = FHitResult(0);
 	int posX;
 	int posY;
     bool bMoving = false;
 	void Move();
 	bool Trace();
+
+	UFUNCTION()
+		void OnEnemyHitPawn(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 };

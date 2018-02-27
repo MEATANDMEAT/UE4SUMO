@@ -7,11 +7,16 @@ AEnemy::AEnemy()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent")); 
+	EnemyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent")); 
+	//EnemyMesh->SetupAttachment(RootComponent);
+	EnemyMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
-	MeshComponent->SetupAttachment(RootComponent);
+	EnemyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("EnemyBox"));
+	EnemyBox->SetWorldScale3D(FVector(1.5f, 1.5f, 2.5f));
+	EnemyBox->bGenerateOverlapEvents = true;
+	EnemyBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnEnemyHitPawn);
+	EnemyBox->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +37,14 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::Move()
 {
+	/*if (LookForPlayer())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("COLLIDING_PLAYER"));
+	} 
+	else if (Trace())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("COLLIDING_WALL"))
+	}*/
 	if (!bMoving) {
 	bool test = (Trace())?true:false;
 		do {
@@ -67,7 +80,6 @@ void AEnemy::Move()
 		SetActorLocation(FVector(100*posX, 100*posY, 100));
 		bMoving = false;
 	}
-	
 }
 
 bool AEnemy::Trace()
@@ -85,4 +97,11 @@ bool AEnemy::Trace()
 	TraceParams
 	);
 	return HitOut.bBlockingHit;
+}
+void AEnemy::OnEnemyHitPawn(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (OtherActor->GetName().Contains(TEXT("PawnCharacter")))
+	{
+		OtherActor->Destroy();
+	}
 }

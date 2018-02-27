@@ -14,8 +14,8 @@ APawnCharacter::APawnCharacter()
 	// We want to use a spring arm to create a natual motion for our camera.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->RelativeRotation = FRotator(-45.f, 0.f, 0.f);
-	SpringArm->TargetArmLength = 400.0f;
+	SpringArm->RelativeRotation = FRotator(-35.f, 0.f, 0.f);
+	SpringArm->TargetArmLength = 500.0f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 8.0f;
 
