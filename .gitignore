@@ -51,11 +51,7 @@ SourceArt/**/*.tga
 Binaries/*
 
 # Intermediate
-Intermediate/AssetRegistryCache/*
-Intermediate/Build/*
-Intermediate/Config/*
-Intermediate/ReimportCache/*
-Intermediate/CachedAssetRegistry.bin
+Intermediate/*
 
 # Builds
 Build/*
