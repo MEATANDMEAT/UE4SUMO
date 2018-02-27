@@ -14,8 +14,8 @@ APawnCharacter::APawnCharacter()
 	// We want to use a spring arm to create a natual motion for our camera.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->RelativeRotation = FRotator(-45.f, 45.f, 0.f);
-	SpringArm->TargetArmLength = 200.0f;
+	SpringArm->RelativeRotation = FRotator(-45.f, 0.f, 0.f);
+	SpringArm->TargetArmLength = 400.0f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 8.0f;
 
@@ -60,7 +60,7 @@ UE_LOG(LogTemp,Error,TEXT("Player can move!"))
 void APawnCharacter::MoveUp()
 {
 	// We check if PlayerCanMove and if there is an object in front,  
-	if (PlayerCanMove && !Object(FVector(0.f, 100.f, 0.f)))
+	if (PlayerCanMove && !Object(MOVE_UP))
 	{
 		// Add animation here
 		AddActorLocalOffset(MOVE_UP, true);
@@ -70,7 +70,7 @@ void APawnCharacter::MoveUp()
 }
 void APawnCharacter::MoveDown()
 {
-	if (PlayerCanMove && !Object(FVector(0.f, -100.f, 0.f)))
+	if (PlayerCanMove && !Object(MOVE_DOWN))
 	{
 		AddActorLocalOffset(MOVE_DOWN, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_DOWN"))
@@ -79,7 +79,7 @@ void APawnCharacter::MoveDown()
 }
 void APawnCharacter::MoveRight()
 {
-	if (PlayerCanMove && !Object(FVector(100.f, 0.f, 0.f)))
+	if (PlayerCanMove && !Object(MOVE_RIGHT))
 	{
 		AddActorLocalOffset(MOVE_RIGHT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_RIGHT"))
@@ -88,7 +88,7 @@ void APawnCharacter::MoveRight()
 }
 void APawnCharacter::MoveLeft()
 {
-	if (PlayerCanMove && !Object(FVector(-100.f, 0.f, 0.f)))
+	if (PlayerCanMove && !Object(MOVE_LEFT))
 	{
 		AddActorLocalOffset(MOVE_LEFT, true);
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_LEFT"))
@@ -96,8 +96,10 @@ void APawnCharacter::MoveLeft()
 	}
 }
 /// Ray Trace to see if Player Pawn collides with static geometry. 
-bool APawnCharacter::Object(FVector Direction) {
+bool APawnCharacter::Object(FVector Direction) 
+{
 	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
+
 	FHitResult HitOut = FHitResult(0);
 	FVector End = GetActorLocation() + Direction;
 	GetWorld()->LineTraceSingleByObjectType(
