@@ -30,7 +30,6 @@ public:
 	// Set up static mesh for our pickup
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* FoodMesh;
-	UPROPERTY(EditAnywhere)
 	USceneComponent* FoodRoot;
 	UPROPERTY(EditAnywhere)
     UShapeComponent* FoodBox;
