@@ -97,8 +97,6 @@ bool AEnemy::Trace(){
 	
 	//else bSeesPlayer=false;
 
-	if (HitOut.IsValidBlockingHit()){
-	if (HitOut.Distance<100) return true;
-	else return false;
+	return HitOut.IsValidBlockingHit();
 	}
 }
