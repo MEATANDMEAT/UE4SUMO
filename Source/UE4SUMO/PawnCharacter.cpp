@@ -14,8 +14,8 @@ APawnCharacter::APawnCharacter()
 	// We want to use a spring arm to create a natual motion for our camera.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->RelativeRotation = FRotator(-35.f, 0.f, 0.f);
-	SpringArm->TargetArmLength = 500.0f;
+	//SpringArm->RelativeRotation = FRotator(-60.f, -90.f, 0.f);
+	SpringArm->TargetArmLength = 200.0f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 8.0f;
 
@@ -32,7 +32,8 @@ void APawnCharacter::BeginPlay()
 	Super::BeginPlay();
 	// Each 0.8 second, we set PlayerCanMove to true
 	GetWorldTimerManager().SetTimer(MovementHandle, this, &APawnCharacter::Movement, 0.1f,true);
-	SpringArm->SetRelativeLocation(FVector(-200.f, -200.f, 500.f));
+	SpringArm->SetRelativeLocation(FVector(-200.f, -200.f, 400.f));
+	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.f, 45.f));
 }
 
 // Called every frame
