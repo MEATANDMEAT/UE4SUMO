@@ -92,10 +92,13 @@ bool AEnemy::Trace(){
 	TraceParams
 	);
 
-	if(HitOut.IsValidBlockingHit)
-	if (HitOut.Actor->HasActivePawnControlCameraComponent()){ bSeesPlayer=true; playerDistance = HitOut.Distance;}
+	//if(HitOut.IsValidBlockingHit())
+	//if (HitOut.Actor->HasActivePawnControlCameraComponent()){ bSeesPlayer=true; playerDistance = HitOut.Distance;}
 	
-	else bSeesPlayer=false;
+	//else bSeesPlayer=false;
 
-	return HitOut.Distance<100;
+	if (HitOut.IsValidBlockingHit()){
+	if (HitOut.Distance<100) return true;
+	else return false;
+	}
 }
