@@ -42,5 +42,9 @@ bool Trace();
 
 bool bMoving = false;
 
+bool bSeesPlayer = false;
+
+float playerDistance = 0.f;
+
 FTimerHandle MemberTimerHandle;
 };

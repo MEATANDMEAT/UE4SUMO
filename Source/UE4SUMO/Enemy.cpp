@@ -33,6 +33,12 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::Move(){
 	if (!bMoving) {
+		Trace(); 
+	if (bSeesPlayer){
+		if (GetActorLocation().X > playerDistance) posX++;
+		if (GetActorLocation().Y > playerDistance) posY++;
+	}
+	else {
 	bool test = (Trace())?true:false;
 		do {
 		char r = rand()%4;
@@ -59,6 +65,7 @@ void AEnemy::Move(){
 			break;
 		}
 		} while(test);
+		}
 
 		bMoving = true;
 	}
@@ -74,8 +81,8 @@ bool AEnemy::Trace(){
 
 	FHitResult HitOut = FHitResult(0);
 	FVector End;
-	End.X = posX * 100.f;
-	End.Y = posY * 100.f;
+	End.X = posX * 1000.f;
+	End.Y = posY * 1000.f;
 	End.Z = 100.f;
 	GetWorld()->LineTraceSingleByObjectType(
 	HitOut,
@@ -85,5 +92,10 @@ bool AEnemy::Trace(){
 	TraceParams
 	);
 
-	return HitOut.bBlockingHit;
+	if(HitOut.IsValidBlockingHit)
+	if (HitOut.Actor->HasActivePawnControlCameraComponent()){ bSeesPlayer=true; playerDistance = HitOut.Distance;}
+	
+	else bSeesPlayer=false;
+
+	return HitOut.Distance<100;
 }
