@@ -6,7 +6,7 @@
 APawnCharacter::APawnCharacter()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	// We initialize our Mesh and Root components
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -14,8 +14,8 @@ APawnCharacter::APawnCharacter()
 	// We want to use a spring arm to create a natual motion for our camera.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	//SpringArm->RelativeRotation = FRotator(-60.f, -90.f, 0.f);
-	SpringArm->TargetArmLength = 200.0f;
+	SpringArm->SetRelativeRotation (FRotator(-50.f, 45.f, 0.f));
+	SpringArm->TargetArmLength = 500.0f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 8.0f;
 
@@ -30,16 +30,16 @@ APawnCharacter::APawnCharacter()
 void APawnCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	// Each 0.8 second, we set PlayerCanMove to true
-	GetWorldTimerManager().SetTimer(MovementHandle, this, &APawnCharacter::Movement, 0.1f,true);
-	SpringArm->SetRelativeLocation(FVector(-200.f, -200.f, 400.f));
-	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.f, 45.f));
+	// Each X second, we set PlayerCanMove to true
 }
 
 // Called every frame
 void APawnCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+//	timeSinceMoved+=DeltaTime;
+//	if (timeSinceMoved > 0.3f) { PlayerCanMove = true; MOVEMENT = FVector(NULL, NULL, NULL); }
+	SetActorLocation(FMath::VInterpTo(GetActorLocation(), GetActorForwardVector(), DeltaTime, 1.33333f));
 }
 
 // Called to bind functionality to input
@@ -52,20 +52,16 @@ void APawnCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("MoveRight", IE_Pressed, this, &APawnCharacter::MoveRight);
 	InputComponent->BindAction("MoveLeft", IE_Pressed, this, &APawnCharacter::MoveLeft);
 }
-void APawnCharacter::Movement()
-{
-	// We set PlayerCanMove to true since we want the player to be able to move at the start
-	PlayerCanMove = true;
-UE_LOG(LogTemp,Error,TEXT("Player can move!"))
-}
+
 void APawnCharacter::MoveUp()
 {
 	// We check if PlayerCanMove and if there is an object in front,  
 	if (PlayerCanMove && !Object(MOVE_UP))
 	{
 		// Add animation here
-		AddActorLocalOffset(MOVE_UP, true);
+		MOVEMENT = MOVE_UP;
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_UP"))
+			timeSinceMoved = 0.f;
 		PlayerCanMove = false;
 	}
 }
@@ -73,8 +69,9 @@ void APawnCharacter::MoveDown()
 {
 	if (PlayerCanMove && !Object(MOVE_DOWN))
 	{
-		AddActorLocalOffset(MOVE_DOWN, true);
+		MOVEMENT = MOVE_DOWN;
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_DOWN"))
+			timeSinceMoved = 0.f;
 		PlayerCanMove = false;
 	}
 }
@@ -82,8 +79,9 @@ void APawnCharacter::MoveRight()
 {
 	if (PlayerCanMove && !Object(MOVE_RIGHT))
 	{
-		AddActorLocalOffset(MOVE_RIGHT, true);
+		MOVEMENT = MOVE_RIGHT;
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_LEFT"))
+			timeSinceMoved = 0.f;
 		PlayerCanMove = false;
 	}
 }
@@ -91,8 +89,9 @@ void APawnCharacter::MoveLeft()
 {
 	if (PlayerCanMove && !Object(MOVE_LEFT))
 	{
-		AddActorLocalOffset(MOVE_LEFT, true);
+		MOVEMENT = MOVE_LEFT;
 		UE_LOG(LogTemp, Warning, TEXT("MOVE_RIGHT"))
+			timeSinceMoved = 0.f;
 		PlayerCanMove = false;
 	}
 }
