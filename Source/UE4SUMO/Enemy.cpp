@@ -37,14 +37,6 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::Move()
 {
-	/*if (LookForPlayer())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("COLLIDING_PLAYER"));
-	} 
-	else if (Trace())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("COLLIDING_WALL"))
-	}*/
 	if (!bMoving) {
 	bool test = (Trace())?true:false;
 		do {

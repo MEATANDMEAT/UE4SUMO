@@ -7,10 +7,7 @@
 APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	//MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	//MeshComponent->SetupAttachment(RootComponent);
+	PrimaryActorTick.bCanEverTick = false;
 	// We want to use a spring arm to create a natual motion for our camera.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -61,23 +58,3 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 		AddMovementInput(GetActorRightVector(), MoveAmount);
 	}
 }
-
-//bool APlayerCharacter::Object(FVector myVector)
-//{
-//	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-//
-//	FHitResult HitOut = FHitResult(0);
-//	FVector End = GetActorLocation() + GetActorForwardVector()+100.f;
-//	GetWorld()->LineTraceSingleByObjectType(
-//		HitOut,
-//		GetActorLocation(),
-//		End,
-//		ECC_WorldStatic,
-//		TraceParams
-//	);
-//	if (HitOut.IsValidBlockingHit()) { UE_LOG(LogTemp, Warning, TEXT("PLAYER_COLLIDING")); }
-//	else { UE_LOG(LogTemp, Warning, TEXT("PLAYER_NOT_COLLIDING")); }
-//	return (HitOut.IsValidBlockingHit());
-//	return true;
-//}
-
