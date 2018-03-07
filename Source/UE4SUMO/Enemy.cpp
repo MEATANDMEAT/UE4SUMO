@@ -6,17 +6,17 @@
 AEnemy::AEnemy()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	EnemyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent")); 
-	//EnemyMesh->SetupAttachment(RootComponent);
-	EnemyMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	//PrimaryActorTick.bCanEverTick = false;
+	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	//EnemyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent")); 
+	////EnemyMesh->SetupAttachment(RootComponent);
+	//EnemyMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
-	EnemyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("EnemyBox"));
-	EnemyBox->SetWorldScale3D(FVector(1.5f, 1.5f, 2.5f));
-	EnemyBox->bGenerateOverlapEvents = true;
-	EnemyBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnEnemyHitPawn);
-	EnemyBox->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	//EnemyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("EnemyBox"));
+	//EnemyBox->SetWorldScale3D(FVector(1.5f, 1.5f, 2.5f));
+	//EnemyBox->bGenerateOverlapEvents = true;
+	//EnemyBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnEnemyHitPawn);
+	//EnemyBox->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
 // Called when the game starts or when spawned
