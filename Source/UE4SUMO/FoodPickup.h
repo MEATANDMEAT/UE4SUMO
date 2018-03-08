@@ -2,8 +2,10 @@
 
 #pragma once
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
-#include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/GameFramework/Pawn.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "FoodPickup.generated.h"

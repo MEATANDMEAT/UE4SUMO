@@ -8,22 +8,22 @@ APawnCharacter::APawnCharacter()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	// We initialize our Mesh and Root components
-	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	//MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	//MeshComponent->SetupAttachment(RootComponent);
-	//// We want to use a spring arm to create a natual motion for our camera.
-	//SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
-	//SpringArm->SetupAttachment(RootComponent);
-	//SpringArm->SetRelativeRotation (FRotator(-50.f, 45.f, 0.f));
-	//SpringArm->TargetArmLength = 500.0f;
-	//SpringArm->bEnableCameraLag = true;
-	//SpringArm->CameraLagSpeed = 8.0f;
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(RootComponent);
+	// We want to use a spring arm to create a natual motion for our camera.
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
+	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->SetRelativeRotation (FRotator(-50.f, 45.f, 0.f));
+	SpringArm->TargetArmLength = 500.0f;
+	SpringArm->bEnableCameraLag = true;
+	SpringArm->CameraLagSpeed = 8.0f;
 
-	//// Now we create a camera and attach to our spring arm
-	//Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
-	//Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
-	//// Last, we take control of the first default player
-	//AutoPossessPlayer = EAutoReceiveInput::Player0;
+	// Now we create a camera and attach to our spring arm
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
+	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+	// Last, we take control of the first default player
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 // Called when the game starts or when spawned

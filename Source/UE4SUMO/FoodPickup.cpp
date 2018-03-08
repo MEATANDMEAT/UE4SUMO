@@ -35,12 +35,18 @@ void AFoodPickup::Tick(float DeltaTime)
 
 void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-		//TArray<USkeletalMeshComponent*> Comps;
-		////OtherActor->GetComponents(Comps);
-		//Comps = OtherActor->GetComponentByClass;
-		//USkeletalMeshComponent* FoundComp = Comps[0];
-		//Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + SizeIncrease);
-	
+	//if (OtherActor->IsA())
+	//{
+	//	TArray<UStaticMeshComponent*> Comps;
+
+	//	OtherActor->GetComponents(Comps);
+	//	if (Comps.Num() > 0)
+	//	{
+	//		UStaticMeshComponent* FoundComp = Comps[0];
+	//		Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + SizeIncrease);
+	//	}
+	//	
+	//}
 	Destroy();
 }
 
