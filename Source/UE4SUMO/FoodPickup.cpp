@@ -11,13 +11,14 @@ AFoodPickup::AFoodPickup()
 	FoodRoot = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	RootComponent = FoodRoot;
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FoodMesh"));
-	FoodMesh->AttachToComponent(FoodRoot, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	FoodMesh->SetupAttachment(FoodRoot);
+
 
 	FoodBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FoodBox"));
 	FoodBox->SetWorldScale3D(FVector(1.f, 1.f, 1.f));
 	FoodBox->bGenerateOverlapEvents = true;
 	FoodBox->OnComponentBeginOverlap.AddDynamic(this, &AFoodPickup::OnPlayerEnterPickupBox);
-	FoodBox->AttachToComponent(FoodRoot, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	FoodBox->SetupAttachment(FoodRoot);
 }
 
 // Called when the game starts or when spawned

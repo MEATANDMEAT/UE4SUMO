@@ -9,14 +9,13 @@ AEnemy::AEnemy()
 	PrimaryActorTick.bCanEverTick = false;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	EnemyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent")); 
-	//EnemyMesh->SetupAttachment(RootComponent);
-	EnemyMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	EnemyMesh->SetupAttachment(RootComponent);
 
 	EnemyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("EnemyBox"));
 	EnemyBox->SetWorldScale3D(FVector(1.5f, 1.5f, 2.5f));
 	EnemyBox->bGenerateOverlapEvents = true;
 	EnemyBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnEnemyHitPawn);
-	EnemyBox->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	EnemyBox->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -37,14 +36,6 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::Move()
 {
-	/*if (LookForPlayer())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("COLLIDING_PLAYER"));
-	} 
-	else if (Trace())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("COLLIDING_WALL"))
-	}*/
 	if (!bMoving) {
 	bool test = (Trace())?true:false;
 		do {

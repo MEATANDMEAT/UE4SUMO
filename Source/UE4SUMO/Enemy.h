@@ -33,14 +33,12 @@ private:
 	FTimerHandle MemberTimerHandle;
 
     UPROPERTY(EditAnywhere, Category = "Mesh")
-    UStaticMeshComponent* EnemyMesh;  
+    UStaticMeshComponent* EnemyMesh = nullptr;  
     UPROPERTY(EditAnywhere)
     float MoveTimer = 0.3;
 	UPROPERTY(EditAnywhere)
-	UShapeComponent* EnemyBox;
-	APawn* Pawn;
+	UShapeComponent* EnemyBox = nullptr;
 	FHitResult HitOut = FHitResult(0);
-	FHitResult PawnHit = FHitResult(0);
 	int posX;
 	int posY;
     bool bMoving = false;
