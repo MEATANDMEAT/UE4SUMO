@@ -8,14 +8,17 @@ AEmployees_AI_Controller::AEmployees_AI_Controller()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 // Called when the game starts or when spawned
 void AEmployees_AI_Controller::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp,Warning,TEXT("This controller has now possesed: %s"), *(GetControlledEnemy->GetName()))
+	AEnemyCharacter* GetControlledEnemy = Cast<AEnemyCharacter>(GetPawn());
+	if (GetControlledEnemy != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("C++ controller has now possesed: %s"), (*GetControlledEnemy->GetName()))
+	} else UE_LOG(LogTemp, Warning, TEXT("C++ controller has not possesed anything!"), (*GetControlledEnemy->GetName()))
 }
 
 // Called every frame

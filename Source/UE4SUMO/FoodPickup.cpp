@@ -13,7 +13,6 @@ AFoodPickup::AFoodPickup()
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FoodMesh"));
 	FoodMesh->SetupAttachment(FoodRoot);
 
-
 	FoodBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FoodBox"));
 	FoodBox->SetWorldScale3D(FVector(1.f, 1.f, 1.f));
 	FoodBox->bGenerateOverlapEvents = true;
@@ -35,18 +34,20 @@ void AFoodPickup::Tick(float DeltaTime)
 
 void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	//if (OtherActor->IsA())
-	//{
-	//	TArray<UStaticMeshComponent*> Comps;
+	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	TArray<USkeletalMeshComponent*> Comps;
+	if (PlayerCharacter) {		
+		OtherActor->GetComponents(Comps);
+			if (Comps.Num() > 0)
+			{
+				USkeletalMeshComponent* FoundComp = Comps[0];
+				Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + SizeIncrease);
+			}
+		Destroy(); 
+	}
+	else {
+		// NOT A PLAYER
+	}
 
-	//	OtherActor->GetComponents(Comps);
-	//	if (Comps.Num() > 0)
-	//	{
-	//		UStaticMeshComponent* FoundComp = Comps[0];
-	//		Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + SizeIncrease);
-	//	}
-	//	
-	//}
-	Destroy();
 }
 

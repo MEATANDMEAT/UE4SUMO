@@ -30,4 +30,17 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
+void AEnemyCharacter::OnEnemyHitPlayer(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	TArray<USkeletalMeshComponent*> Comps;
+	if (PlayerCharacter) {
+		OtherActor->GetComponents(Comps);
+		if (Comps.Num() > 0) {
+			USkeletalMeshComponent* FoundComp = Comps[0];
+		}
+		FVector Size = Comps[0]->GetComponentScale();
+		if (Size.X<1.2) OtherActor->Destroy();
+		else Destroy();
+	}
+}

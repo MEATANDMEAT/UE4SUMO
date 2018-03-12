@@ -2,6 +2,7 @@
 
 #pragma once
 #include "EnemyCharacter.h"
+#include "Runtime/AIModule/Classes/BehaviorTree/BlackboardComponent.h"
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Employees_AI_Controller.generated.h"
@@ -24,7 +25,6 @@ protected:
 
 public:
 	// Is called every frame when the actor is present in the world
-	    void Tick(float DeltaTime) override;
-public:
-	AEnemyCharacter* GetControlledEnemy = Cast<AEnemyCharacter>(GetPawn());
+	   void Tick(float DeltaTime) override;
+	
 };
