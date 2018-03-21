@@ -7,9 +7,6 @@
 #include "AIController.h"
 #include "Employees_AI_Controller.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 {
