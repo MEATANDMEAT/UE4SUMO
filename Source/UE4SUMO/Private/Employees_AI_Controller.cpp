@@ -19,12 +19,12 @@ void AEmployees_AI_Controller::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("C++ controller has now possesed: %s"), (*GetControlledEnemy->GetName()))
 	} else UE_LOG(LogTemp, Warning, TEXT("C++ controller has not possesed anything!"), (*GetControlledEnemy->GetName()))
+   
 }
 
 // Called every frame
 void AEmployees_AI_Controller::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 

@@ -7,11 +7,7 @@
 AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	EnemyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FoodBox"));
-	EnemyBox->SetWorldScale3D(FVector(1.8f, 1.8f, 3.f));
-	EnemyBox->bGenerateOverlapEvents = true;
-	EnemyBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapBegin);
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -35,12 +31,12 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void AEnemyCharacter::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
-{
-	UE_LOG(LogTemp, Error, TEXT("Hit something"))
-	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	if (OtherActor != nullptr && OtherActor != this) {
-		UE_LOG(LogTemp, Error, TEXT("Hitting player!"))
-		 OtherActor->Destroy();
-	}
-}	
+//void AEnemyCharacter::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+//{
+//	UE_LOG(LogTemp, Error, TEXT("Hit something"))
+//	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+//	if (OtherActor != nullptr && OtherActor != this) {
+//		UE_LOG(LogTemp, Error, TEXT("Hitting player!"))
+//		 OtherActor->Destroy();
+//	}
+//}	
