@@ -43,6 +43,7 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 				USkeletalMeshComponent* FoundComp = Comps[0];
 				Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + SizeIncrease);
 			}
+			PlayerCharacter->Speed -= 10.f;
 		Destroy(); 
 	}
 	else {

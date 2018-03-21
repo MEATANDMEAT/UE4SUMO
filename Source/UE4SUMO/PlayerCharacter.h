@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
+#include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
+#include "FoodPickup.h"
+#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -32,7 +35,10 @@ public:
 
     void MoveRight(float MoveAmount);
 
-	//bool Object(FVector myVector);
+	void Run(float RunSpeed);
+
+	UPROPERTY(EditAnywhere)
+	float Speed = 300.f;
 private:
 	UPROPERTY(EditAnywhere)
 		FTransform CameraTransform;

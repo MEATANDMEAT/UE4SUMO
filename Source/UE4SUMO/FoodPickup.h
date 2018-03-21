@@ -4,6 +4,7 @@
 #include "components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "PlayerCharacter.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -35,7 +36,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
     float SizeIncrease = 0.1f;
-
 private:
 	UFUNCTION()
 		void OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);

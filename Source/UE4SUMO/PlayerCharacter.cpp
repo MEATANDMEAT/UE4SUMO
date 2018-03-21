@@ -19,6 +19,7 @@ APlayerCharacter::APlayerCharacter()
 	// Now we create a camera and attach to our spring arm
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +33,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 // Called to bind functionality to input
@@ -40,40 +42,50 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	InputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+	InputComponent->BindAxis("Run", this, &APlayerCharacter::Run);
 }
 
 void APlayerCharacter::MoveForward(float MoveAmount)
 {
-	if (Controller && MoveAmount)
+	if (Controller)
 	{
-		AddMovementInput(GetActorForwardVector(), MoveAmount);
+		if (MoveAmount > 0)
+		{
+			GetMesh()->SetWorldRotation(FRotator(0.f, -90.f, 0.f));
+			AddMovementInput(GetActorForwardVector(), MoveAmount);
+		}
+		else if (MoveAmount < 0)
+		{
+			GetMesh()->SetWorldRotation(FRotator(0.f, 90.f, 0.f));
+			AddMovementInput(GetActorForwardVector(), MoveAmount);
+		}
 	}
 }
 
 void APlayerCharacter::MoveRight(float MoveAmount)
 {
-	if (Controller && MoveAmount)
+	if (Controller)
 	{
-		AddMovementInput(GetActorRightVector(), MoveAmount);
+		if (MoveAmount > 0)
+		{
+			GetMesh()->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
+			AddMovementInput(GetActorRightVector(), MoveAmount);
+		}
+		else if (MoveAmount < 0)
+		{
+			GetMesh()->SetWorldRotation(FRotator(0.f, -180.f, 0.f));
+			AddMovementInput(GetActorRightVector(), MoveAmount);
+		}
 	}
 }
 
-//bool APlayerCharacter::Object(FVector myVector)
-//{
-//	FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-//
-//	FHitResult HitOut = FHitResult(0);
-//	FVector End = GetActorLocation() + GetActorForwardVector()+100.f;
-//	GetWorld()->LineTraceSingleByObjectType(
-//		HitOut,
-//		GetActorLocation(),
-//		End,
-//		ECC_WorldStatic,
-//		TraceParams
-//	);
-//	if (HitOut.IsValidBlockingHit()) { UE_LOG(LogTemp, Warning, TEXT("PLAYER_COLLIDING")); }
-//	else { UE_LOG(LogTemp, Warning, TEXT("PLAYER_NOT_COLLIDING")); }
-//	return (HitOut.IsValidBlockingHit());
-//	return true;
-//}
+void APlayerCharacter::Run(float RunSpeed)
+{
+	if (Controller&&RunSpeed)
+	{
+		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
+		UE_LOG(LogTemp, Warning, TEXT("YOU ARE RUNNING"))
+	}
+	else Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
+}
 

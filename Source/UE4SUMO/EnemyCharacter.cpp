@@ -7,7 +7,11 @@
 AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
+	EnemyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FoodBox"));
+	EnemyBox->SetWorldScale3D(FVector(1.8f, 1.8f, 3.f));
+	EnemyBox->bGenerateOverlapEvents = true;
+	EnemyBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapBegin);
 
 }
 
@@ -30,17 +34,13 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-void AEnemyCharacter::OnEnemyHitPlayer(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+
+void AEnemyCharacter::OnOverlapBegin(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	UE_LOG(LogTemp, Error, TEXT("Hit something"))
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	TArray<USkeletalMeshComponent*> Comps;
-	if (PlayerCharacter) {
-		OtherActor->GetComponents(Comps);
-		if (Comps.Num() > 0) {
-			USkeletalMeshComponent* FoundComp = Comps[0];
-		}
-		FVector Size = Comps[0]->GetComponentScale();
-		if (Size.X<1.2) OtherActor->Destroy();
-		else Destroy();
+	if (OtherActor != nullptr && OtherActor != this) {
+		UE_LOG(LogTemp, Error, TEXT("Hitting player!"))
+		 OtherActor->Destroy();
 	}
-}
+}	
