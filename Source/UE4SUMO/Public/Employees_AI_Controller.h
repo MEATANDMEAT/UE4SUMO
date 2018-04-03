@@ -9,6 +9,7 @@
 #include "AIController.h"
 #include "Employees_AI_Controller.generated.h"
 
+
 UCLASS()
 class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 {
@@ -17,11 +18,6 @@ class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 	UBlackboardComponent* BlackboardComp;
 	UBehaviorTreeComponent* BehaviorComp;
 
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FVector RandomLocationKey;
-
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FName PlayerKey;
 
 	virtual void Possess(APawn* Pawn) override;
 
@@ -31,10 +27,20 @@ public:
 
 	void SetPlayerSeen(APawn* Pawn);
 
+	UPROPERTY(EditDefaultsOnly, Category = AI)
+		FName RandomLocationKey;
+
+	UPROPERTY(EditDefaultsOnly, Category = AI)
+		FName PlayerKey;
+
+	UPROPERTY(EditDefaultsOnly, Category = AI)
+		FName WalkSpeed;
+
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 protected:
 	// Called when the game starts or when the actor is spawned in the world
 		void BeginPlay() override;
+
 
 public:
 	// Is called every frame when the actor is present in the world

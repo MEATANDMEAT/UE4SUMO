@@ -18,6 +18,7 @@ EBTNodeResult::Type UBTSelectRndPoint::ExecuteTask(UBehaviorTreeComponent & Owne
 		}
 
 		FNavLocation Result;
+		//Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), AIController->GetPawn()->GetActorLocation(), 3000.f);
 		Result.Location = NavSys->GetRandomPointInNavigableRadius(
 			GetWorld(),
 			AIController->GetPawn()->GetActorLocation(),
@@ -27,9 +28,10 @@ EBTNodeResult::Type UBTSelectRndPoint::ExecuteTask(UBehaviorTreeComponent & Owne
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Could not get a random point"))
 		}
-		//Success
-		AIController->MoveToLocation(Result.Location, -1.0f, true, true, false, false, 0, true);
-		UE_LOG(LogTemp,Warning, TEXT("Random point is at %s"),*(Result.Location.ToString()))
+			//Success
+		UE_LOG(LogTemp, Warning, TEXT("Random point is at %s"), *(Result.Location.ToString()))
+		BlackboardComp->SetValueAsVector(AIController->RandomLocationKey, Result.Location);
+		return EBTNodeResult::Succeeded;
 	}
-	return EBTNodeResult::Succeeded;
+	return EBTNodeResult::Failed;
 }

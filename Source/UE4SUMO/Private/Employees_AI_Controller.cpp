@@ -25,8 +25,9 @@ AEmployees_AI_Controller::AEmployees_AI_Controller()
 	BehaviorComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComp"));
 	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
 
-	RandomLocationKey = FVector(0.f,0.f,0.f);
+	RandomLocationKey = "RandomLocation";
 	PlayerKey = "Target";
+	WalkSpeed = "WalkSpeed";
 }
 
 void AEmployees_AI_Controller::SetPlayerSeen(APawn * Pawn)
@@ -48,6 +49,7 @@ void AEmployees_AI_Controller::BeginPlay()
 	} else UE_LOG(LogTemp, Warning, TEXT("C++ controller has not possesed anything!"), (*GetControlledEnemy->GetName()))
    
 }
+
 
 // Called every frame
 void AEmployees_AI_Controller::Tick(float DeltaTime)

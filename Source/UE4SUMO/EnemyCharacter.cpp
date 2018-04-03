@@ -9,7 +9,6 @@ AEnemyCharacter::AEnemyCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComp"));
-
 }
 
 // Called when the game starts or when spawned
@@ -27,17 +26,25 @@ void AEnemyCharacter::BeginPlay()
 void AEnemyCharacter::OnPawnSeen(APawn * SeenPawn)
 {
 	AEmployees_AI_Controller* AIController = Cast<AEmployees_AI_Controller>(GetController());
-	if (AIController)
+	UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComp();
+	if (SeenPawn && AIController)
 	{
 		AIController->SetPlayerSeen(SeenPawn);
+		BlackboardComp->SetValueAsObject(AIController->PlayerKey, SeenPawn);
+		UE_LOG(LogTemp, Warning, TEXT("AI Saw Something!"));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("AI Saw Something!"));
+	else if (!SeenPawn)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AI no longer sees anything"));
+	}
+	
 }
 
 void AEnemyCharacter::OnNoiseHear(APawn* NoiseInstigator, const FVector& Location, float Volume)
 {
 	UE_LOG(LogTemp, Warning, TEXT("AI Heard Something!"));
 }
+
 
 
 // Called every frame
