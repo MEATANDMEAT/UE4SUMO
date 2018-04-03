@@ -27,8 +27,8 @@ EBTNodeResult::Type UBTSelectRndPoint::ExecuteTask(UBehaviorTreeComponent & Owne
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Could not get a random point"))
 		}
-		//Success!
-		UE_LOG(LogTemp,Warning, TEXT("Random point is at %s"),Result.Location.ToString())
+		//Success
+		UE_LOG(LogTemp,Warning, TEXT("Random point is at %s"),*(Result.Location.ToString()))
 	}
 	return EBTNodeResult::Succeeded;
 }
