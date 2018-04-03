@@ -7,7 +7,6 @@
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
-#include "FoodPickup.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -37,8 +36,15 @@ public:
 
 	void Run(float RunSpeed);
 
+	void Eat(float SizeIncrease);
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Curve)
+	UCurveFloat* Curve;
+
+	float Size = 1.f;
 private:
 	UPROPERTY(EditAnywhere)
 		FTransform CameraTransform;
@@ -46,4 +52,5 @@ private:
 	USpringArmComponent* SpringArm = nullptr;
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera = nullptr;
+
 };

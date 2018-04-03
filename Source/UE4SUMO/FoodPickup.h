@@ -36,6 +36,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
     float SizeIncrease = 0.1f;
+
+
 private:
 	UFUNCTION()
 		void OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
