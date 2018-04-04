@@ -15,6 +15,4 @@ class UE4SUMO_API AUE4SUMOGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 	
-	
-	
 };

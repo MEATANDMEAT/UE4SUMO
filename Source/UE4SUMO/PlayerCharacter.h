@@ -37,6 +37,8 @@ public:
 
 	void Run(float RunSpeed);
 
+	void Lunge();
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
@@ -51,9 +53,10 @@ private:
 	UCameraComponent* Camera = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Rotation Parameters")
-		float LerpSteps = 0.01f;
+		float LerpSteps;
 
-	FTimerHandle TimerHandle_ResetOrientation;
+	//FTimerHandle TimerHandle_ResetOrientation;
+
 
 	float RotationValue;
 };

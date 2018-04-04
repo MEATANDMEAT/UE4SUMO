@@ -27,13 +27,13 @@ void AEnemyCharacter::OnPawnSeen(APawn * SeenPawn)
 {
 	AEmployees_AI_Controller* AIController = Cast<AEmployees_AI_Controller>(GetController());
 	UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComp();
-	if (SeenPawn && AIController)
+	if (PawnSensingComp->CouldSeePawn(SeenPawn, false) && AIController)
 	{
 		AIController->SetPlayerSeen(SeenPawn);
 		BlackboardComp->SetValueAsObject(AIController->PlayerKey, SeenPawn);
 		UE_LOG(LogTemp, Warning, TEXT("AI Saw Something!"));
 	}
-	else if (!SeenPawn)
+	else if (!(PawnSensingComp->CouldSeePawn(SeenPawn, false)))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AI no longer sees anything"));
 	}

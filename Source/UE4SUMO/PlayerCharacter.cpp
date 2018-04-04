@@ -21,20 +21,21 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	LerpSteps = 0.05f;
 }
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	RotationValue = -90.f;
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the guard right now
+	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the enemy right now
 										   //we will use only yaw (the y-axis)       
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 
@@ -47,6 +48,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	InputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	InputComponent->BindAxis("Run", this, &APlayerCharacter::Run);
+	InputComponent->BindAction("Lunge", IE_Pressed, this, &APlayerCharacter::Lunge);
 }
 
 void APlayerCharacter::MoveForward(float MoveAmount)
@@ -55,19 +57,21 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 	{
 		if (MoveAmount > 0)
 		{
-			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
-			RotationValue = 0.f, -90.f, 0.f;
+			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = -90.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
+			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 		else if (MoveAmount < 0)
 		{
-			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
-			RotationValue = 0.f, 90.f, 0.f;
+			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = 90.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
+			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 	}
 }
@@ -78,19 +82,21 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 	{
 		if (MoveAmount > 0)
 		{
-			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
-			RotationValue = 0.f, 0.f, 0.f;
+			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = 0.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
+			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 		else if (MoveAmount < 0)
 		{
-			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
-			RotationValue = 0.f, -180.f, 0.f;
+			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = -180.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
+			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 	}
 }
@@ -100,8 +106,15 @@ void APlayerCharacter::Run(float RunSpeed)
 	if (Controller&&RunSpeed)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
-		UE_LOG(LogTemp, Warning, TEXT("YOU ARE RUNNING"))
+		//UE_LOG(LogTemp, Warning, TEXT("You are currently sprinting"))
 	}
 	else Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
+}
+
+void APlayerCharacter::Lunge()
+{
+	FRotator LungeDirection = GetMesh()->GetComponentRotation();
+	FVector LungeVelocity = LungeDirection.Vector() * 1000.f;
+	this->LaunchCharacter(LungeVelocity,true,true);
 }
 
