@@ -6,6 +6,7 @@
 #include "Employees_AI_Controller.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Perception/PawnSensingComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
@@ -29,6 +30,7 @@ protected:
 	UFUNCTION()
 		void OnNoiseHear(APawn* NoiseInstigator, const FVector& Location, float Volume);
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -45,5 +47,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = AI)
 		class UPawnSensingComponent* PawnSensingComp;
 
+
 private:
+
 };

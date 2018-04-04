@@ -44,6 +44,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
+	FVector CurrentLocation;
+
 private:
 	UPROPERTY(EditAnywhere)
 		FTransform CameraTransform;

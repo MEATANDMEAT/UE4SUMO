@@ -35,6 +35,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	CurrentLocation = GetActorLocation();
 	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the enemy right now
 										   //we will use only yaw (the y-axis)       
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
