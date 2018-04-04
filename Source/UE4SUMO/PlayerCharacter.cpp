@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayerCharacter.h"
-
+#include "Kismet/KismetMathLibrary.h"
+#include "TimerManager.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	// We want to use a spring arm to create a natual motion for our camera.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -33,6 +34,9 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the guard right now
+										   //we will use only yaw (the y-axis)       
+	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 
 }
 
@@ -51,12 +55,18 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 	{
 		if (MoveAmount > 0)
 		{
-			GetMesh()->SetWorldRotation(FRotator(0.f, -90.f, 0.f));
+			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = 0.f, -90.f, 0.f;
+			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
 		}
 		else if (MoveAmount < 0)
 		{
-			GetMesh()->SetWorldRotation(FRotator(0.f, 90.f, 0.f));
+			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = 0.f, 90.f, 0.f;
+			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
 		}
 	}
@@ -68,12 +78,18 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 	{
 		if (MoveAmount > 0)
 		{
-			GetMesh()->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
+			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = 0.f, 0.f, 0.f;
+			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
 		}
 		else if (MoveAmount < 0)
 		{
-			GetMesh()->SetWorldRotation(FRotator(0.f, -180.f, 0.f));
+			GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+			RotationValue = 0.f, -180.f, 0.f;
+			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
 		}
 	}

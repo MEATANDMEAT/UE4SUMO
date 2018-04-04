@@ -39,11 +39,21 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
+
 private:
 	UPROPERTY(EditAnywhere)
 		FTransform CameraTransform;
+
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm = nullptr;
+
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Rotation Parameters")
+		float LerpSteps = 0.01f;
+
+	FTimerHandle TimerHandle_ResetOrientation;
+
+	float RotationValue;
 };

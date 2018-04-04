@@ -12,7 +12,7 @@ EBTNodeResult::Type UBTSetWalkSpeed::ExecuteTask(UBehaviorTreeComponent & OwnerC
 
 	if (AIController)
 	{
-		EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 100.f;
+		EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 300.f;
 
 		return EBTNodeResult::Succeeded;
 	}
