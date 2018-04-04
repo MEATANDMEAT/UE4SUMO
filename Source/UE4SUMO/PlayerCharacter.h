@@ -37,7 +37,9 @@ public:
 
 	void Run(float RunSpeed);
 
-	void Lunge();
+	void LungeCharge(float Charge);
+
+	void LungeRelease();
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
@@ -55,8 +57,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Rotation Parameters")
 		float LerpSteps;
 
-	//FTimerHandle TimerHandle_ResetOrientation;
+	float LungeAttackCharge;
 
+	//FTimerHandle TimerHandle_ResetOrientation;
 
 	float RotationValue;
 };

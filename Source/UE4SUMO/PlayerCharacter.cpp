@@ -48,7 +48,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	InputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	InputComponent->BindAxis("Run", this, &APlayerCharacter::Run);
-	InputComponent->BindAction("Lunge", IE_Pressed, this, &APlayerCharacter::Lunge);
+	InputComponent->BindAxis("LungeCharge", this, &APlayerCharacter::LungeCharge);
+	InputComponent->BindAction("Lunge", IE_Released, this, &APlayerCharacter::LungeRelease);
 }
 
 void APlayerCharacter::MoveForward(float MoveAmount)
@@ -111,10 +112,21 @@ void APlayerCharacter::Run(float RunSpeed)
 	else Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
 }
 
-void APlayerCharacter::Lunge()
+void APlayerCharacter::LungeCharge(float Charge)
+{
+	if (Controller && Charge)
+	{
+		LungeAttackCharge += 25.f;
+		UE_LOG(LogTemp,Warning,TEXT("Charging the attack: %f"),LungeAttackCharge)
+	}
+}
+
+void APlayerCharacter::LungeRelease()
 {
 	FRotator LungeDirection = GetMesh()->GetComponentRotation();
-	FVector LungeVelocity = LungeDirection.Vector() * 1000.f;
-	this->LaunchCharacter(LungeVelocity,true,true);
+	LungeDirection += FRotator(0.f, 90.f, 0.f);
+	FVector LungeVelocity = LungeDirection.Vector() * LungeAttackCharge;
+	this->LaunchCharacter(LungeVelocity, true, true);
+	LungeAttackCharge = 0.f;
 }
 
