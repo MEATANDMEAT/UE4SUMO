@@ -1,11 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "components/SkeletalMeshComponent.h"
+//Custom headers
+#include "PlayerCharacter.h"
+
+//Engine specific headers
+#include "Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
-#include "PlayerCharacter.h"
+
+//Reqiured headers
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "FoodPickup.generated.h"

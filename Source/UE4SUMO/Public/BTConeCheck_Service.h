@@ -1,7 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Custom headers
 #include "Employees_AI_Controller.h"
+
+//Required headers
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
 #include "BTConeCheck_Service.generated.h"
@@ -46,8 +49,6 @@ public:
 	FVector LastSeenLocation_VECTOR;
 
 	FVector LastSeenDistance;
-
-	float DotProductLastSeen
 
 	bool AIRemember;
 

@@ -7,39 +7,14 @@
 AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComp"));
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
-	AEmployees_AI_Controller* AIController = Cast<AEmployees_AI_Controller>(GetController());
-	UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComp();
 	Super::BeginPlay();
-	if (PawnSensingComp)
-	{
-		PawnSensingComp->OnSeePawn.AddDynamic(this, &AEnemyCharacter::OnPawnSeen);
-		PawnSensingComp->OnHearNoise.AddDynamic(this, &AEnemyCharacter::OnNoiseHear);
-	}
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnPlayerOverlap);
-}
-
-void AEnemyCharacter::OnPawnSeen(APawn * SeenPawn)
-{
-	AEmployees_AI_Controller* AIController = Cast<AEmployees_AI_Controller>(GetController());
-	UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComp();
-	if (AIController)
-	{
-		AIController->SetPlayerSeen(SeenPawn);
-		BlackboardComp->SetValueAsObject(AIController->PlayerKey, SeenPawn);
-	}
-	
-}
-
-void AEnemyCharacter::OnNoiseHear(APawn* NoiseInstigator, const FVector& Location, float Volume)
-{
-	UE_LOG(LogTemp, Warning, TEXT("AI Heard Something!"));
 }
 
 // Called every frame

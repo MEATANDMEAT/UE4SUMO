@@ -39,7 +39,7 @@ void UBTConeCheck_Service::TickNode(UBehaviorTreeComponent & OwnerComp, uint8 * 
 		Angle = FMath::RadiansToDegrees(Radian);
 
 		  //Set a limit to the angle, in order to give the enemy a reasonable sight radius
-		  if (Angle < 90.f)
+		  if (Angle < 120.f)
 		  {
 			  const FName TraceTag("PawnTraceTag");
 			  //Set up Ray Tracing parameters
@@ -63,44 +63,48 @@ void UBTConeCheck_Service::TickNode(UBehaviorTreeComponent & OwnerComp, uint8 * 
 					 BlackboardComp->SetValueAsObject(Target.SelectedKeyName, HitResult.GetActor());
 					 LastSeenLocation_VECTOR = PlayerCharacter->GetActorLocation();
 					 BlackboardComp->SetValueAsVector(LastSeenLocation.SelectedKeyName, LastSeenLocation_VECTOR);
-					 UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_SUCCESSFUL | Updating AIRemember = true"))
+					// UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_SUCCESSFUL | Updating AIRemember = true"))
 					 AIRemember = true;
 				 }
 				 //If not, set AI_State to Find Player
 				 else if (AIRemember)
 				 {
-					 UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_LOST_VISION | AIRemember = true"))
+				   //UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_LOST_VISION | AIRemember = true"))
+				   //UE_LOG(LogTemp, Warning, TEXT("LastSeenLocation: %s | EnemyCharacter: %s"), *(LastSeenLocation_VECTOR.ToString()), *(EnemyCharacter->GetActorLocation().ToString()))
+				   ///Get a distance between the Enemy and the Last Seen Location of Player and make sure that Enemy get's as close as possible to that location before it can forget Player location
 					 BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_PlayerLastSeen));
 					 LastSeenDistance = LastSeenLocation_VECTOR - EnemyCharacter->GetActorLocation();
-					 LastSeenDistance.Normalize();
-					 DotProductLastSeen = FVector::DotProduct(PlayerToEnemyLine, EnemyCharacter->GetActorForwardVector());
-					 if (LastSeenDistance < )
+					// UE_LOG(LogTemp, Error, TEXT("LastSeenDistance: %f"), LastSeenDistance.Size())
+					 if (LastSeenDistance.Size() < 15.f)
 					 {
 						 AIRemember = false;
 					 }
 				 } 
 				 else if (AIRemember == false)
 				 {
-					 UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_SUCCESSFUL_ATLEAST_ONCE | AIRemember = false"))
+					// UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_SUCCESSFUL_ATLEAST_ONCE | AIRemember = false"))
 					 BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_FindPlayer));
 				 }		 
 		  }
 		  else
 		  {
+			  ///Perform same checks if Player is out of Cone vision
 			  if (AIRemember)
 			  {
-				  UE_LOG(LogTemp, Warning, TEXT("OUT_OF_VISION_FIELD | RAY_CAST_NEVER_HAPPENED | AIRemember = True"))
-					  BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_PlayerLastSeen));
-
-				  if (EnemyCharacter->GetActorLocation() == LastSeenLocation_VECTOR)
+				//  UE_LOG(LogTemp, Warning, TEXT("OUT_OF_VISION_FIELD | RAY_CAST_NEVER_HAPPENED | AIRemember = True"))
+				//  UE_LOG(LogTemp, Warning, TEXT("LastSeenLocation: %s | EnemyCharacter: %s"),*(LastSeenLocation_VECTOR.ToString()),*(EnemyCharacter->GetActorLocation().ToString()))
+				  BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_PlayerLastSeen));
+				  LastSeenDistance = LastSeenLocation_VECTOR - EnemyCharacter->GetActorLocation();
+				//  UE_LOG(LogTemp, Error, TEXT("LastSeenDistance: %f"), LastSeenDistance.Size())
+				  if (LastSeenDistance.Size() < 15.f)
 				  {
 					  AIRemember = false;
 				  }
 			  }
 			  else if (AIRemember == false)
 			  {
-				  UE_LOG(LogTemp, Warning, TEXT("OUT_OF_VISION_FIELD | RAY_CAST_NEVER_HAPPENED | AIRemember = False"))
-					  BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_FindPlayer));
+				//  UE_LOG(LogTemp, Warning, TEXT("OUT_OF_VISION_FIELD | RAY_CAST_NEVER_HAPPENED | AIRemember = False"))
+				  BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_FindPlayer));
 			  }
 		  }
 	  ///When done, clean up PawnSensingComponent (Or maybe use later for OnHearNoise event?)
