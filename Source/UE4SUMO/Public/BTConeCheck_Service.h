@@ -45,11 +45,16 @@ public:
 		FBlackboardKeySelector LastSeenLocation;
 	FVector LastSeenLocation_VECTOR;
 
+	FVector LastSeenDistance;
+
+	float DotProductLastSeen
+
 	bool AIRemember;
 
 	//Target (PlayerCharacter)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FBlackboardKeySelector Target;
+
 
 
 };

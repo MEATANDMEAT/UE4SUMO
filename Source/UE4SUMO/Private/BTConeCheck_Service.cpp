@@ -60,11 +60,10 @@ void UBTConeCheck_Service::TickNode(UBehaviorTreeComponent & OwnerComp, uint8 * 
 			     if (HitResult.GetActor()==PlayerCharacter)
 			     {				 
 					 BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_ChasePlayer));
-					 BlackboardComp->SetValueAsVector(Target.SelectedKeyName, HitResult.GetActor()->GetActorLocation() + 
-					(GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - AIController->GetPawn()->GetActorLocation()).Normalize()*10.f);
+					 BlackboardComp->SetValueAsObject(Target.SelectedKeyName, HitResult.GetActor());
 					 LastSeenLocation_VECTOR = PlayerCharacter->GetActorLocation();
 					 BlackboardComp->SetValueAsVector(LastSeenLocation.SelectedKeyName, LastSeenLocation_VECTOR);
-					 UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_SUCCESSFUL | Updating AIRemember = true"), *(HitResult.Actor->GetName()))
+					 UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_SUCCESSFUL | Updating AIRemember = true"))
 					 AIRemember = true;
 				 }
 				 //If not, set AI_State to Find Player
@@ -72,7 +71,10 @@ void UBTConeCheck_Service::TickNode(UBehaviorTreeComponent & OwnerComp, uint8 * 
 				 {
 					 UE_LOG(LogTemp, Warning, TEXT("IN_VISION_FIELD | RAY_CAST_LOST_VISION | AIRemember = true"))
 					 BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_PlayerLastSeen));
-					 if (EnemyCharacter->GetActorLocation() nearvector LastSeenLocation_VECTOR)
+					 LastSeenDistance = LastSeenLocation_VECTOR - EnemyCharacter->GetActorLocation();
+					 LastSeenDistance.Normalize();
+					 DotProductLastSeen = FVector::DotProduct(PlayerToEnemyLine, EnemyCharacter->GetActorForwardVector());
+					 if (LastSeenDistance < )
 					 {
 						 AIRemember = false;
 					 }
@@ -89,7 +91,11 @@ void UBTConeCheck_Service::TickNode(UBehaviorTreeComponent & OwnerComp, uint8 * 
 			  {
 				  UE_LOG(LogTemp, Warning, TEXT("OUT_OF_VISION_FIELD | RAY_CAST_NEVER_HAPPENED | AIRemember = True"))
 					  BlackboardComp->SetValueAsEnum(AI_State_BBKey.SelectedKeyName, static_cast<uint8>(EAI_State::AI_PlayerLastSeen));
-				  AIRemember = false;
+
+				  if (EnemyCharacter->GetActorLocation() == LastSeenLocation_VECTOR)
+				  {
+					  AIRemember = false;
+				  }
 			  }
 			  else if (AIRemember == false)
 			  {
