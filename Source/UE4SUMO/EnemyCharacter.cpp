@@ -14,6 +14,8 @@ AEnemyCharacter::AEnemyCharacter()
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
+	AEmployees_AI_Controller* AIController = Cast<AEmployees_AI_Controller>(GetController());
+	UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComp();
 	Super::BeginPlay();
 	if (PawnSensingComp)
 	{

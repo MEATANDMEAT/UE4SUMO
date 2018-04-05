@@ -7,7 +7,6 @@
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
-#include "FoodPickup.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "PlayerCharacter.generated.h"
 

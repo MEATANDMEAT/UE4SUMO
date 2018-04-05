@@ -4,7 +4,6 @@
 #include "EnemyCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
-#include "BehaviorTree/BehaviorTree.h"
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Employees_AI_Controller.generated.h"
