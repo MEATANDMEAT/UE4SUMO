@@ -3,10 +3,13 @@
 #pragma once
 //Custom headers
 #include "EnemyCharacter.h"
+#include "PlayerCharacter.h"
 
 //Engine specific headers
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -29,16 +32,40 @@ public:
 	// Sets default values for this actor's properties
 	AEmployees_AI_Controller();
 
-	void SetPlayerSeen(APawn* Pawn);
+	virtual FRotator GetControlRotation() const override;
+
+	UFUNCTION()
+		void OnPerceptionUpdated(const TArray<AActor*> &Actors);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
+		float AISightRadius = 700.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
+		float AISightAge = 5.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
+		float AILoseSightRadius = AISightRadius + 50.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
+		float AISightAngle = 90.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
+		class UAISenseConfig_Sight* SightConfig;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
+		bool bIsPlayerDetected = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = AI)
 		FName RandomLocationKey;
 
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FName PlayerKey;
+	bool bBehaviorTreeRunning = false;
 
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FName WalkSpeed;
+	UPROPERTY(EditAnywhere, Category = "AI Animations")
+		UAnimationAsset* Running;
+
+	FVector LastSeenLocation;
+
+	bool bAIRemember = false;
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 protected:

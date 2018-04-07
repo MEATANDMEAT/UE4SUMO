@@ -3,10 +3,12 @@
 #pragma once
 //Custom headers
 #include "PlayerCharacter.h"
+#include "Employees_AI_Controller.h"
 
 //Engine specific headers
 #include "BehaviorTree/BehaviorTree.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 //Required headers
 #include "CoreMinimal.h"

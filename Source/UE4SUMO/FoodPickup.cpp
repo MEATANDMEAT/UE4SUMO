@@ -30,6 +30,7 @@ void AFoodPickup::BeginPlay()
 void AFoodPickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)

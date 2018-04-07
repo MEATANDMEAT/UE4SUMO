@@ -108,7 +108,14 @@ void APlayerCharacter::Run(float RunSpeed)
 	if (Controller&&RunSpeed)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
-		//UE_LOG(LogTemp, Warning, TEXT("You are currently sprinting"))
+		TArray<USkeletalMeshComponent*> Comps;
+			GetComponents(Comps);
+			if (Comps.Num() > 0)
+			{
+				USkeletalMeshComponent* FoundComp = Comps[0];
+				Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + -0.0005f);
+			}
+			Speed += 0.1f;
 	}
 	else Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
 }
