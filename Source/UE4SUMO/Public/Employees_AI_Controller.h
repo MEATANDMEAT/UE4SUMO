@@ -10,6 +10,7 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "AI/Navigation/NavigationSystem.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -66,6 +67,8 @@ public:
 	FVector LastSeenLocation;
 
 	bool bAIRemember = false;
+
+	FNavLocation Result;
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 protected:

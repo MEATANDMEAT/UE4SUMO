@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "FoodPickup.h"
+#include "HealthyFoodPickup.h"
 
 
 // Sets default values
-AFoodPickup::AFoodPickup()
+AHealthyFoodPickup::AHealthyFoodPickup()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	FoodRoot = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	RootComponent = FoodRoot;
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FoodMesh"));
@@ -16,39 +16,40 @@ AFoodPickup::AFoodPickup()
 	FoodBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FoodBox"));
 	FoodBox->SetWorldScale3D(FVector(1.f, 1.f, 1.f));
 	FoodBox->bGenerateOverlapEvents = true;
-	FoodBox->OnComponentBeginOverlap.AddDynamic(this, &AFoodPickup::OnPlayerEnterPickupBox);
+	FoodBox->OnComponentBeginOverlap.AddDynamic(this, &AHealthyFoodPickup::OnPlayerEnterPickupBox);
 	FoodBox->SetupAttachment(FoodRoot);
 }
 
 // Called when the game starts or when spawned
-void AFoodPickup::BeginPlay()
+void AHealthyFoodPickup::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 // Called every frame
-void AFoodPickup::Tick(float DeltaTime)
+void AHealthyFoodPickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+void AHealthyFoodPickup::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	TArray<USkeletalMeshComponent*> Comps;
 	if (PlayerCharacter) {
 		OtherActor->GetComponents(Comps);
-			if (Comps.Num() > 0)
-			{
-				USkeletalMeshComponent* FoundComp = Comps[0];
-				Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + SizeIncrease);
-			}
-			PlayerCharacter->Speed -= SlowDown;
-		    Destroy(); 
+		if (Comps.Num() > 0)
+		{
+			USkeletalMeshComponent* FoundComp = Comps[0];
+			Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() - SizeDecrease);
+		}
+		PlayerCharacter->Speed += SpeedUp;
+		Destroy();
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
+		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this HealthyFoodPickup"));
 	}
 
 }

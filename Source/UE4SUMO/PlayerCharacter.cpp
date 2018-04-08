@@ -1,8 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayerCharacter.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "TimerManager.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -35,11 +33,9 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CurrentLocation = GetActorLocation();
 	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the enemy right now
 										   //we will use only yaw (the y-axis)       
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
-
 }
 
 // Called to bind functionality to input
@@ -59,7 +55,6 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 	{
 		if (MoveAmount > 0)
 		{
-			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
 			RotationValue = -90.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
@@ -68,7 +63,6 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 		}
 		else if (MoveAmount < 0)
 		{
-			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
 			RotationValue = 90.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
@@ -137,4 +131,5 @@ void APlayerCharacter::LungeRelease()
 	this->LaunchCharacter(LungeVelocity, true, true);
 	LungeAttackCharge = 0.f;
 }
+
 
