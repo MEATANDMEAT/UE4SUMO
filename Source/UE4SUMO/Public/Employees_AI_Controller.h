@@ -59,6 +59,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = AI)
 		FName RandomLocationKey;
 
+	FTimerHandle TimerHandle;
+
+	void GetNewPlayerLocation();
+
+	FVector NewPlayerLocation = FVector(0.f, 0.f, 0.f);
+
 	bool bBehaviorTreeRunning = false;
 
 	UPROPERTY(EditAnywhere, Category = "AI Animations")

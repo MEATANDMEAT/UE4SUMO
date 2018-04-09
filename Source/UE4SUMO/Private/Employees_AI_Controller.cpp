@@ -68,6 +68,13 @@ void AEmployees_AI_Controller::Possess(APawn * Pawn)
 //	}
 }
 
+void AEmployees_AI_Controller::GetNewPlayerLocation()
+{
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	NewPlayerLocation = PlayerCharacter->GetActorLocation();
+
+}
+
 // Called when the game starts or when spawned
 void AEmployees_AI_Controller::BeginPlay()
 {
@@ -92,48 +99,48 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	USkeletalMeshComponent *SkelMesh = EnemyCharacter->FindComponentByClass<USkeletalMeshComponent>();
 	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
+
+
 	if (bIsPlayerDetected && PlayerCharacter && SkelMesh)
 	{
-		//if (bBehaviorTreeRunning)
-		//{
-		//	BehaviorComp->StopTree(EBTStopMode::Safe);
-		//	bBehaviorTreeRunning = false;
-		//	EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 400.f;
-		//}	
-		MoveToActor(PlayerCharacter, 5.f, false, true, false);
+		MoveToActor(PlayerCharacter, 0.f,false,true,true,0,false);
 		LastSeenLocation = PlayerCharacter->GetActorLocation();
 		SkelMesh->PlayAnimation(Running, true);
 		bAIRemember = true;
-		UE_LOG(LogTemp, Warning, TEXT("Player Detected"));
 	}
+
 	else if (bIsPlayerDetected == false && PlayerCharacter && SkelMesh && bAIRemember)
 	{
-		if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() < 35.f)
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEmployees_AI_Controller::GetNewPlayerLocation, 1.f, false, 0.f);
+
+		if (EnemyCharacter->GetActorLocation().Equals(LastSeenLocation,5.f))
 		{
 			bAIRemember = false;
-			UE_LOG(LogTemp, Warning, TEXT("Distance to LastSeen is less than 15"));
+			UE_LOG(LogTemp, Warning, TEXT("EnemyLocation equals LastSeenLocation, 5 tolerance"));
 		}
-		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 35.f)
+		else if (EnemyCharacter->GetActorLocation().Equals(LastSeenLocation,5.f) == false)
 		{
-			MoveToLocation(LastSeenLocation, 0.f, true, false, false, false);
-			UE_LOG(LogTemp, Warning, TEXT("Going to Last Seen, destination is: %f"), (EnemyCharacter->GetActorLocation() - LastSeenLocation).Size());
+			MoveToLocation(LastSeenLocation, 0.f,false,true,false,true,0,false);
+			UE_LOG(LogTemp, Warning, TEXT("EnemyLocation does not equal LastSeenLocation, 5 tolerance"), (EnemyCharacter->GetActorLocation() - LastSeenLocation).Size());
 		}
 	}
+
 	else if (bIsPlayerDetected == false && PlayerCharacter && SkelMesh && bAIRemember == false)
 	{
-		if (FVector::Distance(EnemyCharacter->GetActorLocation(), Result.Location) < 15.f)
+		if (EnemyCharacter->GetActorLocation().Equals(LastSeenLocation,5.f))
 		{
 			Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 2000.f);
 			/*Result.Location = NavSys->GetRandomPointInNavigableRadius(
 				GetWorld(),
 				GetPawn()->GetActorLocation(),
 				2000.f);*/
+			MoveToLocation((Result.Location), 0.f, false, true, true, true, 0, true);
 			UE_LOG(LogTemp, Warning, TEXT("Random point is at %s"), *(Result.Location.ToString()))
 		}
-		else if (FVector::Distance(EnemyCharacter->GetActorLocation(),Result.Location) > 15.f)
+		else if (EnemyCharacter->GetActorLocation().Equals(Result.Location, 0.f) == false)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Distance to random point: %f"), (EnemyCharacter->GetActorLocation() - Result.Location).Size())
-			MoveToLocation((Result.Location), 10.f);
+			MoveToLocation((Result.Location), 0.f,false,true,true,true,0,true);
 		}
 	}
 }
