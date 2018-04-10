@@ -89,3 +89,8 @@ void APlayerCharacter::Run(float RunSpeed)
 	else Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
 }
 
+void APlayerCharacter::Eat(float SizeIncrease) {
+	Size+=SizeIncrease;
+	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
+	Speed -= 100.f * SizeIncrease;
+}
