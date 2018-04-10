@@ -41,13 +41,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
-<<<<<<< HEAD
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
 
 	float Size = 1.f;
-=======
->>>>>>> slave
+
 private:
 	UPROPERTY(EditAnywhere)
 		FTransform CameraTransform;
@@ -58,13 +56,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera = nullptr;
 
-<<<<<<< HEAD
-=======
 	UPROPERTY(EditAnywhere, Category = "Rotation Parameters")
 		float LerpSteps = 0.01f;
 
 	FTimerHandle TimerHandle_ResetOrientation;
 
 	float RotationValue;
->>>>>>> slave
 };
