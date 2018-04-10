@@ -46,6 +46,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FBlackboardKeySelector LastSeenLocation;
+
 	FVector LastSeenLocation_VECTOR;
 
 	FVector LastSeenDistance;

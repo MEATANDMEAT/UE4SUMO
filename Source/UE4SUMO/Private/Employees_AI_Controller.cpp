@@ -68,11 +68,29 @@ void AEmployees_AI_Controller::Possess(APawn * Pawn)
 //	}
 }
 
-void AEmployees_AI_Controller::GetNewPlayerLocation()
-{
-	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	NewPlayerLocation = PlayerCharacter->GetActorLocation();
 
+void AEmployees_AI_Controller::GetRandomPoint()
+{
+	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
+	Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 2000.f);
+	//	/*Result.Location = NavSys->GetRandomPointInNavigableRadius(
+	//		GetWorld(),
+	//		GetPawn()->GetActorLocation(),
+	//		2000.f);*/
+	Result.Location += FVector(0.f, 0.f, 87.275f);
+	UE_LOG(LogTemp, Warning, TEXT("Result Location is: %s"), *(Result.Location.ToString()))
+	RandomPointGenerated = false;
+}
+
+void AEmployees_AI_Controller::MoveToRandomPoint()
+{
+	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
+	MoveToLocation(Result.Location, 5.f, false, true, true, true, 0, true);
+	if ((EnemyCharacter->GetActorLocation() - Result.Location).Size() < 10.f)
+	{
+		RandomPointGenerated = false;
+		MoveToRunning = false;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -81,11 +99,6 @@ void AEmployees_AI_Controller::BeginPlay()
 	Super::BeginPlay();
 	AEnemyCharacter* GetControlledEnemy = Cast<AEnemyCharacter>(GetPawn());
 	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
-	if (GetControlledEnemy != nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("C++ controller has now possesed: %s"), (*GetControlledEnemy->GetName()))
-	} else UE_LOG(LogTemp, Warning, TEXT("C++ controller has not possesed anything!"), (*GetControlledEnemy->GetName()))
-	
 	Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 2000.f);
    
 }
@@ -97,50 +110,39 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 	PrimaryActorTick.TickInterval = 0.1f;
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	USkeletalMeshComponent *SkelMesh = EnemyCharacter->FindComponentByClass<USkeletalMeshComponent>();
 	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
 
 
-	if (bIsPlayerDetected && PlayerCharacter && SkelMesh)
+	if (bIsPlayerDetected && PlayerCharacter)
 	{
 		MoveToActor(PlayerCharacter, 0.f,false,true,true,0,false);
 		LastSeenLocation = PlayerCharacter->GetActorLocation();
-		SkelMesh->PlayAnimation(Running, true);
 		bAIRemember = true;
 	}
 
-	else if (bIsPlayerDetected == false && PlayerCharacter && SkelMesh && bAIRemember)
+	else if (bIsPlayerDetected == false && PlayerCharacter && bAIRemember)
 	{
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEmployees_AI_Controller::GetNewPlayerLocation, 1.f, false, 0.f);
-
-		if (EnemyCharacter->GetActorLocation().Equals(LastSeenLocation,5.f))
+		if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() < 10.f)
 		{
 			bAIRemember = false;
-			UE_LOG(LogTemp, Warning, TEXT("EnemyLocation equals LastSeenLocation, 5 tolerance"));
 		}
-		else if (EnemyCharacter->GetActorLocation().Equals(LastSeenLocation,5.f) == false)
+		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 10.f)
 		{
-			MoveToLocation(LastSeenLocation, 0.f,false,true,false,true,0,false);
-			UE_LOG(LogTemp, Warning, TEXT("EnemyLocation does not equal LastSeenLocation, 5 tolerance"), (EnemyCharacter->GetActorLocation() - LastSeenLocation).Size());
+			MoveToLocation(LastSeenLocation, 5.f,false,true,false,true,0,false);
 		}
 	}
 
-	else if (bIsPlayerDetected == false && PlayerCharacter && SkelMesh && bAIRemember == false)
+	else if (bIsPlayerDetected == false && PlayerCharacter && bAIRemember == false)
 	{
-		if (EnemyCharacter->GetActorLocation().Equals(LastSeenLocation,5.f))
+		if (RandomPointGenerated == false && MoveToRunning == false)
 		{
-			Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 2000.f);
-			/*Result.Location = NavSys->GetRandomPointInNavigableRadius(
-				GetWorld(),
-				GetPawn()->GetActorLocation(),
-				2000.f);*/
-			MoveToLocation((Result.Location), 0.f, false, true, true, true, 0, true);
-			UE_LOG(LogTemp, Warning, TEXT("Random point is at %s"), *(Result.Location.ToString()))
+			GetRandomPoint();
+			RandomPointGenerated = true;
 		}
-		else if (EnemyCharacter->GetActorLocation().Equals(Result.Location, 0.f) == false)
+		else if (RandomPointGenerated && MoveToRunning == false)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Distance to random point: %f"), (EnemyCharacter->GetActorLocation() - Result.Location).Size())
-			MoveToLocation((Result.Location), 0.f,false,true,true,true,0,true);
+			MoveToRandomPoint();
+			MoveToRunning = true;
 		}
 	}
 }

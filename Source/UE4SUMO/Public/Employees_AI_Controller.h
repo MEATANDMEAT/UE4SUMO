@@ -61,14 +61,7 @@ public:
 
 	FTimerHandle TimerHandle;
 
-	void GetNewPlayerLocation();
-
-	FVector NewPlayerLocation = FVector(0.f, 0.f, 0.f);
-
 	bool bBehaviorTreeRunning = false;
-
-	UPROPERTY(EditAnywhere, Category = "AI Animations")
-		UAnimationAsset* Running;
 
 	FVector LastSeenLocation;
 
@@ -76,7 +69,16 @@ public:
 
 	FNavLocation Result;
 
+	bool RandomPointGenerated = false;
+
+	void GetRandomPoint();
+
+	void MoveToRandomPoint();
+
+	bool MoveToRunning = false;
+
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
+
 protected:
 	// Called when the game starts or when the actor is spawned in the world
 		void BeginPlay() override;
