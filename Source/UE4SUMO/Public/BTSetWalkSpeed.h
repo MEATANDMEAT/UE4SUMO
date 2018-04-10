@@ -2,6 +2,7 @@
 
 #pragma once
 
+//Required headers
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTSetWalkSpeed.generated.h"
@@ -17,7 +18,7 @@ class UE4SUMO_API UBTSetWalkSpeed : public UBTTaskNode
 		virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
 public:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WalkSpeed;
 	
 };

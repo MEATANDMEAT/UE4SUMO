@@ -1,14 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
-#include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+//Engine specific headers
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
-#include "FoodPickup.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "TimerManager.h"
+
+//Required headers
+#include "GameFramework/Character.h"
+#include "CoreMinimal.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -37,8 +40,14 @@ public:
 
 	void Run(float RunSpeed);
 
+	void LungeCharge(float Charge);
+
+	void LungeRelease();
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
+
+	FVector CurrentLocation;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -51,9 +60,11 @@ private:
 	UCameraComponent* Camera = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Rotation Parameters")
-		float LerpSteps = 0.01f;
+		float LerpSteps;
 
-	FTimerHandle TimerHandle_ResetOrientation;
+	float LungeAttackCharge;
+
+	//FTimerHandle TimerHandle_ResetOrientation;
 
 	float RotationValue;
 };

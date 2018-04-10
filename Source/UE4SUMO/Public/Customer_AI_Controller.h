@@ -3,16 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "UE4SUMOGameModeBase.generated.h"
+#include "AIController.h"
+#include "Customer_AI_Controller.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UE4SUMO_API AUE4SUMOGameModeBase : public AGameModeBase
+class UE4SUMO_API ACustomer_AI_Controller : public AAIController
 {
 	GENERATED_BODY()
+	
+	
 	
 	
 };

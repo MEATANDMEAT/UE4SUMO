@@ -1,11 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Custom headers
 #include "PlayerCharacter.h"
-#include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
 #include "Employees_AI_Controller.h"
+
+//Engine specific headers
 #include "BehaviorTree/BehaviorTree.h"
-#include "Perception/PawnSensingComponent.h"
+#include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+//Required headers
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
@@ -23,11 +28,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-		void OnPawnSeen(APawn* SeenPawn);
-
-	UFUNCTION()
-		void OnNoiseHear(APawn* NoiseInstigator, const FVector& Location, float Volume);
 
 public:	
 	// Called every frame
@@ -42,8 +42,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = AI)
 		class UBehaviorTree* BehaviorTree;
 
-	UPROPERTY(VisibleAnywhere, Category = AI)
-		class UPawnSensingComponent* PawnSensingComp;
 
 private:
+
 };
