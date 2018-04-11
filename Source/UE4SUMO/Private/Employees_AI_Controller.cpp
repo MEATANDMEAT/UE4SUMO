@@ -7,10 +7,7 @@ AEmployees_AI_Controller::AEmployees_AI_Controller()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	BehaviorComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComp"));
-	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
 
-	RandomLocationKey = "RandomLocation";
 	{
 		SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 		PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AI Perception Component");
@@ -20,29 +17,32 @@ AEmployees_AI_Controller::AEmployees_AI_Controller()
 		SightConfig->PeripheralVisionAngleDegrees = AISightAngle;
 		SightConfig->SetMaxAge(AISightAge);
 
-		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+		SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
+		SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
 		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 
 		PerceptionComponent->SetDominantSense(*SightConfig->GetSenseImplementation());
 		PerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &AEmployees_AI_Controller::OnPerceptionUpdated);
 		PerceptionComponent->ConfigureSense(*SightConfig);
 		PerceptionComponent->bEditableWhenInherited = true;
+
+		SetGenericTeamId(FGenericTeamId(0));
 	}
 }
 
 void AEmployees_AI_Controller::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 {
-	auto Player = Actors.FindByKey(GetWorld()->GetFirstPlayerController()->GetPawn());
 	//Set bIsPlayerDetected to true when the AI's perception updates and vice versa.
 	//This will switch between true and false each time the percetion is updated.
-	if (bIsPlayerDetected == false && Player)
+	if (bIsPlayerDetected == false)
 	{
 		bIsPlayerDetected = true;
+		UE_LOG(LogTemp,Warning,TEXT("Player detected"))
 	}
-	else if (bIsPlayerDetected && Player)
+	else if (bIsPlayerDetected)
 	{
 		bIsPlayerDetected = false;
+		UE_LOG(LogTemp, Warning, TEXT("Player not detected"))
 	}
 }
 void AEmployees_AI_Controller::Possess(APawn * Pawn)

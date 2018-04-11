@@ -7,6 +7,7 @@
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GenericTeamAgentInterface.h"
 
 //Required headers
 #include "GameFramework/Character.h"
@@ -14,7 +15,7 @@
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class UE4SUMO_API APlayerCharacter : public ACharacter
+class UE4SUMO_API APlayerCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -53,6 +54,10 @@ public:
 
 	float Size = 1.f;
 	bool bRunning;
+
+	FGenericTeamId TeamId;
+
+	virtual FGenericTeamId GetGenericTeamId() const override;
 
 private:
 	UPROPERTY(EditAnywhere)

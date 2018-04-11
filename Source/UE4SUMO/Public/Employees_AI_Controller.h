@@ -6,8 +6,6 @@
 #include "PlayerCharacter.h"
 
 //Engine specific headers
-#include "BehaviorTree/BlackboardComponent.h"
-#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "AI/Navigation/NavigationSystem.h"
@@ -23,10 +21,6 @@ UCLASS()
 class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 {
 	GENERATED_BODY()
-
-	UBlackboardComponent* BlackboardComp;
-	UBehaviorTreeComponent* BehaviorComp;
-
 
 	virtual void Possess(APawn* Pawn) override;
 
@@ -55,11 +49,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
 		bool bIsPlayerDetected = false;
 
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FName RandomLocationKey;
-
-	FTimerHandle TimerHandle;
-
+	//AI behavior variables and functions
 	bool bBehaviorTreeRunning = false;
 
 	FVector LastSeenLocation;
@@ -77,9 +67,8 @@ public:
 	bool bMoveToIsRunning = false;
 
 	AEnemyCharacter* EnemyCharacter;
-	APlayerCharacter* PlayerCharacter;
 
-	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
+	APlayerCharacter* PlayerCharacter;
 
 protected:
 	// Called when the game starts or when the actor is spawned in the world

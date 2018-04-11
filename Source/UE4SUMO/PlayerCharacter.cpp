@@ -20,6 +20,8 @@ APlayerCharacter::APlayerCharacter()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	LerpSteps = 0.05f;
+
+	TeamId = FGenericTeamId(1);
 }
 
 // Called when the game starts or when spawned
@@ -41,7 +43,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 		Speed += 5.f * DeltaTime;
 		GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size - 1.f)));
 	}
-	UE_LOG(LogTemp, Error, TEXT("Size is %s"), *(GetMesh()->GetComponentScale().ToString()))
 }
 
 // Called to bind functionality to input
@@ -84,7 +85,6 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 	{
 		if (MoveAmount > 0)
 		{
-			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
 			RotationValue = 0.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
@@ -93,7 +93,6 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 		}
 		else if (MoveAmount < 0)
 		{
-			//GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
 			RotationValue = -180.f;
 			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
@@ -139,4 +138,9 @@ void APlayerCharacter::Eat(float SizeIncrease) {
 	if(Size<2.f)Size+=SizeIncrease;
 	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
 	Speed -= 50.f * SizeIncrease;
+}
+
+FGenericTeamId APlayerCharacter::GetGenericTeamId() const
+{
+	return TeamId;
 }
