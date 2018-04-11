@@ -28,17 +28,16 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	RotationValue = -90.f;
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the enemy right now
-										   //we will use only yaw (the y-axis)       
+	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the enemy right        
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
-	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) {
+	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
+	{
 		Size -= 0.1f * DeltaTime;
 		Speed += 5.f * DeltaTime;
 		GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size - 1.f)));
@@ -63,16 +62,14 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 		if (MoveAmount > 0)
 		{
 			RotationValue = -90.f;
-			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 		else if (MoveAmount < 0)
 		{
 			RotationValue = 90.f;
-			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
@@ -86,16 +83,14 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 		if (MoveAmount > 0)
 		{
 			RotationValue = 0.f;
-			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 		else if (MoveAmount < 0)
 		{
 			RotationValue = -180.f;
-			FRotator CurrentRotation = GetMesh()->GetComponentRotation();
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
@@ -120,7 +115,6 @@ void APlayerCharacter::LungeCharge(float Charge)
 	if (Controller && Charge)
 	{
 		LungeAttackCharge += 25.f;
-		UE_LOG(LogTemp,Warning,TEXT("Charging the attack: %f"),LungeAttackCharge)
 	}
 }
 
@@ -129,13 +123,14 @@ void APlayerCharacter::LungeRelease()
 	FRotator LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 	FVector LungeVelocity = LungeDirection.Vector() * LungeAttackCharge;
-	this->LaunchCharacter(LungeVelocity, true, true);
+	this->GetCharacterMovement()->AddImpulse(LungeVelocity, true);
 	LungeAttackCharge = 0.f;
 }
 
 
-void APlayerCharacter::Eat(float SizeIncrease) {
-	if(Size<2.f)Size+=SizeIncrease;
+void APlayerCharacter::Eat(float SizeIncrease) 
+{
+	if (Size < 2.f) Size+=SizeIncrease;
 	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
 	Speed -= 50.f * SizeIncrease;
 }

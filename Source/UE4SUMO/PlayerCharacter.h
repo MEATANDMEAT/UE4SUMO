@@ -43,16 +43,19 @@ public:
 	void LungeCharge(float Charge);
 
 	void LungeRelease();
+
 	void Eat(float SizeIncrease);
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
 	FVector CurrentLocation;
+
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
 
 	float Size = 1.f;
+
 	bool bRunning;
 
 	FGenericTeamId TeamId;
@@ -61,7 +64,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-		FTransform CameraTransform;
+	FTransform CameraTransform;
 
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm = nullptr;
@@ -70,9 +73,9 @@ private:
 	UCameraComponent* Camera = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Rotation Parameters")
-		float LerpSteps;
+	float LerpSteps;
 
 	float LungeAttackCharge;
 
-	float RotationValue;
+	float RotationValue = -90.f;
 };

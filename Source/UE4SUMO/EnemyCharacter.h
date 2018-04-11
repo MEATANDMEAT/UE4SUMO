@@ -3,7 +3,6 @@
 #pragma once
 //Custom headers
 #include "PlayerCharacter.h"
-#include "Employees_AI_Controller.h"
 
 //Engine specific headers
 #include "BehaviorTree/BehaviorTree.h"
@@ -36,9 +35,6 @@ public:
 
 	UFUNCTION()
 	void OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-
-	UPROPERTY(EditAnywhere, Category = AI)
-		class UBehaviorTree* BehaviorTree;
 
 
 private:
