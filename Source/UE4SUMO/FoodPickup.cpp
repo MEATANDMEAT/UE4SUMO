@@ -46,10 +46,12 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 			}
 			PlayerCharacter->Speed -= SlowDown;
 		    Destroy(); 
+	if (PlayerCharacter){
+		PlayerCharacter->Eat(SizeIncrease);
+		Destroy(); 
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
 	}
 
 }
-

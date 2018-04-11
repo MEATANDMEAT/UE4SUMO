@@ -47,6 +47,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float SlowDown = 10.f;
+    float SizeIncrease = 0.1f;
 
 private:
 	UFUNCTION()

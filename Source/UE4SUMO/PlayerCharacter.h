@@ -43,11 +43,16 @@ public:
 	void LungeCharge(float Charge);
 
 	void LungeRelease();
+	void Eat(float SizeIncrease);
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
 	FVector CurrentLocation;
+	UPROPERTY(EditDefaultsOnly, Category = Curve)
+	UCurveFloat* Curve;
+
+	float Size = 1.f;
 
 private:
 	UPROPERTY(EditAnywhere)

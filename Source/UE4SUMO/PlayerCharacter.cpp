@@ -133,3 +133,8 @@ void APlayerCharacter::LungeRelease()
 }
 
 
+void APlayerCharacter::Eat(float SizeIncrease) {
+	if(Size<2.f)Size+=SizeIncrease;
+	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
+	Speed -= 100.f * SizeIncrease;
+}
