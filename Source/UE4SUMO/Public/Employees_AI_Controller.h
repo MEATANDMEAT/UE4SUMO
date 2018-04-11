@@ -17,7 +17,6 @@
 #include "AIController.h"
 #include "Employees_AI_Controller.generated.h"
 
-
 UCLASS()
 class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 {
@@ -32,8 +31,6 @@ class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 public:
 	// Sets default values for this actor's properties
 	AEmployees_AI_Controller();
-
-	virtual FRotator GetControlRotation() const override;
 
 	UFUNCTION()
 		void OnPerceptionUpdated(const TArray<AActor*> &Actors);
@@ -69,13 +66,13 @@ public:
 
 	FNavLocation Result;
 
-	bool RandomPointGenerated = false;
+	bool bRandomPointGenerated = false;
 
 	void GetRandomPoint();
 
 	void MoveToRandomPoint();
 
-	bool MoveToRunning = false;
+	bool bMoveToIsRunning = false;
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 

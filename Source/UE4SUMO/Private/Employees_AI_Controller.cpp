@@ -11,138 +11,125 @@ AEmployees_AI_Controller::AEmployees_AI_Controller()
 	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
 
 	RandomLocationKey = "RandomLocation";
-
-	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
-	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AI Perception Component");
-
-	SightConfig->SightRadius = AISightRadius;
-	SightConfig->LoseSightRadius = AILoseSightRadius;
-	SightConfig->PeripheralVisionAngleDegrees = AISightAngle;
-	SightConfig->SetMaxAge(AISightAge);
-
-	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
-	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-
-	PerceptionComponent->SetDominantSense(*SightConfig->GetSenseImplementation());
-	PerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &AEmployees_AI_Controller::OnPerceptionUpdated);
-	PerceptionComponent->ConfigureSense(*SightConfig);
-	PerceptionComponent->bEditableWhenInherited = true;
-}
-
-FRotator AEmployees_AI_Controller::GetControlRotation() const
-{
-	if (GetPawn() == nullptr)
 	{
-		return FRotator(0.f, 0.f, 0.f);
+		SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+		PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AI Perception Component");
+
+		SightConfig->SightRadius = AISightRadius;
+		SightConfig->LoseSightRadius = AILoseSightRadius;
+		SightConfig->PeripheralVisionAngleDegrees = AISightAngle;
+		SightConfig->SetMaxAge(AISightAge);
+
+		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+
+		PerceptionComponent->SetDominantSense(*SightConfig->GetSenseImplementation());
+		PerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &AEmployees_AI_Controller::OnPerceptionUpdated);
+		PerceptionComponent->ConfigureSense(*SightConfig);
+		PerceptionComponent->bEditableWhenInherited = true;
 	}
-	return FRotator(0.f, GetPawn()->GetActorRotation().Yaw, 0.f);
 }
 
 void AEmployees_AI_Controller::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 {
 	auto Player = Actors.FindByKey(GetWorld()->GetFirstPlayerController()->GetPawn());
+	//Set bIsPlayerDetected to true when the AI's perception updates and vice versa.
+	//This will switch between true and false each time the percetion is updated.
 	if (bIsPlayerDetected == false && Player)
 	{
 		bIsPlayerDetected = true;
-		UE_LOG(LogTemp, Warning, TEXT("bPlayerDetected %i"), bIsPlayerDetected);
 	}
 	else if (bIsPlayerDetected && Player)
 	{
 		bIsPlayerDetected = false;
-		UE_LOG(LogTemp, Warning, TEXT("bPlayerDetected %i"), bIsPlayerDetected);
 	}
 }
 
 void AEmployees_AI_Controller::Possess(APawn * Pawn)
 {
 	Super::Possess(Pawn);
-	//AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(Pawn);
-//	if (EnemyCharacter)
-//	{
-//		if (EnemyCharacter->BehaviorTree->BlackboardAsset)
-//		{
-//			BlackboardComp->InitializeBlackboard(*(EnemyCharacter->BehaviorTree->BlackboardAsset));
-//	  }
-//		BehaviorComp->StartTree(*EnemyCharacter->BehaviorTree);
-//	}
 }
-
-
+/*Generates a random location in the navigable mesh that the AI can reach and stores it inside Result.*/
 void AEmployees_AI_Controller::GetRandomPoint()
 {
 	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
-	Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 2000.f);
-	//	/*Result.Location = NavSys->GetRandomPointInNavigableRadius(
-	//		GetWorld(),
-	//		GetPawn()->GetActorLocation(),
-	//		2000.f);*/
-	Result.Location += FVector(0.f, 0.f, 87.275f);
-	UE_LOG(LogTemp, Warning, TEXT("Result Location is: %s"), *(Result.Location.ToString()))
-	RandomPointGenerated = false;
+	Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 1500.f);
+	Result.Location.Z = GetPawn()->GetActorLocation().Z;
 }
-
+/*Move the AI to the location stored inside Result
+NOTE: Result must be assigned to a valid location, use GetRandomReachablePointInRadius.*/
 void AEmployees_AI_Controller::MoveToRandomPoint()
 {
-	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	MoveToLocation(Result.Location, 5.f, false, true, true, true, 0, true);
-	if ((EnemyCharacter->GetActorLocation() - Result.Location).Size() < 10.f)
-	{
-		RandomPointGenerated = false;
-		MoveToRunning = false;
-	}
 }
 
-// Called when the game starts or when spawned
 void AEmployees_AI_Controller::BeginPlay()
 {
 	Super::BeginPlay();
-	AEnemyCharacter* GetControlledEnemy = Cast<AEnemyCharacter>(GetPawn());
-	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
-	Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 2000.f);
-   
+	PrimaryActorTick.TickInterval = 0.2f;
 }
 
-// Called every frame
 void AEmployees_AI_Controller::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	PrimaryActorTick.TickInterval = 0.1f;
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
-
-
+	
+	//When the player is detected and the pointer to player isn't NULL, move the AI
+	//to Player's current position. We use a vector(LastSeenLocation) to store player's position
+	//in order to give the AI memory.
 	if (bIsPlayerDetected && PlayerCharacter)
 	{
-		MoveToActor(PlayerCharacter, 0.f,false,true,true,0,false);
+		MoveToActor(PlayerCharacter, 0.f, false, true, true, 0, false);
 		LastSeenLocation = PlayerCharacter->GetActorLocation();
+		//Set AIRemember to true, so it has to move to LastSeenLocation.
 		bAIRemember = true;
 	}
-
+	//After the AI loses sight of the player, it moves to the LastSeenLocation vector.
+	//Which is the last position the AI recorded of Player's position.
 	else if (bIsPlayerDetected == false && PlayerCharacter && bAIRemember)
 	{
-		if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() < 10.f)
+		if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() < 5.f)
 		{
+			//After the AI loses sight of the player, and is near LastSeenLocation
+			//assign the random point to player's new position.
+			//This is to give the illusion that the AI predicted where the player could have moved, instead
+			//of the AI just turning around 180 degrees after it moves to the last seen position of the player
+			Result.Location = PlayerCharacter->GetActorLocation();
 			bAIRemember = false;
+			bRandomPointGenerated = true;
+			bMoveToIsRunning = false;
 		}
-		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 10.f)
+		//If the AI isn't close the last seen position of the player, then move until it is.
+		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 5.f)
 		{
-			MoveToLocation(LastSeenLocation, 5.f,false,true,false,true,0,false);
+			MoveToLocation(LastSeenLocation, 1.f, false, true, false, true, 0, false);
 		}
 	}
-
+	//When the player has not been detected and the AI does not remember any last positions of the player.
 	else if (bIsPlayerDetected == false && PlayerCharacter && bAIRemember == false)
 	{
-		if (RandomPointGenerated == false && MoveToRunning == false)
+		//Check if the random point has not already been generated and that the AI is in idle.
+		if (bRandomPointGenerated == false && bMoveToIsRunning == false)
 		{
 			GetRandomPoint();
-			RandomPointGenerated = true;
+			//Set bRandomPointGenerated to true, in order to stop the tick from running the same task again.
+			bRandomPointGenerated = true;
 		}
-		else if (RandomPointGenerated && MoveToRunning == false)
+		//Then check if we have generated a random point and that the AI is in idle.
+		if (bRandomPointGenerated && bMoveToIsRunning == false)
 		{
 			MoveToRandomPoint();
-			MoveToRunning = true;
+			//Set bMoveToIsRunning to true, in order to stop the tick from running the same task again.
+			bMoveToIsRunning = true;
+		}
+		//Check if the AI is near the random point, when it is, set the AI to idle and generate a random point again.
+		//Repeat the whole process again.
+		if ((EnemyCharacter->GetActorLocation() - Result.Location).Size() < 10.f)
+		{
+			bRandomPointGenerated = false;
+			bMoveToIsRunning = false;
 		}
 	}
 }
