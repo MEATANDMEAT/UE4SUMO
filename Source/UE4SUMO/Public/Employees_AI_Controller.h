@@ -76,6 +76,9 @@ public:
 
 	bool bMoveToIsRunning = false;
 
+	AEnemyCharacter* EnemyCharacter;
+	APlayerCharacter* PlayerCharacter;
+
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 
 protected:
