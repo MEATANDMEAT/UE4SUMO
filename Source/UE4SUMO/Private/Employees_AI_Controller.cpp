@@ -45,7 +45,6 @@ void AEmployees_AI_Controller::OnPerceptionUpdated(const TArray<AActor*>& Actors
 		bIsPlayerDetected = false;
 	}
 }
-
 void AEmployees_AI_Controller::Possess(APawn * Pawn)
 {
 	Super::Possess(Pawn);
@@ -68,13 +67,13 @@ void AEmployees_AI_Controller::BeginPlay()
 {
 	Super::BeginPlay();
 	PrimaryActorTick.TickInterval = 0.2f;
+	EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
+	PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 void AEmployees_AI_Controller::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
-	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	
 	//When the player is detected and the pointer to player isn't NULL, move the AI
 	//to Player's current position. We use a vector(LastSeenLocation) to store player's position

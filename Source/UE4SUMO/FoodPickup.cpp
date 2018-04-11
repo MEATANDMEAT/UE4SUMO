@@ -36,16 +36,6 @@ void AFoodPickup::Tick(float DeltaTime)
 void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	TArray<USkeletalMeshComponent*> Comps;
-	if (PlayerCharacter) {
-		OtherActor->GetComponents(Comps);
-			if (Comps.Num() > 0)
-			{
-				USkeletalMeshComponent* FoundComp = Comps[0];
-				Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + SizeIncrease);
-			}
-			PlayerCharacter->Speed -= SlowDown;
-		    Destroy(); 
 	if (PlayerCharacter){
 		PlayerCharacter->Eat(SizeIncrease);
 		Destroy(); 
@@ -53,5 +43,4 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 	else {
 		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
 	}
-
 }

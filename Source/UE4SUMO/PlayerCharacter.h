@@ -7,7 +7,6 @@
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "TimerManager.h"
 
 //Required headers
 #include "GameFramework/Character.h"
@@ -53,6 +52,7 @@ public:
 	UCurveFloat* Curve;
 
 	float Size = 1.f;
+	bool bRunning;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -68,8 +68,6 @@ private:
 		float LerpSteps;
 
 	float LungeAttackCharge;
-
-	//FTimerHandle TimerHandle_ResetOrientation;
 
 	float RotationValue;
 };

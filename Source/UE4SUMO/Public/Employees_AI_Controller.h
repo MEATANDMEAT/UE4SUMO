@@ -17,6 +17,8 @@
 #include "AIController.h"
 #include "Employees_AI_Controller.generated.h"
 
+class AEnemyCharacter;
+class APlayerCharacter;
 UCLASS()
 class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 {

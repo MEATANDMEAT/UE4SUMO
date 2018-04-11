@@ -36,6 +36,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the enemy right now
 										   //we will use only yaw (the y-axis)       
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) {
+		Size -= 0.1f * DeltaTime;
+		Speed += 5.f * DeltaTime;
+		GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size - 1.f)));
+	}
+	UE_LOG(LogTemp, Error, TEXT("Size is %s"), *(GetMesh()->GetComponentScale().ToString()))
 }
 
 // Called to bind functionality to input
@@ -102,16 +108,12 @@ void APlayerCharacter::Run(float RunSpeed)
 	if (Controller&&RunSpeed)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
-		TArray<USkeletalMeshComponent*> Comps;
-			GetComponents(Comps);
-			if (Comps.Num() > 0)
-			{
-				USkeletalMeshComponent* FoundComp = Comps[0];
-				Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() + -0.0005f);
-			}
-			Speed += 0.1f;
+		bRunning = true;
 	}
-	else Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
+	else {
+		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
+		bRunning = false;
+	}
 }
 
 void APlayerCharacter::LungeCharge(float Charge)
@@ -136,5 +138,5 @@ void APlayerCharacter::LungeRelease()
 void APlayerCharacter::Eat(float SizeIncrease) {
 	if(Size<2.f)Size+=SizeIncrease;
 	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
-	Speed -= 100.f * SizeIncrease;
+	Speed -= 50.f * SizeIncrease;
 }
