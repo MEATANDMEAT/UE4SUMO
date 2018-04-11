@@ -3,9 +3,6 @@
 #pragma once
 #include "PlayerCharacter.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
-#include "Employees_AI_Controller.h"
-#include "BehaviorTree/BehaviorTree.h"
-#include "Perception/PawnSensingComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
@@ -23,27 +20,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-		void OnPawnSeen(APawn* SeenPawn);
-
-	UFUNCTION()
-		void OnNoiseHear(APawn* NoiseInstigator, const FVector& Location, float Volume);
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UFUNCTION()
 	void OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-
-	UPROPERTY(EditAnywhere, Category = AI)
-		class UBehaviorTree* BehaviorTree;
-
-	UPROPERTY(VisibleAnywhere, Category = AI)
-		class UPawnSensingComponent* PawnSensingComp;
-
-private:
 };

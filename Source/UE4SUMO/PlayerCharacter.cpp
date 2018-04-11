@@ -106,7 +106,7 @@ void APlayerCharacter::Run(float RunSpeed)
 }
 
 void APlayerCharacter::Eat(float SizeIncrease) {
-	Size+=SizeIncrease;
+	if(Size<2.f)Size+=SizeIncrease;
 	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
 	Speed -= 100.f * SizeIncrease;
 }

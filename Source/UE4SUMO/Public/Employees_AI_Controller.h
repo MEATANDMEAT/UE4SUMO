@@ -2,11 +2,10 @@
 
 #pragma once
 #include "EnemyCharacter.h"
-#include "BehaviorTree/BlackboardComponent.h"
-#include "BehaviorTree/BehaviorTreeComponent.h"
-#include "BehaviorTree/BehaviorTree.h"
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/PawnSensingComponent.h"
+#include "Runtime/Engine/Classes/AI/Navigation/NavigationSystem.h"
 #include "Employees_AI_Controller.generated.h"
 
 
@@ -15,32 +14,22 @@ class UE4SUMO_API AEmployees_AI_Controller : public AAIController
 {
 	GENERATED_BODY()
 
-	UBlackboardComponent* BlackboardComp;
-	UBehaviorTreeComponent* BehaviorComp;
-
-
-	virtual void Possess(APawn* Pawn) override;
-
 public:
 	// Sets default values for this actor's properties
 	AEmployees_AI_Controller();
 
-	void SetPlayerSeen(APawn* Pawn);
+	FNavLocation Result;
+	UNavigationSystem* NavSys;
+	unsigned char AIState;
+	FVector Target;
+	UPROPERTY(VisibleAnywhere, Category = AI)
+	class UPawnSensingComponent* PawnSensingComp;
 
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FName RandomLocationKey;
-
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FName PlayerKey;
-
-	UPROPERTY(EditDefaultsOnly, Category = AI)
-		FName WalkSpeed;
-
-	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 protected:
 	// Called when the game starts or when the actor is spawned in the world
-		void BeginPlay() override;
-
+	void BeginPlay() override;
+	UFUNCTION()
+	void OnPawnSeen(APawn* SeenPawn);
 
 public:
 	// Is called every frame when the actor is present in the world
