@@ -2,6 +2,10 @@
 
 #pragma once
 
+//Engine specific headers
+#include "GameFramework/CharacterMovementComponent.h"
+
+//Required headers
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Customer.generated.h"
@@ -23,9 +27,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
 	
 };

@@ -37,18 +37,17 @@ void AEmployees_AI_Controller::OnPerceptionUpdated(const TArray<AActor*>& Actors
 	if (bIsPlayerDetected == false)
 	{
 		bIsPlayerDetected = true;
-		UE_LOG(LogTemp,Warning,TEXT("Player detected"))
 	}
 	else if (bIsPlayerDetected)
 	{
 		bIsPlayerDetected = false;
-		UE_LOG(LogTemp, Warning, TEXT("Player not detected"))
 	}
 }
 void AEmployees_AI_Controller::Possess(APawn * Pawn)
 {
 	Super::Possess(Pawn);
 }
+
 /*Generates a random location in the navigable mesh that the AI can reach and stores it inside Result.*/
 void AEmployees_AI_Controller::GetRandomPoint()
 {
@@ -56,6 +55,7 @@ void AEmployees_AI_Controller::GetRandomPoint()
 	Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), 1500.f);
 	Result.Location.Z = GetPawn()->GetActorLocation().Z;
 }
+
 /*Move the AI to the location stored inside Result
 NOTE: Result must be assigned to a valid location, use GetRandomReachablePointInRadius.*/
 void AEmployees_AI_Controller::MoveToRandomPoint()

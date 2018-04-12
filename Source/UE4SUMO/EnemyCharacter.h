@@ -5,12 +5,10 @@
 #include "PlayerCharacter.h"
 
 //Engine specific headers
-#include "BehaviorTree/BehaviorTree.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 //Required headers
-#include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"

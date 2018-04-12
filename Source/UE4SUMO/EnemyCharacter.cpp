@@ -7,9 +7,11 @@ AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 350.f, 0.f);
 }
@@ -29,10 +31,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
 void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	UE_LOG(LogTemp, Error, TEXT("Hit something"))
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	if (PlayerCharacter) {
-		UE_LOG(LogTemp, Error, TEXT("Hitting player!"))
+	if (PlayerCharacter) 
+	{
 		 OtherActor->Destroy();
 	}
 }	
