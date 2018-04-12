@@ -19,7 +19,7 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
-	LerpSteps = 0.05f;
+	LerpSteps = 0.075f;
 
 	TeamId = FGenericTeamId(1);
 }
@@ -33,14 +33,19 @@ void APlayerCharacter::BeginPlay()
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-	FRotator CurrentRotation = GetMesh()->GetComponentRotation();  //the rotation of the enemy right        
-	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(CurrentRotation), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+	Super::Tick(DeltaTime);  
+	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
 		Size -= 0.1f * DeltaTime;
 		Speed += 5.f * DeltaTime;
 		GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size - 1.f)));
+	}
+	if (bSizeIncrease)
+	{
+		Alpha = (FMath::Lerp(Alpha, 0.f, 0.1f*DeltaTime));
+		GetMesh()->SetWorldScale3D(FVector(LerpCurve->GetFloatValue(Alpha)));
+		//bSizeIncrease = false;
 	}
 }
 
@@ -114,7 +119,7 @@ void APlayerCharacter::LungeCharge(float Charge)
 {
 	if (Controller && Charge)
 	{
-		LungeAttackCharge += 25.f;
+		LungeAttackCharge += 50.f;
 	}
 }
 
@@ -130,8 +135,12 @@ void APlayerCharacter::LungeRelease()
 
 void APlayerCharacter::Eat(float SizeIncrease) 
 {
-	if (Size < 2.f) Size+=SizeIncrease;
-	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
+	if (Size < 2.f)
+	{
+		Size += SizeIncrease;
+		bSizeIncrease = true;
+	}
+	//GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
 	Speed -= 50.f * SizeIncrease;
 }
 

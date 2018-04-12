@@ -9,17 +9,18 @@ ACustomer_AI_Controller::ACustomer_AI_Controller()
 
 void ACustomer_AI_Controller::BeginPlay()
 {
-	PrimaryActorTick.TickInterval = 0.2f;
+	Super::BeginPlay();
+	PrimaryActorTick.TickInterval = 3.f;
 }
 
 void ACustomer_AI_Controller::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	if (bRandomPointGenerated == false && bMoveToIsRunning == false)
 	{
 		GetRandomPoint();
 		//Set bRandomPointGenerated to true, in order to stop the tick from running the same task again.
 		bRandomPointGenerated = true;
-		UE_LOG(LogTemp,Warning,TEXT("Stuck in RPointGen = false, MoveTo= false"))
 	}
 	//Then check if we have generated a random point and that the AI is in idle.
 	if (bRandomPointGenerated && bMoveToIsRunning == false)
@@ -27,7 +28,6 @@ void ACustomer_AI_Controller::Tick(float DeltaTime)
 		MoveToRandomPoint();
 		//Set bMoveToIsRunning to true, in order to stop the tick from running the same task again.
 		bMoveToIsRunning = true;
-		UE_LOG(LogTemp, Warning, TEXT("Stuck in RPointGen = true, MoveTo= false"))
 	}
 	//Check if the AI is near the random point, when it is, set the AI to idle and generate a random point again.
 	//Repeat the whole process again.
@@ -35,9 +35,7 @@ void ACustomer_AI_Controller::Tick(float DeltaTime)
 	{
 		bRandomPointGenerated = false;
 		bMoveToIsRunning = false;
-		UE_LOG(LogTemp, Warning, TEXT("RPoint less than 10"))
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Tick is running"))
 }
 
 void ACustomer_AI_Controller::GetRandomPoint()

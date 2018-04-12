@@ -7,7 +7,7 @@
 AFoodPickup::AFoodPickup()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	FoodRoot = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	RootComponent = FoodRoot;
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FoodMesh"));
@@ -24,21 +24,28 @@ AFoodPickup::AFoodPickup()
 void AFoodPickup::BeginPlay()
 {
 	Super::BeginPlay();
+	Alpha = 0.f;
+	bEat = false;
 }
 
 // Called every frame
 void AFoodPickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (bEat) {
+		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.f*DeltaTime));
+		FoodMesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
+		if (Alpha >= 1) Destroy();
+	}
 }
 
 void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	if (PlayerCharacter){
+	if (PlayerCharacter && !bEat)
+	{
 		PlayerCharacter->Eat(SizeIncrease);
-		Destroy(); 
+		bEat = true;
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));

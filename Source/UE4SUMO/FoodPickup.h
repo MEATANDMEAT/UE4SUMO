@@ -5,10 +5,8 @@
 #include "PlayerCharacter.h"
 
 //Engine specific headers
-#include "Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
-#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 
 //Reqiured headers
 #include "CoreMinimal.h"
@@ -44,6 +42,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float SizeIncrease = 0.1f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Curve)
+	UCurveFloat* Curve;
+
+	float Alpha;
+	bool bEat;
 
 private:
 	UFUNCTION()
