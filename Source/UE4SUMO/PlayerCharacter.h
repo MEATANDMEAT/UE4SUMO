@@ -54,10 +54,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
 
-	UPROPERTY(EditDefaultsOnly, Category = Curve)
-	UCurveFloat* LerpCurve;
-
-	float Size = 1.f;
+	float Size = 1.0f;
 
 	bool bRunning;
 
@@ -81,8 +78,4 @@ private:
 	float LungeAttackCharge;
 
 	float RotationValue = -90.f;
-
-	bool bSizeIncrease = false;
-
-	float Alpha = 1;
 };

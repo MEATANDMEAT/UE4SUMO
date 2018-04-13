@@ -35,18 +35,14 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);  
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+	UE_LOG(LogTemp, Warning,TEXT("ALPHA: %f"),Size)
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
 		Size -= 0.1f * DeltaTime;
 		Speed += 5.f * DeltaTime;
 		GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size - 1.f)));
 	}
-	if (bSizeIncrease)
-	{
-		Alpha = (FMath::Lerp(Alpha, 0.f, 0.1f*DeltaTime));
-		GetMesh()->SetWorldScale3D(FVector(LerpCurve->GetFloatValue(Alpha)));
-		//bSizeIncrease = false;
-	}
+
 }
 
 // Called to bind functionality to input
@@ -135,12 +131,8 @@ void APlayerCharacter::LungeRelease()
 
 void APlayerCharacter::Eat(float SizeIncrease) 
 {
-	if (Size < 2.f)
-	{
-		Size += SizeIncrease;
-		bSizeIncrease = true;
-	}
-	//GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
+	if (Size < 2.f) Size += SizeIncrease;
+	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
 	Speed -= 50.f * SizeIncrease;
 }
 

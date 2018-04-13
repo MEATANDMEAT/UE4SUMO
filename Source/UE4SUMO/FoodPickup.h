@@ -47,6 +47,7 @@ public:
 	UCurveFloat* Curve;
 
 	float Alpha;
+
 	bool bEat;
 
 private:
