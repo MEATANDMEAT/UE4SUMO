@@ -35,7 +35,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);  
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
-	UE_LOG(LogTemp, Warning,TEXT("ALPHA: %f"),Size)
+	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-0.9f)), 0.03f));
+	UE_LOG(LogTemp,Warning,TEXT("SIZE: %s"),*(GetMesh()->GetComponentScale().ToString()))
+	UE_LOG(LogTemp, Warning, TEXT("SIZE VAR: %f"), Size)
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
 		Size -= 0.1f * DeltaTime;
@@ -132,7 +134,7 @@ void APlayerCharacter::LungeRelease()
 void APlayerCharacter::Eat(float SizeIncrease) 
 {
 	if (Size < 2.f) Size += SizeIncrease;
-	GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size-1.f)));
+	//GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size - 1.f)));
 	Speed -= 50.f * SizeIncrease;
 }
 

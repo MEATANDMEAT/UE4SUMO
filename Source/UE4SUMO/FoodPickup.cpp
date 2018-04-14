@@ -32,8 +32,10 @@ void AFoodPickup::BeginPlay()
 void AFoodPickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bEat) {
-		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f*DeltaTime));
+
+	if (bEat) 
+	{
+		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f * DeltaTime));
 		FoodMesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
 		if (Alpha >= 1) Destroy();
 	}
