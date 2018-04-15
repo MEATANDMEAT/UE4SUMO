@@ -44,7 +44,7 @@ public:
 
 	void LungeRelease();
 
-	void EatUnhealthy(float SizeIncrease);
+	void EatUnhealthy();
 
 	void EatHealthy(float SizeDecrease);
 
@@ -63,6 +63,9 @@ public:
 	FGenericTeamId TeamId;
 
 	virtual FGenericTeamId GetGenericTeamId() const override;
+
+	UPROPERTY(EditAnywhere)
+		float SizeIncrease = 0.1f;
 
 private:
 	UPROPERTY(EditAnywhere)

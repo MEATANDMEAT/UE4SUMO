@@ -130,7 +130,7 @@ void APlayerCharacter::LungeRelease()
 }
 
 
-void APlayerCharacter::EatUnhealthy(float SizeIncrease) 
+void APlayerCharacter::EatUnhealthy() 
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 50.f * SizeIncrease;
