@@ -44,7 +44,9 @@ public:
 
 	void LungeRelease();
 
-	void Eat(float SizeIncrease);
+	void EatUnhealthy(float SizeIncrease);
+
+	void EatHealthy(float SizeDecrease);
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;

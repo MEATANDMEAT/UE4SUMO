@@ -32,24 +32,24 @@ void AHealthyFoodPickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bEat)
+	{
+		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f * DeltaTime));
+		FoodMesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
+		if (Alpha >= 1) Destroy();
+	}
 }
 
 void AHealthyFoodPickup::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	TArray<USkeletalMeshComponent*> Comps;
-	if (PlayerCharacter) {
-		OtherActor->GetComponents(Comps);
-		if (Comps.Num() > 0)
-		{
-			USkeletalMeshComponent* FoundComp = Comps[0];
-			Comps[0]->SetWorldScale3D(Comps[0]->GetComponentScale() - SizeDecrease);
-		}
-		PlayerCharacter->Speed += SpeedUp;
-		Destroy();
+	if (PlayerCharacter && !bEat)
+	{
+		PlayerCharacter->EatHealthy(SizeDecrease);
+		bEat = true;
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this HealthyFoodPickup"));
+		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
 	}
 
 }

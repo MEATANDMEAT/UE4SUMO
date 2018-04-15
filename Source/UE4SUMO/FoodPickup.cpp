@@ -46,7 +46,7 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if (PlayerCharacter && !bEat)
 	{
-		PlayerCharacter->Eat(SizeIncrease);
+		PlayerCharacter->EatUnhealthy(SizeIncrease);
 		bEat = true;
 	}
 	else {

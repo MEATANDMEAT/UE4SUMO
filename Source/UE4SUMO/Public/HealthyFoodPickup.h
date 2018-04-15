@@ -44,8 +44,12 @@ public:
 	UPROPERTY(EditAnywhere)
 		float SizeDecrease = 0.1f;
 
-	UPROPERTY(EditAnywhere)
-		float SpeedUp = 10.f;
+	UPROPERTY(EditDefaultsOnly, Category = Curve)
+		UCurveFloat* Curve;
+
+	float Alpha = 0.f;
+
+	bool bEat = false;
 
 private:
 	UFUNCTION()
