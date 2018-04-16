@@ -1,9 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Custom headers
+#include "Customer.h"
 
 //Engine specific headers
 #include "AI/Navigation/NavigationSystem.h"
+#include "EngineUtils.h"
+
+//C++ headers
+#include <vector>
 
 //Requried headers
 #include "CoreMinimal.h"
@@ -33,6 +39,11 @@ public:
 		void MoveToRandomPoint();
 
 		bool bMoveToIsRunning = false;
+
+		bool bHasReceievedActors = false;
+
+		std::vector<TActorIterator<ACustomer>> CustomerArray;
+
 private:
 	
 	

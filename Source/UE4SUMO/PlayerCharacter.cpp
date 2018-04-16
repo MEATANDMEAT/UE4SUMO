@@ -19,7 +19,6 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
-	LerpSteps = 0.075f;
 
 	TeamId = FGenericTeamId(1);
 }
@@ -34,8 +33,9 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);  
-	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
-	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 0.03f));
+	FrameTime = DeltaTime;
+	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * DeltaTime));
+	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 3.f * DeltaTime));
 	//UE_LOG(LogTemp,Warning,TEXT("PlayerSize %s"),*GetMesh()->GetComponentScale().ToString())
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
@@ -63,14 +63,14 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 		if (MoveAmount > 0)
 		{
 			RotationValue = -90.f;
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 		else if (MoveAmount < 0)
 		{
 			RotationValue = 90.f;
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
@@ -84,14 +84,14 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 		if (MoveAmount > 0)
 		{
 			RotationValue = 0.f;
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
 		else if (MoveAmount < 0)
 		{
 			RotationValue = -180.f;
-			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
+			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
 			PawnMakeNoise(1.f, GetActorLocation(), false);
 		}

@@ -79,10 +79,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera = nullptr;
 
-	UPROPERTY(EditAnywhere, Category = "Rotation Parameters")
-	float LerpSteps;
-
 	float LungeAttackCharge;
 
 	float RotationValue = -90.f;
+
+	float FrameTime = 0.f;
 };

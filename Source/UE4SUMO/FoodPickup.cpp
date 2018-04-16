@@ -50,6 +50,6 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 		bEat = true;
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
+		//UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
 	}
 }
