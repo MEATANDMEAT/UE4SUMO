@@ -22,7 +22,7 @@ ACustomer::ACustomer()
 void ACustomer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACustomer::OnPlayerOverlap);
 }
 
 // Called every frame
@@ -30,5 +30,15 @@ void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	if (PlayerCharacter)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("COLLIDING!"))
+		PlayerCharacter->LaunchCharacter((PlayerCharacter->GetMesh()->GetForwardVector() *-1.f)*3000.f, true,false);
+	}
 }
 

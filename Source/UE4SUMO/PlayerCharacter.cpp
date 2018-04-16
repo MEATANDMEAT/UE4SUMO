@@ -36,12 +36,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);  
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), LerpSteps));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 0.03f));
-	UE_LOG(LogTemp,Warning,TEXT("PlayerSize %s"),*GetMesh()->GetComponentScale().ToString())
+	//UE_LOG(LogTemp,Warning,TEXT("PlayerSize %s"),*GetMesh()->GetComponentScale().ToString())
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
 		Size -= 0.1f * DeltaTime;
 		Speed += 5.f * DeltaTime;
-		GetMesh()->SetWorldScale3D(FVector(Curve->GetFloatValue(Size - 1.f)));
 	}
 
 }
@@ -105,6 +104,7 @@ void APlayerCharacter::Run(float RunSpeed)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
 		bRunning = true;
+		CurrentSize -= 1.f;
 	}
 	else {
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
@@ -134,12 +134,14 @@ void APlayerCharacter::EatUnhealthy()
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 50.f * SizeIncrease;
+	CurrentSize += 4.f;
 }
 
 void APlayerCharacter::EatHealthy(float SizeDecrease)
 {
 	if (Size >= 1.f) Size -= SizeDecrease;
 	Speed += 50.f * SizeDecrease;
+	CurrentSize -= 4.f;
 }
 
 FGenericTeamId APlayerCharacter::GetGenericTeamId() const

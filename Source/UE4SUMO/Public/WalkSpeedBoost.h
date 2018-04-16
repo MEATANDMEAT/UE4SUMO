@@ -30,7 +30,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
@@ -42,6 +42,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 		UCurveFloat* Curve;
 
+	UPROPERTY(EditDefaultsOnly, Category = Curve)
+		UCurveFloat* CurveFloating;
+
 	float Alpha = 0.f;
 
 	bool bPickup = false;
@@ -50,6 +53,9 @@ public:
 
 	unsigned int Repeats = 0;
 
+	bool bUp = true;
+
+	float Beta = 0.f;
 private:
 	UFUNCTION()
 		void OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);

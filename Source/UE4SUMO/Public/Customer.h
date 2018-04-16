@@ -1,9 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Custom headers
+#include "PlayerCharacter.h"
 
 //Engine specific headers
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -27,6 +30,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	UFUNCTION()
+		void OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	
 };

@@ -24,7 +24,6 @@ AWalkSpeedBoost::AWalkSpeedBoost()
 void AWalkSpeedBoost::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -37,7 +36,15 @@ void AWalkSpeedBoost::Tick(float DeltaTime)
 		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f * DeltaTime));
 		Mesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
 	}
-
+	if (Beta >= 1.f) 
+	{
+		bUp = !bUp;
+		Beta = 0.f;
+	}
+	Beta = (FMath::Lerp(Beta, 1.1f, 1.9f*DeltaTime));
+	if (bUp) Mesh->AddRelativeLocation(FVector(0.f, 0.f, CurveFloating->GetFloatValue(Beta))*30.f*DeltaTime);
+	else Mesh->AddRelativeLocation(FVector(0.f, 0.f, CurveFloating->GetFloatValue(Beta)*-30.f*DeltaTime));
+	Mesh->AddRelativeRotation(FRotator(0.f, 73.f*DeltaTime, 0.f));
 }
 
 void AWalkSpeedBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)

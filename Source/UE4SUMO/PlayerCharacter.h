@@ -67,6 +67,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		float SizeIncrease = 0.1f;
 
+	float CurrentSize = 60.f;
+
 private:
 	UPROPERTY(EditAnywhere)
 	FTransform CameraTransform;

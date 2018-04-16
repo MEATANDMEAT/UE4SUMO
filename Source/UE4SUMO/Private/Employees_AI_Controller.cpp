@@ -66,7 +66,6 @@ void AEmployees_AI_Controller::MoveToRandomPoint()
 void AEmployees_AI_Controller::BeginPlay()
 {
 	Super::BeginPlay();
-	PrimaryActorTick.TickInterval = 0.2f;
 	EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }

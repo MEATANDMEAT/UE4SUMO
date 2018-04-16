@@ -2,6 +2,10 @@
 
 #pragma once
 
+#include <vector>
+#include "Customer.h"
+#include "EngineUtils.h"
+
 //Required headers
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
@@ -20,5 +24,5 @@ private:
 
 	virtual void Tick(float DeltaSeconds) override;
 	
-	
+	std::vector<TActorIterator<ACustomer>> CustomerArray;
 };

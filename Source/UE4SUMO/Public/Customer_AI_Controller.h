@@ -2,7 +2,6 @@
 
 #pragma once
 
-
 //Engine specific headers
 #include "AI/Navigation/NavigationSystem.h"
 
