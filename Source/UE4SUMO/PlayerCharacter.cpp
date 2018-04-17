@@ -127,8 +127,8 @@ void APlayerCharacter::LungeRelease()
 	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 	const FVector Force = LungeDirection.Vector() * LungeAttackCharge;
-	GetMovementComponent()->AddRadialImpulse(LungeDirection.Vector(), 300.f, 1000.f,ERadialImpulseFalloff::RIF_Linear,true);
-	LaunchCharacter(Force, false, true);
+	//GetMovementComponent()->AddRadialImpulse(LungeDirection.Vector(), 300.f, 1000.f,ERadialImpulseFalloff::RIF_Linear,true);
+	//LaunchCharacter(Force, false, true);
 	LungeAttackCharge = 0.f;
 	bLunge = false;
 }
