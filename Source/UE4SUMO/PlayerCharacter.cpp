@@ -35,7 +35,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);  
 	FrameTime = DeltaTime;
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * DeltaTime));
-	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 3.f * DeltaTime));
+	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 1.f * DeltaTime));
 	//UE_LOG(LogTemp,Warning,TEXT("PlayerSize %s"),*GetMesh()->GetComponentScale().ToString())
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
@@ -104,7 +104,8 @@ void APlayerCharacter::Run(float RunSpeed)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
 		bRunning = true;
-		CurrentSize -= 1.f;
+		PlayerSize -= 0.03f;
+		UE_LOG(LogTemp, Warning, TEXT("Player %f"), PlayerSize);
 	}
 	else {
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
@@ -122,11 +123,14 @@ void APlayerCharacter::LungeCharge(float Charge)
 
 void APlayerCharacter::LungeRelease()
 {
-	FRotator LungeDirection = GetMesh()->GetComponentRotation();
+	if (!bLunge) bLunge = true;
+	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
-	FVector LungeVelocity = LungeDirection.Vector() * LungeAttackCharge;
-	this->GetCharacterMovement()->AddImpulse(LungeVelocity, true);
+	const FVector Force = LungeDirection.Vector() * LungeAttackCharge;
+	GetMovementComponent()->AddRadialImpulse(LungeDirection.Vector(), 300.f, 1000.f,ERadialImpulseFalloff::RIF_Linear,true);
+	LaunchCharacter(Force, false, true);
 	LungeAttackCharge = 0.f;
+	bLunge = false;
 }
 
 
@@ -134,14 +138,12 @@ void APlayerCharacter::EatUnhealthy()
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 50.f * SizeIncrease;
-	CurrentSize += 4.f;
 }
 
 void APlayerCharacter::EatHealthy(float SizeDecrease)
 {
 	if (Size >= 1.f) Size -= SizeDecrease;
 	Speed += 50.f * SizeDecrease;
-	CurrentSize -= 4.f;
 }
 
 FGenericTeamId APlayerCharacter::GetGenericTeamId() const

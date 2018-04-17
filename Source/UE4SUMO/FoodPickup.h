@@ -7,6 +7,7 @@
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 //Reqiured headers
 #include "CoreMinimal.h"
@@ -46,6 +47,12 @@ public:
 	float Alpha;
 
 	bool bEat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USoundBase* GrowingSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USoundBase* EatingSound;
 
 private:
 	UFUNCTION()

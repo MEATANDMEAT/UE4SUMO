@@ -7,6 +7,7 @@
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -44,6 +45,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 		UCurveFloat* CurveFloating;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class USoundBase* SpeedBoostSound;
 
 	float Alpha = 0.f;
 

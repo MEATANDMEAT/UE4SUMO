@@ -58,7 +58,7 @@ public:
 
 	float Size = 1.0f;
 
-	bool bRunning;
+	bool bRunning = false;
 
 	FGenericTeamId TeamId;
 
@@ -67,7 +67,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		float SizeIncrease = 0.1f;
 
-	float CurrentSize = 60.f;
+	float PlayerSize = 60.f;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -84,4 +84,8 @@ private:
 	float RotationValue = -90.f;
 
 	float FrameTime = 0.f;
+
+	bool bLunge = false;
+
+	FRotator LungeDirection;
 };

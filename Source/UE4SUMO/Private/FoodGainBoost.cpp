@@ -36,8 +36,21 @@ void AFoodGainBoost::Tick(float DeltaTime)
 	{
 		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f * DeltaTime));
 		FoodMesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
-		if (Alpha >= 1) Destroy();
+		if (Alpha >= 1)
+		{
+			Destroy();
+			PrimaryActorTick.bCanEverTick = false;
+		}	
 	}
+	if (Beta >= 1.f)
+	{
+		bUp = !bUp;
+		Beta = 0.f;
+	}
+	Beta = (FMath::Lerp(Beta, 1.1f, 1.9f*DeltaTime));
+	if (bUp) FoodMesh->AddRelativeLocation(FVector(0.f, 0.f, CurveFloating->GetFloatValue(Beta))*30.f*DeltaTime);
+	else FoodMesh->AddRelativeLocation(FVector(0.f, 0.f, CurveFloating->GetFloatValue(Beta)*-30.f*DeltaTime));
+	FoodMesh->AddRelativeRotation(FRotator(0.f, 73.f*DeltaTime, 0.f));
 }
 
 void AFoodGainBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -45,7 +58,7 @@ void AFoodGainBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AActo
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if (PlayerCharacter && !bPickup)
 	{
-		GetWorldTimerManager().SetTimer(Timer, this, &AFoodGainBoost::FoodGain, 1.f, true, 0.f);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &AFoodGainBoost::FoodGain, 1.f, true, 0.f);
 		bPickup = true;
 	}
 }
@@ -57,12 +70,12 @@ void AFoodGainBoost::FoodGain()
 	if (Repeats < 5)
 	{
 		PlayerCharacter->SizeIncrease = 0.3f;
-		UE_LOG(LogTemp, Warning, TEXT("Speed 400"));
+		UE_LOG(LogTemp, Warning, TEXT("Food gain has increased"));
 	}
 	else if (Repeats > 5)
 	{
-		GetWorldTimerManager().ClearTimer(Timer);
-		UE_LOG(LogTemp, Warning, TEXT("Speed 300"));
+		GetWorldTimerManager().ClearTimer(TimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT("Food gain has decreased"));
 		PlayerCharacter->SizeIncrease = 0.1f;
 		Repeats = 0;
 		Destroy();

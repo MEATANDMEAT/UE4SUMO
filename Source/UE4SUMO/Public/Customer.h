@@ -3,10 +3,12 @@
 #pragma once
 //Custom headers
 #include "PlayerCharacter.h"
+#include "Customer_AI_Controller.h"
 
 //Engine specific headers
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
+#include "AI/Navigation/NavigationSystem.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -34,5 +36,7 @@ private:
 	UFUNCTION()
 		void OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-	
+	FVector Direction = FVector(0.f, 0.f, 0.f);
+
+	float CustomerSize = 70.f;
 };

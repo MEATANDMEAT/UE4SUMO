@@ -40,9 +40,6 @@ public:
 
 		bool bMoveToIsRunning = false;
 
-		bool bHasReceievedActors = false;
-
-		std::vector<TActorIterator<ACustomer>> CustomerArray;
 
 private:
 	

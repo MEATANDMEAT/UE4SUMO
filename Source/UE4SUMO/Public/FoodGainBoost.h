@@ -42,13 +42,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 		UCurveFloat* Curve;
 
+	UPROPERTY(EditDefaultsOnly, Category = Curve)
+		UCurveFloat* CurveFloating;
+
 	float Alpha = 0.f;
+
+	float Beta = 0.f;
 
 	bool bPickup = false;
 
+	bool bUp = true;
+
+	FTimerHandle TimerHandle;
+
 	unsigned int Repeats = 0;
 
-	FTimerHandle Timer;
 
 private:
 	UFUNCTION()

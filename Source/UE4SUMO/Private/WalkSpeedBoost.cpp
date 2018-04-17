@@ -53,6 +53,7 @@ void AWalkSpeedBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AAct
 	if (PlayerCharacter && !bPickup)
 	{
 		GetWorldTimerManager().SetTimer(Timer, this, &AWalkSpeedBoost::SpeedBoost, 1.f, true, 0.f);
+		UGameplayStatics::PlaySound2D(GetWorld(), SpeedBoostSound, 0.2f, 1, 0, nullptr, PlayerCharacter);
 		bPickup = true;
 	}
 }
@@ -73,6 +74,7 @@ void AWalkSpeedBoost::SpeedBoost()
 		PlayerCharacter->Speed = 300.f;
 		Repeats = 0;
 		Destroy();
+		PrimaryActorTick.bCanEverTick = false;
 	}
 
 }
