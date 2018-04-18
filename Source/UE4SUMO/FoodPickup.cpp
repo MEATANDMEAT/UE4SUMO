@@ -52,7 +52,7 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), GrowingSound, 0.2f ,1, 0, nullptr, PlayerCharacter);
 		UGameplayStatics::PlaySound2D(GetWorld(), EatingSound, 1.f , 1, 0, nullptr, PlayerCharacter);
-		PlayerCharacter->EatUnhealthy();
+		PlayerCharacter->EatUnhealthy(SizeIncrease);
 		PlayerCharacter->PlayerSize += 4.f;
 		UE_LOG(LogTemp, Warning, TEXT("Player %f"), PlayerCharacter->PlayerSize);
 		bEat = true;

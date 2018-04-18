@@ -40,11 +40,11 @@ public:
 
 	void Run(float RunSpeed);
 
-	void LungeCharge(float Charge);
+	void Dash();
 
-	void LungeRelease();
+	void Punch();
 
-	void EatUnhealthy();
+	void EatUnhealthy(float SizeIncrease);
 
 	void EatHealthy(float SizeDecrease);
 
@@ -64,9 +64,6 @@ public:
 
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
-	UPROPERTY(EditAnywhere)
-		float SizeIncrease = 0.1f;
-
 	float PlayerSize = 60.f;
 
 private:
@@ -79,13 +76,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera = nullptr;
 
-	float LungeAttackCharge;
-
 	float RotationValue = -90.f;
 
 	float FrameTime = 0.f;
-
-	bool bLunge = false;
 
 	FRotator LungeDirection;
 };

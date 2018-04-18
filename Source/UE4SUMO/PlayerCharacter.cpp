@@ -41,6 +41,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		Size -= 0.1f * DeltaTime;
 		Speed += 5.f * DeltaTime;
+		PlayerSize -= 1.f * DeltaTime;
 	}
 
 }
@@ -52,8 +53,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	InputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	InputComponent->BindAxis("Run", this, &APlayerCharacter::Run);
-	InputComponent->BindAxis("LungeCharge", this, &APlayerCharacter::LungeCharge);
-	InputComponent->BindAction("Lunge", IE_Released, this, &APlayerCharacter::LungeRelease);
+	InputComponent->BindAction("Dash", IE_Released, this, &APlayerCharacter::Dash);
+	InputComponent->BindAction("Punch", IE_Pressed, this, &APlayerCharacter::Punch);
+
 }
 
 void APlayerCharacter::MoveForward(float MoveAmount)
@@ -104,7 +106,6 @@ void APlayerCharacter::Run(float RunSpeed)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
 		bRunning = true;
-		PlayerSize -= 0.03f;
 		UE_LOG(LogTemp, Warning, TEXT("Player %f"), PlayerSize);
 	}
 	else {
@@ -113,28 +114,21 @@ void APlayerCharacter::Run(float RunSpeed)
 	}
 }
 
-void APlayerCharacter::LungeCharge(float Charge)
+void APlayerCharacter::Dash()
 {
-	if (Controller && Charge)
-	{
-		LungeAttackCharge += 50.f;
-	}
-}
-
-void APlayerCharacter::LungeRelease()
-{
-	if (!bLunge) bLunge = true;
 	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
-	const FVector Force = LungeDirection.Vector() * LungeAttackCharge;
+	const FVector Force = LungeDirection.Vector();
 	//GetMovementComponent()->AddRadialImpulse(LungeDirection.Vector(), 300.f, 1000.f,ERadialImpulseFalloff::RIF_Linear,true);
-	//LaunchCharacter(Force, false, true);
-	LungeAttackCharge = 0.f;
-	bLunge = false;
+	LaunchCharacter(Force * 4000.f, false, true);
 }
 
+void APlayerCharacter::Punch()
+{
+	
+}
 
-void APlayerCharacter::EatUnhealthy() 
+void APlayerCharacter::EatUnhealthy(float  SizeIncrease) 
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 50.f * SizeIncrease;
