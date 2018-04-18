@@ -14,12 +14,19 @@ AEnemyCharacter::AEnemyCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 350.f, 0.f);
+
+	Exclaimation = CreateDefaultSubobject<UBillboardComponent>(TEXT("Exclaimation"));
+	Question = CreateDefaultSubobject<UBillboardComponent>(TEXT("Question"));
+	Exclaimation->SetupAttachment(RootComponent);
+	Question->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	Exclaimation->SetHiddenInGame(true);
+	Question->SetHiddenInGame(true);
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnPlayerOverlap);
 }
 
@@ -33,10 +40,10 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	if (PlayerCharacter && PlayerController) 
+	if (PlayerCharacter && PlayerController)
 	{
 		PlayerCharacter->DisableInput(PlayerController);
 		PlayerCharacter->GetMesh()->ToggleVisibility();
 		GetController()->PrimaryActorTick.bCanEverTick = false;
 	}
-}	
+}

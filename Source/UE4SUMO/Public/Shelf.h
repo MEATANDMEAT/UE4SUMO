@@ -4,6 +4,7 @@
 
 //Custom headers
 #include "FoodPickup.h"
+#include "HealthyFoodPickup.h"
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
@@ -18,8 +19,8 @@ UCLASS()
 class UE4SUMO_API AShelf : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AShelf();
 
@@ -39,12 +40,15 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TSubclassOf<AFoodPickup> Food;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TSubclassOf<AHealthyFoodPickup> HealthyFood;
+
 	bool bAllowSpawn = false;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
-	
+
+
 };

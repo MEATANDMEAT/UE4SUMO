@@ -73,7 +73,7 @@ void AEmployees_AI_Controller::BeginPlay()
 void AEmployees_AI_Controller::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	//When the player is detected and the pointer to player isn't NULL, move the AI
 	//to Player's current position. We use a vector(LastSeenLocation) to store player's position
 	//in order to give the AI memory.
@@ -83,6 +83,9 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 		LastSeenLocation = PlayerCharacter->GetActorLocation();
 		//Set AIRemember to true, so it has to move to LastSeenLocation.
 		bAIRemember = true;
+
+		EnemyCharacter->Exclaimation->SetHiddenInGame(false);
+		EnemyCharacter->Question->SetHiddenInGame(true);
 	}
 	//After the AI loses sight of the player, it moves to the LastSeenLocation vector.
 	//Which is the last position the AI recorded of Player's position.
@@ -103,11 +106,15 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 5.f)
 		{
 			MoveToLocation(LastSeenLocation, 1.f, false, true, false, true, 0, false);
+				EnemyCharacter->Exclaimation->SetHiddenInGame(true);
+				EnemyCharacter->Question->SetHiddenInGame(false);
 		}
 	}
 	//When the player has not been detected and the AI does not remember any last positions of the player.
 	else if (bIsPlayerDetected == false && PlayerCharacter && bAIRemember == false)
 	{
+		EnemyCharacter->Exclaimation->SetHiddenInGame(true);
+			EnemyCharacter->Question->SetHiddenInGame(true);
 		//Check if the random point has not already been generated and that the AI is in idle.
 		if (bRandomPointGenerated == false && bMoveToIsRunning == false)
 		{

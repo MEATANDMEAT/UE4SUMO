@@ -5,8 +5,9 @@
 #include "PlayerCharacter.h"
 
 //Engine specific headers
-#include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/BillboardComponent.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -27,14 +28,18 @@ protected:
 	virtual void BeginPlay() override;
 
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
 	void OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UBillboardComponent* Exclaimation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UBillboardComponent* Question;
 private:
+
 
 };

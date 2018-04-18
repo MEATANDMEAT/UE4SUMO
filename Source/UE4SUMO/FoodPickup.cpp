@@ -24,7 +24,7 @@ AFoodPickup::AFoodPickup()
 void AFoodPickup::BeginPlay()
 {
 	Super::BeginPlay();
-	Alpha = 0.f;
+	Alpha = FMath::RandRange(-2.5f, 0.f);
 	bEat = false;
 }
 
@@ -33,15 +33,16 @@ void AFoodPickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bEat) 
+	if (bEat)
 	{
-		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f * DeltaTime));
+		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f * DeltaTime * FMath::RandRange(0.8f, 1.3f)));
+
 		FoodMesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
 		if (Alpha >= 1)
 		{
 			Destroy();
 			PrimaryActorTick.bCanEverTick = false;
-		}			
+		}
 	}
 }
 
@@ -50,10 +51,11 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if (PlayerCharacter && !bEat)
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), GrowingSound, 0.2f ,1, 0, nullptr, PlayerCharacter);
-		UGameplayStatics::PlaySound2D(GetWorld(), EatingSound, 1.f , 1, 0, nullptr, PlayerCharacter);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), GrowingSound, GetActorLocation(), 0.05f ,1.f, 1.8.f, nullptr, PlayerCharacter);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), EatingSound, GetActorLocation(), 1.f , 1, 0, nullptr, PlayerCharacter);
 		PlayerCharacter->EatUnhealthy(SizeIncrease);
 		PlayerCharacter->PlayerSize += 4.f;
+
 		UE_LOG(LogTemp, Warning, TEXT("Player %f"), PlayerCharacter->PlayerSize);
 		bEat = true;
 	}
