@@ -34,9 +34,23 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);  
 	FrameTime = DeltaTime;
+	LungeDirection = GetMesh()->GetComponentRotation();
+	LungeDirection += FRotator(0.f, 90.f, 0.f);
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * DeltaTime));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 1.f * DeltaTime));
-	//UE_LOG(LogTemp,Warning,TEXT("PlayerSize %s"),*GetMesh()->GetComponentScale().ToString())
+	if (bDashing) {
+		UE_LOG(LogTemp, Error, TEXT("DASH STARTED"))
+		Speed = Speed + DashValue * DashCurve->GetFloatValue(DashAlpha);
+		AddMovementInput(LungeDirection.Vector(), 1.f, true);
+		DashAlpha = FMath::Lerp(DashAlpha, 1.1f, 5.f * DeltaTime);
+		if (DashAlpha >= 1.f) {
+			UE_LOG(LogTemp, Error, TEXT("DASH ENDED"))
+			bDashing = false;
+			DashAlpha = 0.f;
+			Speed = PrevSpeed;
+			bEnableInput = true;
+		}
+	}
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
 		Size -= 0.1f * DeltaTime;
@@ -60,7 +74,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::MoveForward(float MoveAmount)
 {
-	if (Controller)
+	if (Controller && bEnableInput)
 	{
 		if (MoveAmount > 0)
 		{
@@ -81,7 +95,7 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 
 void APlayerCharacter::MoveRight(float MoveAmount)
 {
-	if (Controller)
+	if (Controller && bEnableInput)
 	{
 		if (MoveAmount > 0)
 		{
@@ -102,11 +116,10 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 
 void APlayerCharacter::Run(float RunSpeed)
 {
-	if (Controller&&RunSpeed)
+	if (Controller&&RunSpeed&&!bDashing)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
 		bRunning = true;
-		UE_LOG(LogTemp, Warning, TEXT("Player %f"), PlayerSize);
 	}
 	else {
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed;
@@ -114,13 +127,13 @@ void APlayerCharacter::Run(float RunSpeed)
 	}
 }
 
-void APlayerCharacter::Dash()
-{
-	LungeDirection = GetMesh()->GetComponentRotation();
-	LungeDirection += FRotator(0.f, 90.f, 0.f);
-	const FVector Force = LungeDirection.Vector();
-	//GetMovementComponent()->AddRadialImpulse(LungeDirection.Vector(), 300.f, 1000.f,ERadialImpulseFalloff::RIF_Linear,true);
-	LaunchCharacter(Force * 4000.f, false, true);
+void APlayerCharacter::Dash(){
+	
+	if (DashAlpha == 0.f && !bDashing) {
+		PrevSpeed = Speed;
+		bDashing = true;
+		bEnableInput = false;
+	}
 }
 
 void APlayerCharacter::Punch()

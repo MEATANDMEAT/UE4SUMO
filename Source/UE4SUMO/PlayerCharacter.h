@@ -51,10 +51,16 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
+	UPROPERTY(EditAnywhere)
+	float DashValue = 50.f;
+
 	FVector CurrentLocation;
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
+
+	UPROPERTY(EditDefaultsOnly, Category = Curve)
+	UCurveFloat* DashCurve;
 
 	float Size = 1.0f;
 
@@ -65,6 +71,8 @@ public:
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
 	float PlayerSize = 60.f;
+
+	bool bSpeedPickup = false;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -79,6 +87,14 @@ private:
 	float RotationValue = -90.f;
 
 	float FrameTime = 0.f;
+
+	float DashAlpha = 0.f;
+
+	bool bDashing = false;
+
+	bool bEnableInput = true;
+
+	float PrevSpeed = 0.f;
 
 	FRotator LungeDirection;
 };

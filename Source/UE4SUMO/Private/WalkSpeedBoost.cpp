@@ -64,17 +64,24 @@ void AWalkSpeedBoost::SpeedBoost()
 	Repeats++;
 	if (Repeats < 5)
 	{
-		PlayerCharacter->Speed = 400.f;
-		UE_LOG(LogTemp, Warning, TEXT("Speed 400"));
+		if (PlayerCharacter->bSpeedPickup == false)
+		{
+			PlayerCharacter->Speed += 100.f;
+			PlayerCharacter->bSpeedPickup = true;
+			UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), PlayerCharacter->Speed)
+		}
 	}
 	else if (Repeats > 5)
 	{
-		GetWorldTimerManager().ClearTimer(Timer);
-		UE_LOG(LogTemp, Warning, TEXT("Speed 300"));
-		PlayerCharacter->Speed = 300.f;
-		Repeats = 0;
-		Destroy();
-		PrimaryActorTick.bCanEverTick = false;
+		if (PlayerCharacter->bSpeedPickup)
+		{
+			GetWorldTimerManager().ClearTimer(Timer);
+			PlayerCharacter->Speed -= 100.f;
+			PlayerCharacter->bSpeedPickup = false;
+			UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), PlayerCharacter->Speed)
+			Repeats = 0;
+			Destroy();
+		}	
 	}
 
 }
