@@ -10,7 +10,7 @@ ACustomer_AI_Controller::ACustomer_AI_Controller()
 void ACustomer_AI_Controller::BeginPlay()
 {
 	Super::BeginPlay();
-	PrimaryActorTick.TickInterval = 3.f;
+	PrimaryActorTick.TickInterval = FMath::RandRange(1.f,4.f);
 }
 
 void ACustomer_AI_Controller::Tick(float DeltaTime)

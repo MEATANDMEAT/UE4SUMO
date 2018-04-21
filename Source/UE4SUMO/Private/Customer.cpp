@@ -50,13 +50,49 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 		}		
 		else if (CustomerSize < PlayerCharacter->PlayerSize)
 		{
-			FRotator LungeDirection = PlayerCharacter->GetMesh()->GetComponentRotation();
-			LungeDirection += FRotator(0.f, 90.f, 0.f);
-			const FVector LungeVelocity = LungeDirection.Vector();
-            LaunchCharacter((LungeVelocity * 1000.f).RotateAngleAxis(90,FVector(0,0,1)), true, false);
-			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
-			UE_LOG(LogTemp, Warning, TEXT("Customer: %f | Player %f"), CustomerSize, PlayerCharacter->PlayerSize);
+			GetWorldTimerManager().SetTimer(Timer, this, &ACustomer::OnRagdoll, 1.f, true, 0.f);	
 		}
+	}
+}
+
+void ACustomer::OnRagdoll()
+{
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	ACustomer_AI_Controller* Controller = Cast<ACustomer_AI_Controller>(GetController());
+	Repeats++;
+	if (Repeats < 6)
+	{
+		GetMesh()->SetSimulatePhysics(true);
+		GetMesh()->WakeAllRigidBodies();
+
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+		Controller->StopMovement();
+		Controller->PrimaryActorTick.bCanEverTick = false;
+		Controller->StopMovement();
+
+		UE_LOG(LogTemp, Warning, TEXT("RAGDOLL GOING"));
+	} else if (Repeats > 6)
+	{
+		GetCapsuleComponent()->SetWorldLocation(GetMesh()->GetComponentLocation()+FVector(0.f,0.f,1.f));
+
+		GetMesh()->PutAllRigidBodiesToSleep();
+		GetMesh()->SetSimulatePhysics(false);
+
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+		GetMesh()->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale, NAME_None);
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, GetCapsuleComponent()->GetComponentLocation().Z * -1));
+		GetMesh()->SetRelativeRotation(FRotator(0.f,-90.f,0.f));
+
+		Controller->PrimaryActorTick.bCanEverTick = true;
+		Controller->bMoveToIsRunning = false;
+		Controller->bRandomPointGenerated = false;
+
+		Repeats = 0;
+		GetWorldTimerManager().ClearTimer(Timer);
+
+		UE_LOG(LogTemp, Warning, TEXT("RAGDOLL DONE"));
 	}
 }
 
