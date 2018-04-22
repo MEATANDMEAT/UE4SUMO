@@ -9,6 +9,7 @@
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 //Required headers
 #include "CoreMinimal.h"

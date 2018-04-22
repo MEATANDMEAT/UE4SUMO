@@ -24,6 +24,7 @@ AWalkSpeedBoost::AWalkSpeedBoost()
 void AWalkSpeedBoost::BeginPlay()
 {
 	Super::BeginPlay();
+	Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 // Called every frame
@@ -36,12 +37,14 @@ void AWalkSpeedBoost::Tick(float DeltaTime)
 		Alpha = (FMath::Lerp(Alpha, 1.1f, 2.75f * DeltaTime));
 		Mesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
 	}
+
 	if (Beta >= 1.f) 
 	{
 		bUp = !bUp;
 		Beta = 0.f;
 	}
 	Beta = (FMath::Lerp(Beta, 1.1f, 1.9f*DeltaTime));
+
 	if (bUp) Mesh->AddRelativeLocation(FVector(0.f, 0.f, CurveFloating->GetFloatValue(Beta))*30.f*DeltaTime);
 	else Mesh->AddRelativeLocation(FVector(0.f, 0.f, CurveFloating->GetFloatValue(Beta)*-30.f*DeltaTime));
 	Mesh->AddRelativeRotation(FRotator(0.f, 73.f*DeltaTime, 0.f));
@@ -50,38 +53,31 @@ void AWalkSpeedBoost::Tick(float DeltaTime)
 void AWalkSpeedBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	if (PlayerCharacter && !bPickup)
+
+	if (PlayerCharacter && !bPickup && !PlayerCharacter->bSpeedPickup)
 	{
-		GetWorldTimerManager().SetTimer(Timer, this, &AWalkSpeedBoost::SpeedBoost, 1.f, true, 0.f);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &AWalkSpeedBoost::SpeedBoost, 1.f, true, 0.f);
 		UGameplayStatics::PlaySound2D(GetWorld(), SpeedBoostSound, 0.2f, 1, 0, nullptr, PlayerCharacter);
+		Player->bSpeedPickup = true;
+		Player->Speed += 100.f;
 		bPickup = true;
 	}
 }
 
 void AWalkSpeedBoost::SpeedBoost()
 {
-	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	Repeats++;
-	if (Repeats < 5)
+	if (Repeats > 0)
 	{
-		if (PlayerCharacter->bSpeedPickup == false)
-		{
-			PlayerCharacter->Speed += 100.f;
-			PlayerCharacter->bSpeedPickup = true;
-			UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), PlayerCharacter->Speed)
-		}
+		UE_LOG(LogTemp, Warning, TEXT("Speedboost: %i"), Repeats)
+        Repeats--;
 	}
-	else if (Repeats > 5)
+	else if (Repeats <= 0)
 	{
-		if (PlayerCharacter->bSpeedPickup)
-		{
-			GetWorldTimerManager().ClearTimer(Timer);
-			PlayerCharacter->Speed -= 100.f;
-			PlayerCharacter->bSpeedPickup = false;
-			UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), PlayerCharacter->Speed)
-			Repeats = 0;
-			Destroy();
-		}	
+		GetWorldTimerManager().ClearTimer(TimerHandle);
+		Player->Speed -= 100.f;
+		Player->bSpeedPickup = false;
+		UE_LOG(LogTemp, Warning, TEXT("Speedboost: No Longer Active"))
+		Destroy();
 	}
 
 }

@@ -7,13 +7,16 @@
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 
 //Required headers
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "WalkSpeedBoost.generated.h"
 
+class APlayerCharacter;
 UCLASS()
 class UE4SUMO_API AWalkSpeedBoost : public AActor
 {
@@ -49,13 +52,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class USoundBase* SpeedBoostSound;
 
+	APlayerCharacter* Player = nullptr;
+
 	float Alpha = 0.f;
 
 	bool bPickup = false;
 
-	FTimerHandle Timer;
+	FTimerHandle TimerHandle;
 
-	unsigned int Repeats = 0;
+	unsigned int Repeats = 5;
 
 	bool bUp = true;
 

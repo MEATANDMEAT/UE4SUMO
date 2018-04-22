@@ -48,6 +48,8 @@ public:
 
 	void EatHealthy(float SizeDecrease);
 
+	void DashCooldown();
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
@@ -74,6 +76,8 @@ public:
 
 	bool bSpeedPickup = false;
 
+	bool bChiliPickup = false;
+
 private:
 	UPROPERTY(EditAnywhere)
 	FTransform CameraTransform;
@@ -97,4 +101,10 @@ private:
 	float PrevSpeed = 0.f;
 
 	FRotator LungeDirection;
+
+	bool bCooldown = false;
+
+	FTimerHandle Timer;
+
+	unsigned int CheckCooldownTimer = 6;
 };

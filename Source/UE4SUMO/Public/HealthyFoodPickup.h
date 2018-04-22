@@ -9,6 +9,7 @@
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 //Required headers
 #include "CoreMinimal.h"
