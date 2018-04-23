@@ -43,8 +43,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * DeltaTime));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 1.f * DeltaTime));
 
-//	UE_LOG(LogTemp, Warning, TEXT("Mesh current rotation: %s"), *LungeDirection.ToString());
-
 	if (bDashing) 
 	{
 		Speed = Speed + DashValue * DashCurve->GetFloatValue(DashAlpha);
@@ -55,11 +53,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 			bDashing = false;
 			DashAlpha = 0.f;
 			Speed = PrevSpeed;
-			bEnableInput = true;
+			bInputEnabled = true;
 		}
 	}
 
-	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
+	if (bRunning && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
 	{
 		Size -= 0.1f * DeltaTime;
 		Speed += 5.f * DeltaTime;
@@ -83,7 +81,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::MoveForward(float MoveAmount)
 {
-	if (Controller && bEnableInput)
+	if (Controller && bInputEnabled)
 	{
 		if (MoveAmount > 0)
 		{
@@ -104,7 +102,7 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 
 void APlayerCharacter::MoveRight(float MoveAmount)
 {
-	if (Controller && bEnableInput)
+	if (Controller && bInputEnabled)
 	{
 		if (MoveAmount > 0)
 		{
@@ -125,7 +123,7 @@ void APlayerCharacter::MoveRight(float MoveAmount)
 
 void APlayerCharacter::Run(float RunSpeed)
 {
-	if (Controller&&RunSpeed&&!bDashing)
+	if (Controller && RunSpeed && !bDashing)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
 		bRunning = true;
@@ -145,25 +143,27 @@ void APlayerCharacter::Dash()
 		PrevSpeed = Speed;
 		bDashing = true;
 		GetWorldTimerManager().SetTimer(Timer, this, &APlayerCharacter::DashCooldown, 1.f, true, 0.f);
-		bEnableInput = false;
+		bInputEnabled = false;
 	}
 }
 
 void APlayerCharacter::Punch()
 {
-	
+	//BETA
 }
 
 void APlayerCharacter::EatUnhealthy(float  SizeIncrease) 
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 50.f * SizeIncrease;
+	PlayerScore += PlayerSize + 150;
 }
 
 void APlayerCharacter::EatHealthy(float SizeDecrease)
 {
 	if (Size >= 1.f) Size -= SizeDecrease;
 	Speed += 50.f * SizeDecrease;
+	PlayerScore += PlayerSize - 150;
 }
 
 void APlayerCharacter::DashCooldown()
