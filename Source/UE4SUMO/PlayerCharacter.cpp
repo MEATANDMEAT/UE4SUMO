@@ -70,6 +70,7 @@ void APlayerCharacter::Tick(float DeltaTime) {
 		PlayerSize -= 1.f * DeltaTime;
 	}
 }
+	}
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
