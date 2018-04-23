@@ -5,6 +5,7 @@
 //Custom headers
 #include "FoodPickup.h"
 #include "HealthyFoodPickup.h"
+#include "Customer.h"
 #include "WalkSpeedBoost.h"
 #include "ChiliPowerUp.h"
 
@@ -40,6 +41,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UShapeComponent* WorldStaticBox = nullptr;
 
+	UPROPERTY(EditAnywhere)
+		UShapeComponent* MeshCollider = nullptr;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TSubclassOf<AFoodPickup> Food;
 
@@ -67,5 +71,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	void OnMeshOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 };

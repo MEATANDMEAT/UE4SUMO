@@ -64,9 +64,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* DashCurve;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float PlayerScore = 0;
-
 	float Size = 1.0f;
 
 	bool bRunning = false;
@@ -99,7 +96,7 @@ private:
 
 	bool bDashing = false;
 
-	bool bInputEnabled = true;
+	bool bEnableInput = true;
 
 	float PrevSpeed = 0.f;
 

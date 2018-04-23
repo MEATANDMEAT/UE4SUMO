@@ -3,8 +3,7 @@
 #include "Shelf.h"
 
 // Sets default values
-AShelf::AShelf() 
-{
+AShelf::AShelf() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -14,8 +13,10 @@ AShelf::AShelf()
 	WorldStaticMesh->SetupAttachment(WorldStaticRoot);
 
 	WorldStaticBox = CreateDefaultSubobject<UBoxComponent>(TEXT("WorldStaticBox"));
+	MeshCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("MeshCollider"));
 	WorldStaticBox->SetWorldScale3D(FVector(1.f, 1.f, 1.f));
 	WorldStaticBox->SetupAttachment(WorldStaticRoot);
+	MeshCollider->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -32,33 +33,32 @@ void AShelf::BeginPlay()
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	bAllowSpawn = FMath::RandBool();
 
-	if (Food && HealthyFood && SpeedBoost && ChiliBoost)
+	MeshCollider->OnComponentBeginOverlap.AddDynamic(this, &AShelf::OnMeshOverlap);
+
+	if (bAllowSpawn) 
 	{
-		if (bAllowSpawn)
-		{
-			GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-			GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-			GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-			GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-		}
-		else
-		{
-			GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-			GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-			GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-			GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
-		}
-		SpawnRateSpeed = FMath::RandRange(1.f, 10.f);
-		if (SpawnRateSpeed <= SpawnRateSpeedBoost)
-		{
-			GetWorld()->SpawnActor<AWalkSpeedBoost>(SpeedBoost->GetAuthoritativeClass(), Location + FVector(-150.f, FMath::RandRange(-50, 50), -50.f), Rotation, SpawnInfo);
-		}
-		SpawnRateChili = FMath::RandRange(1.f, 10.f);
-		if (SpawnRateChili <= SpawnRateChiliBoost)
-		{
-			GetWorld()->SpawnActor<AChiliPowerUp>(ChiliBoost->GetAuthoritativeClass(), Location + FVector(-150.f, FMath::RandRange(-50, 50), -50.f), Rotation, SpawnInfo);
-		}
-	}	
+		GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+		GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+		GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+		GetWorld()->SpawnActor<AFoodPickup>(Food->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+	}
+	else 
+	{
+		GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+		GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(-30.f, -70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+		GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), 0.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+		GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw,FVector(0,0,1)), Rotation, SpawnInfo);
+	}
+	SpawnRateSpeed = FMath::RandRange(1.f, 10.f);
+	if (SpawnRateSpeed > 0.f && SpawnRateSpeed < SpawnRateSpeedBoost)
+	{
+		GetWorld()->SpawnActor<AWalkSpeedBoost>(SpeedBoost->GetAuthoritativeClass(), Location + FVector(-150.f, FMath::RandRange(-50, 50), -50.f), Rotation, SpawnInfo);
+	}
+	SpawnRateChili = FMath::RandRange(1.f, 10.f);
+	if (SpawnRateChili > 0.f && SpawnRateChili < SpawnRateChiliBoost)
+	{
+		GetWorld()->SpawnActor<AChiliPowerUp>(ChiliBoost->GetAuthoritativeClass(), Location + FVector(-150.f, FMath::RandRange(-50,50), -50.f), Rotation, SpawnInfo);
+	}
 }
 
 // Called every frame
@@ -68,4 +68,15 @@ void AShelf::Tick(float DeltaTime)
 
 }
 
+void AShelf::OnMeshOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ACustomer* Customer = Cast<ACustomer>(OtherActor);
+	if (Customer)
+	{
+		if (OtherComp == Customer->GetMesh())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Mesh colliding!"));
+		}
+	}
+}
 
