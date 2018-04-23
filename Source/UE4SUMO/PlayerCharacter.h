@@ -51,6 +51,8 @@ public:
 
 	void DashCooldown();
 
+	void RunCooldown();
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
@@ -79,6 +81,12 @@ public:
 
 	bool bChiliPickup = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float Stamina = 100.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float Score;
+
 private:
 	UPROPERTY(EditAnywhere)
 	FTransform CameraTransform;
@@ -105,7 +113,13 @@ private:
 
 	bool bCooldown = false;
 
+	bool bRegainStamina = true;
+
 	FTimerHandle Timer;
 
+	FTimerHandle RunTimer;
+
 	unsigned int CheckCooldownTimer = 6;
+
+	unsigned int CheckRunCooldownTimer = 2;
 };
