@@ -54,7 +54,7 @@ protected:
 
 	FTimerHandle TimerHandle;
 
-	unsigned int Repeats = 6;
+	unsigned int Repeats = 5;
 
 	bool bUp = true;
 

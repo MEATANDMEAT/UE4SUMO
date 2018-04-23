@@ -66,7 +66,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* DashCurve;
-
+	
 	float Size = 1.0f;
 
 	bool bRunning = false;

@@ -66,10 +66,13 @@ void AChiliPowerUp::OnPlayerEnterPickupBox(UPrimitiveComponent* HitComp, AActor*
 void AChiliPowerUp::PlayerRage()
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	Repeats--;
 	if (Repeats > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player in rage!"), Repeats)
+		PlayerCharacter->PlayerSize -= 5.f;
+		//REMINDER: if SizeDecrease changes, it has to be also changed here
+		if (PlayerCharacter->Size >= 1.f) PlayerCharacter->Size -= (0.05f/3);
+		PlayerCharacter->Speed += (50.f/3) * 0.05f;
+		Repeats--;
 	}
 	else if (Repeats <= 0)
 	{
