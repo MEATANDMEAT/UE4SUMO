@@ -5,9 +5,6 @@
 //Custom headers
 #include "FoodPickup.h"
 #include "HealthyFoodPickup.h"
-#include "Customer.h"
-#include "WalkSpeedBoost.h"
-#include "ChiliPowerUp.h"
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
@@ -41,38 +38,18 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UShapeComponent* WorldStaticBox = nullptr;
 
-	UPROPERTY(EditAnywhere)
-		UShapeComponent* MeshCollider = nullptr;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TSubclassOf<AFoodPickup> Food;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TSubclassOf<AHealthyFoodPickup> HealthyFood;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		TSubclassOf<AWalkSpeedBoost> SpeedBoost;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		TSubclassOf<AChiliPowerUp> ChiliBoost;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float SpawnRateSpeedBoost = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float SpawnRateChiliBoost = 0;
-
 	bool bAllowSpawn = false;
-
-	float SpawnRateSpeed;
-
-	float SpawnRateChili;
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-private:
-	void OnMeshOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
 
 };
