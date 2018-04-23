@@ -45,7 +45,7 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 			FRotator LungeDirection = PlayerCharacter->GetMesh()->GetComponentRotation();
 			LungeDirection += FRotator(0.f, 90.f, 0.f);
 			const FVector LungeVelocity = LungeDirection.Vector();
-			PlayerCharacter->LaunchCharacter((LungeVelocity * 1000.f)*-1.f, true, false);
+			PlayerCharacter->LaunchCharacter((LungeVelocity * 3000.f)*-1.f, true, false);
 			UE_LOG(LogTemp, Warning, TEXT("Customer: %f | Player %f"), CustomerSize, PlayerCharacter->PlayerSize);
 		}		
 		else if (CustomerSize < PlayerCharacter->PlayerSize)
