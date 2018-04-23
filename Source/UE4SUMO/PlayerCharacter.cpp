@@ -43,12 +43,14 @@ void APlayerCharacter::Tick(float DeltaTime)
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * DeltaTime));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size-1.f)), 1.f * DeltaTime));
 
-//	UE_LOG(LogTemp, Warning, TEXT("Mesh current rotation: %s"), *LungeDirection.ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, FString::Printf(TEXT("DeltaTime: %f"),DeltaTime),true);
 
 	if (bDashing) 
 	{
-		Speed = Speed + DashValue * DashCurve->GetFloatValue(DashAlpha);
-		AddMovementInput(LungeDirection.Vector(), 1.f, true);
+
+		//USE OF DELTATIME HERE FOR SOME REASON PRODUCES INCONSISTENT RESULTS WHEN FRAMERATE CHANGES!
+		//ONE OF THE THOSE INCONSISTENCIES IS THE DASH BEIGN LONGER THE HIGHER THE FRAMERATE OF THE ENGINE 
+		
 		DashAlpha = FMath::Lerp(DashAlpha, 1.1f, 5.f * DeltaTime);
 		if (DashAlpha >= 1.f) 
 		{
@@ -57,6 +59,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 			Speed = PrevSpeed;
 			bEnableInput = true;
 		}
+		Speed = Speed + DashValue * DashCurve->GetFloatValue(DashAlpha);
+		AddMovementInput(LungeDirection.Vector(), 1.f);
 	}
 
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size()!=0) 
