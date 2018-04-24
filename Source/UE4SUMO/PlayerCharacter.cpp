@@ -37,6 +37,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina), true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("Score: %f"), Score), true);
 
 	FrameTime = DeltaTime;
 	LungeDirection = GetMesh()->GetComponentRotation();
@@ -170,7 +171,7 @@ void APlayerCharacter::EatUnhealthy(float SizeIncrease)
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 50.f * SizeIncrease;
-	Score -= PlayerSize * 500;
+	Score += PlayerSize * 50;
 }
 
 void APlayerCharacter::EatHealthy(float SizeDecrease) 
@@ -178,7 +179,7 @@ void APlayerCharacter::EatHealthy(float SizeDecrease)
 	//WHEN SIZEDECREASE CHANGES, REMEMBER TO CHANGE IT IN CHILIPOWERUP
 	if (Size >= 1.f) Size -= SizeDecrease;
 	Speed += 50.f * SizeDecrease;
-	Score += PlayerSize * 500;
+	Score -= PlayerSize * 50;
 }
 
 void APlayerCharacter::DashCooldown() 

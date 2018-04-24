@@ -86,7 +86,7 @@ public:
 	float Stamina = 100.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float Score;
+	float Score = 0.f;
 
 	float CaughtRotation = 0.f;
 
