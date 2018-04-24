@@ -49,12 +49,14 @@ void AHealthyFoodPickup::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, A
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if (PlayerCharacter && !bEat)
 	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), EatingSound, PlayerCharacter->GetActorLocation(), 1.f, 1.f, 0.f, nullptr, nullptr);
 		PlayerCharacter->EatHealthy(SizeDecrease);
 		PlayerCharacter->PlayerSize -= 4.f;
 		UE_LOG(LogTemp, Warning, TEXT("Player %f"), PlayerCharacter->PlayerSize);
 		bEat = true;
 	}
-	else {
+	else 
+	{
 
 	}
 

@@ -45,4 +45,6 @@ private:
 	void OnRagdoll();
 
 	int Repeats = 0;
+
+	float FallRotation = 0.f;
 };

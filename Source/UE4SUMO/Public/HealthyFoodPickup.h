@@ -5,11 +5,10 @@
 #include "PlayerCharacter.h"
 
 //Engine specific headers
-#include "Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
-#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -47,6 +46,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 		UCurveFloat* Curve;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class USoundBase* EatingSound;
 
 	float Alpha = 0.f;
 

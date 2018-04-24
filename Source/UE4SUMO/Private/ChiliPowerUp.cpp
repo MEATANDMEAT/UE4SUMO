@@ -71,6 +71,7 @@ void AChiliPowerUp::PlayerRage()
 		PlayerCharacter->PlayerSize -= 5.f;
 		//REMINDER: if SizeDecrease changes, it has to be also changed here
 		if (PlayerCharacter->Size >= 1.f) PlayerCharacter->Size -= (0.05f/3);
+		PlayerCharacter->bPlayerRage = true;
 		PlayerCharacter->Speed += (50.f/3) * 0.05f;
 		Repeats--;
 	}

@@ -3,6 +3,7 @@
 #pragma once
 //Custom headers
 #include "PlayerCharacter.h"
+#include "Employees_AI_Controller.h"
 
 //Engine specific headers
 #include "Components/CapsuleComponent.h"
@@ -37,8 +38,17 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBillboardComponent* Exclaimation;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBillboardComponent* Question;
+
+	FTimerHandle RageTimer;
+
+	void OnPlayerRage();
+
+	int FunctionRepeats = 0;
+
+	float FallRotation;
 private:
 
 

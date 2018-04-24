@@ -88,6 +88,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Score;
 
+	float CaughtRotation = 0.f;
+
+	bool bPlayerRage = false;
+
 private:
 	UPROPERTY(EditAnywhere)
 	FTransform CameraTransform;
