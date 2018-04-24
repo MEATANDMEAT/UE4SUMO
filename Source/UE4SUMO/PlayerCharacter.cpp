@@ -170,6 +170,7 @@ void APlayerCharacter::EatUnhealthy(float SizeIncrease)
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 50.f * SizeIncrease;
+	Score -= PlayerSize * 500;
 }
 
 void APlayerCharacter::EatHealthy(float SizeDecrease) 
@@ -177,6 +178,7 @@ void APlayerCharacter::EatHealthy(float SizeDecrease)
 	//WHEN SIZEDECREASE CHANGES, REMEMBER TO CHANGE IT IN CHILIPOWERUP
 	if (Size >= 1.f) Size -= SizeDecrease;
 	Speed += 50.f * SizeDecrease;
+	Score += PlayerSize * 500;
 }
 
 void APlayerCharacter::DashCooldown() 
