@@ -75,6 +75,7 @@ public:
 
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PlayerSize = 60.f;
 
 	bool bSpeedPickup = false;
