@@ -3,7 +3,7 @@
 #include "Shelf.h"
 
 // Sets default values
-AShelf::AShelf() 
+AShelf::AShelf()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -16,13 +16,15 @@ AShelf::AShelf()
 	WorldStaticBox = CreateDefaultSubobject<UBoxComponent>(TEXT("WorldStaticBox"));
 	WorldStaticBox->SetWorldScale3D(FVector(1.f, 1.f, 1.f));
 	WorldStaticBox->SetupAttachment(WorldStaticRoot);
+
 }
 
 // Called when the game starts or when spawned
-void AShelf::BeginPlay() 
+void AShelf::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bAllowSpawn = FMath::RandBool();
 	FVector Location(GetActorLocation());
 	Location.Z = 150.f;
 	const FRotator Rotation(0.0f, 0.0f, 0.0f);
@@ -30,7 +32,6 @@ void AShelf::BeginPlay()
 	SpawnInfo.Owner = this;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	bAllowSpawn = FMath::RandBool();
 	if (Food && HealthyFood && SpeedBoost && ChiliBoost)
 	{
 		if (bAllowSpawn)
@@ -62,7 +63,7 @@ void AShelf::BeginPlay()
 }
 
 // Called every frame
-void AShelf::Tick(float DeltaTime) 
+void AShelf::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
