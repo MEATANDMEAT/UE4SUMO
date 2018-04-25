@@ -41,20 +41,21 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	if (PlayerCharacter)
 	{
-	
+
 		if (GetMesh()->GetComponentScale().Size() > PlayerCharacter->GetMesh()->GetComponentScale().Size())
 		{
 			FRotator LungeDirection = PlayerCharacter->GetMesh()->GetComponentRotation();
 			LungeDirection += FRotator(0.f, 90.f, 0.f);
 			const FVector LungeVelocity = LungeDirection.Vector();
-			PlayerCharacter->GetMovementComponent()->AddRadialImpulse(GetActorLocation(),100.f, 1000.f, ERadialImpulseFalloff::RIF_Linear, false);
-			PlayerCharacter->LaunchCharacter((LungeVelocity * 5000.f)*-1.f, true, false);
-			UE_LOG(LogTemp, Warning, TEXT("Customer: %f | Player %f"), CustomerSize, PlayerCharacter->PlayerSize);
-		}		
+			//PlayerCharacter->GetMovementComponent()->AddRadialImpulse(GetActorLocation(),100.f, 1000.f, ERadialImpulseFalloff::RIF_Linear, false);
+			UE_LOG(LogTemp, Warning, TEXT("Customer Overlap"), CustomerSize, PlayerCharacter->PlayerSize);
+		}
 		else if (GetMesh()->GetComponentScale().Size() < PlayerCharacter->GetMesh()->GetComponentScale().Size() && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)
 		{
 			FallRotation = -90.f;
-			GetWorldTimerManager().SetTimer(Timer, this, &ACustomer::OnRagdoll, 0.5f, true, 0.f);	
+			Controller->StopMovement();
+			Controller->PrimaryActorTick.bCanEverTick = false;
+			GetWorldTimerManager().SetTimer(Timer, this, &ACustomer::OnRagdoll, 0.5f, true, 0.f);
 		}
 	}
 }
@@ -70,7 +71,7 @@ void ACustomer::OnRagdoll()
 		Controller->StopMovement();
 		Controller->PrimaryActorTick.bCanEverTick = false;
 		Controller->StopMovement();
-		 
+
 		UE_LOG(LogTemp, Warning, TEXT("Customer on the ground"));
 
 	} else if (Repeats >= 10)

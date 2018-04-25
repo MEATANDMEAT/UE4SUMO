@@ -66,9 +66,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size() != 0)
 	{
-		Size -= 0.1f * (3.f/5.f) * DeltaTime;
-		Speed += 3.f * DeltaTime;
-		PlayerSize -= 0.5f * DeltaTime;
+		Size -= 1.f * (3.f/5.f) * DeltaTime;
+		Speed += 30.f * DeltaTime;
+		PlayerSize -= 5.0f * DeltaTime;
 		Score -= PlayerSize * 8 * DeltaTime;
 	}
 }
@@ -172,7 +172,7 @@ void APlayerCharacter::EatUnhealthy(float SizeIncrease)
 {
 	if (Size <= 2.f) Size += SizeIncrease;
 	Speed -= 30.f * SizeIncrease;
-	Score += PlayerSize * 8;
+	Score += PlayerSize * 4;
 }
 
 void APlayerCharacter::EatHealthy(float SizeDecrease)

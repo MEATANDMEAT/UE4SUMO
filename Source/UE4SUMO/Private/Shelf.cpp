@@ -49,15 +49,15 @@ void AShelf::BeginPlay()
 			GetWorld()->SpawnActor<AHealthyFoodPickup>(HealthyFood->GetAuthoritativeClass(), Location + FVector(FMath::RandRange(-25.f, -10.f), FMath::RandRange(30.f, 70.f), -100.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
 		}
 
-		SpawnRateSpeed = FMath::RandRange(1.f, 20.f);
+		SpawnRateSpeed = FMath::RandRange(0.f, 10.f);
 		if (SpawnRateSpeed > 0.f && SpawnRateSpeed <= SpawnRateSpeedBoost)
 		{
-			GetWorld()->SpawnActor<AWalkSpeedBoost>(SpeedBoost->GetAuthoritativeClass(), Location + FVector(-150.f, FMath::RandRange(-50, 50), -50.f), Rotation, SpawnInfo);
+			GetWorld()->SpawnActor<AWalkSpeedBoost>(SpeedBoost->GetAuthoritativeClass(), Location + FVector(-175.f, FMath::RandRange(-25.f, 25.f), -50.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
 		}
-		SpawnRateChili = FMath::RandRange(1.f, 20.f);
+		SpawnRateChili = FMath::RandRange(0.f, 10.f);
 		if (SpawnRateChili > 0.f && SpawnRateChili <= SpawnRateChiliBoost)
 		{
-			GetWorld()->SpawnActor<AChiliPowerUp>(ChiliBoost->GetAuthoritativeClass(), Location + FVector(-150.f, FMath::RandRange(-50, 50), -50.f), Rotation, SpawnInfo);
+			GetWorld()->SpawnActor<AChiliPowerUp>(ChiliBoost->GetAuthoritativeClass(), Location + FVector(-175.f, FMath::RandRange(-25.f, 25.f), -50.f).RotateAngleAxis(GetActorRotation().Yaw, FVector(0, 0, 1)), Rotation, SpawnInfo);
 		}
 	}
 }
