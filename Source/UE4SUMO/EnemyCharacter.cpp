@@ -46,6 +46,7 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 	{
 		PlayerCharacter->DisableInput(PlayerController);
 		PlayerCharacter->CaughtRotation = -90.f;
+		UGameplayStatics::OpenLevel(GetWorld(), "Level_1");
 		GetController()->PrimaryActorTick.bCanEverTick = false;
 	}
 	else if (PlayerCharacter && PlayerController && PlayerCharacter->bPlayerRage)

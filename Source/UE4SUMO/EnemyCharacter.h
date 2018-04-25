@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BillboardComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 //Required headers
 #include "CoreMinimal.h"
