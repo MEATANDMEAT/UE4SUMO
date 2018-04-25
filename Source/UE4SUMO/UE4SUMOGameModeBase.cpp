@@ -5,6 +5,8 @@
 void AUE4SUMOGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 }
 
 void AUE4SUMOGameModeBase::Tick(float DeltaSeconds)

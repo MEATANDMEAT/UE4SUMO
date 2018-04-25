@@ -29,4 +29,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* OurCamera;
+
+	UFUNCTION(BlueprintPure, Category = "Hardware")
+		static FString GetPrimaryGPUBrand();
+
+	UFUNCTION(BlueprintPure, Category = "Hardware")
+		static FString GetCPUBrand();
+
+
 };
