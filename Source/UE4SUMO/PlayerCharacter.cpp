@@ -3,7 +3,7 @@
 #include "PlayerCharacter.h"
 
 // Sets default values
-APlayerCharacter::APlayerCharacter() 
+APlayerCharacter::APlayerCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -25,14 +25,14 @@ APlayerCharacter::APlayerCharacter()
 }
 
 // Called when the game starts or when spawned
-void APlayerCharacter::BeginPlay() 
+void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 }
 
 // Called every frame
-void APlayerCharacter::Tick(float DeltaTime) 
+void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -53,7 +53,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 		//USE OF DELTATIME HERE FOR SOME REASON PRODUCES INCONSISTENT RESULTS WHEN FRAMERATE CHANGES!
 		//ONE OF THE THOSE INCONSISTENCIES IS THE DASH BEIGN LONGER THE HIGHER THE FRAMERATE OF THE ENGINE
 		DashAlpha = FMath::Lerp(DashAlpha, 1.1f, 5.f * DeltaTime);
-		if (DashAlpha >= 1.f) 
+		if (DashAlpha >= 1.f)
 		{
 			bDashing = false;
 			DashAlpha = 0.f;
@@ -64,17 +64,17 @@ void APlayerCharacter::Tick(float DeltaTime)
 		AddMovementInput(LungeDirection.Vector(), 50.f * DeltaTime);
 	}
 
-	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size() != 0) 
+	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size() != 0)
 	{
-		Size -= 0.1f * DeltaTime;
-		Speed += 5.f * DeltaTime;
-		PlayerSize -= 1.f * DeltaTime;
-		Score -= PlayerSize * 10 * DeltaTime;
+		Size -= 0.1f * (3.f/5.f) * DeltaTime;
+		Speed += 3.f * DeltaTime;
+		PlayerSize -= 0.5f * DeltaTime;
+		Score -= PlayerSize * 8 * DeltaTime;
 	}
 }
 
 // Called to bind functionality to input
-void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) 
+void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
@@ -86,18 +86,18 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
-void APlayerCharacter::MoveForward(float MoveAmount) 
+void APlayerCharacter::MoveForward(float MoveAmount)
 {
-	if (Controller && bEnableInput) 
+	if (Controller && bEnableInput)
 	{
-		if (MoveAmount > 0) 
+		if (MoveAmount > 0)
 		{
 			RotationValue = -90.f;
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
 			AddMovementInput(GetActorForwardVector(), MoveAmount);
 			//PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
-		else if (MoveAmount < 0) 
+		else if (MoveAmount < 0)
 		{
 			RotationValue = 90.f;
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
@@ -107,18 +107,18 @@ void APlayerCharacter::MoveForward(float MoveAmount)
 	}
 }
 
-void APlayerCharacter::MoveRight(float MoveAmount) 
+void APlayerCharacter::MoveRight(float MoveAmount)
 {
-	if (Controller && bEnableInput) 
+	if (Controller && bEnableInput)
 	{
-		if (MoveAmount > 0) 
+		if (MoveAmount > 0)
 		{
 			RotationValue = 0.f;
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
 			AddMovementInput(GetActorRightVector(), MoveAmount);
 			//PawnMakeNoise(1.f, GetActorLocation(), false);
 		}
-		else if (MoveAmount < 0) 
+		else if (MoveAmount < 0)
 		{
 			RotationValue = -180.f;
 			GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, 0.0f)), 6.f * FrameTime));
@@ -151,10 +151,10 @@ void APlayerCharacter::Run(float RunSpeed)
 	}
 }
 
-void APlayerCharacter::Dash() 
+void APlayerCharacter::Dash()
 {
 
-	if (DashAlpha == 0.f && !bDashing && !bCooldown) 
+	if (DashAlpha == 0.f && !bDashing && !bCooldown)
 	{
 		PrevSpeed = Speed;
 		bDashing = true;
@@ -168,30 +168,30 @@ void APlayerCharacter::Punch()
 	//TEMP
 }
 
-void APlayerCharacter::EatUnhealthy(float SizeIncrease) 
+void APlayerCharacter::EatUnhealthy(float SizeIncrease)
 {
 	if (Size <= 2.f) Size += SizeIncrease;
-	Speed -= 50.f * SizeIncrease;
-	Score += PlayerSize * 10;
+	Speed -= 30.f * SizeIncrease;
+	Score += PlayerSize * 8;
 }
 
-void APlayerCharacter::EatHealthy(float SizeDecrease) 
+void APlayerCharacter::EatHealthy(float SizeDecrease)
 {
 	//WHEN SIZEDECREASE CHANGES, REMEMBER TO CHANGE IT IN CHILIPOWERUP
 	if (Size >= 1.f) Size -= SizeDecrease;
-	Speed += 50.f * SizeDecrease;
-	Score -= PlayerSize * 10;
+	Speed += 30.f * SizeDecrease;
+	Score -= PlayerSize * 4;
 }
 
-void APlayerCharacter::DashCooldown() 
+void APlayerCharacter::DashCooldown()
 {
-	if (CheckCooldownTimer > 0) 
+	if (CheckCooldownTimer > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Dash: %i"),CheckCooldownTimer);
 		bCooldown = true;
 		CheckCooldownTimer--;
 	}
-	else if (CheckCooldownTimer <= 0) 
+	else if (CheckCooldownTimer <= 0)
 	{
 		bCooldown = false;
 		CheckCooldownTimer = 6;
