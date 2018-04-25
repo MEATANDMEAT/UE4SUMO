@@ -80,6 +80,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 	if (bIsPlayerDetected && PlayerCharacter)
 	{
 		MoveToActor(PlayerCharacter, 0.f, false, true, true, 0, false);
+		EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 350;
 		LastSeenLocation = PlayerCharacter->GetActorLocation();
 		//Set AIRemember to true, so it has to move to LastSeenLocation.
 		bAIRemember = true;
@@ -101,20 +102,22 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 			bAIRemember = false;
 			bRandomPointGenerated = true;
 			bMoveToIsRunning = false;
+			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 250;
 		}
 		//If the AI isn't close the last seen position of the player, then move until it is.
 		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 5.f)
 		{
 			MoveToLocation(LastSeenLocation, 1.f, false, true, false, true, 0, false);
-				EnemyCharacter->Exclaimation->SetHiddenInGame(true);
-				EnemyCharacter->Question->SetHiddenInGame(false);
+			EnemyCharacter->Exclaimation->SetHiddenInGame(true);
+			EnemyCharacter->Question->SetHiddenInGame(false);
+			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 250;
 		}
 	}
 	//When the player has not been detected and the AI does not remember any last positions of the player.
 	else if (bIsPlayerDetected == false && PlayerCharacter && bAIRemember == false)
 	{
 		EnemyCharacter->Exclaimation->SetHiddenInGame(true);
-			EnemyCharacter->Question->SetHiddenInGame(true);
+		EnemyCharacter->Question->SetHiddenInGame(true);
 		//Check if the random point has not already been generated and that the AI is in idle.
 		if (bRandomPointGenerated == false && bMoveToIsRunning == false)
 		{
@@ -128,6 +131,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 			MoveToRandomPoint();
 			//Set bMoveToIsRunning to true, in order to stop the tick from running the same task again.
 			bMoveToIsRunning = true;
+			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 250;
 		}
 		//Check if the AI is near the random point, when it is, set the AI to idle and generate a random point again.
 		//Repeat the whole process again.

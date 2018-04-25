@@ -58,8 +58,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float SpawnRateChiliBoost = 0;
 
-	bool bAllowSpawn = false;
-
 	float SpawnRateSpeed;
 
 	float SpawnRateChili;
@@ -67,5 +65,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bAllowSpawn = false;
 
 };
