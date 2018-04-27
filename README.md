@@ -5,5 +5,6 @@ We are at early stages of production and hopefully, will reach our final destina
 # Controls:
 -Use W,A,S,D to move your character 
 
--Hold Space Bar to charge your Forward Dash.
+-Press Space Bar to dash forward.
 
+-Hold Shift to sprint
