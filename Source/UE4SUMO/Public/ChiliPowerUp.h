@@ -48,6 +48,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class USoundBase* SpeedBoostSound;
 
+	UPROPERTY(EditAnywhere)
+		float SizeDecreaseOverTime = -0.005f;
+
 	float Alpha = 0.f;
 
 	bool bPickup = false;
