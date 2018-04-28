@@ -42,16 +42,16 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina), true);
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("Score: %f"), Score), true);
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("Size: %f"), Size), true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("STAMINA: %f"), Stamina), true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SCORE: %f"), Score), true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SIZE: %f"), Size), true);
 
 	FrameTime = DeltaTime;
 	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, CaughtRotation)), 6.f * DeltaTime));
-	//GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size - 1.f)), 1.f * DeltaTime));
+	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f), 1.f * DeltaTime));
 
 	for (int i{}; i<10; i++) {
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/3.f), 1.f*DeltaTime));
