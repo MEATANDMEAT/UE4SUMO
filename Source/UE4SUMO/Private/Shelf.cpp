@@ -27,7 +27,8 @@ void AShelf::BeginPlay()
 	bAllowSpawn = FMath::RandBool();
 	FVector Location(GetActorLocation());
 	Location.Z = 150.f;
-	const FRotator Rotation(0.0f, 0.0f, 0.0f);
+	FRotator Rotation = GetActorRotation();
+	Rotation.Yaw += 90.f;
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Owner = this;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;

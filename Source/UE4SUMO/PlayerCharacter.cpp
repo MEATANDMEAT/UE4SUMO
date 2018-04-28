@@ -54,7 +54,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	//GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size - 1.f)), 1.f * DeltaTime));
 
 	for (int i{}; i<10; i++) {
-		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/2.f), 1.f*DeltaTime));
+		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/3.f), 1.f*DeltaTime));
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, FString::Printf(TEXT("DeltaTime: %f"), DeltaTime), true);
@@ -77,7 +77,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size() != 0)
 	{
-		ChangeValues((6 * DeltaTime) * -1);
+		ChangeValues((DeltaTime / 10.f) * -1);
 	}
 }
 
@@ -142,7 +142,7 @@ void APlayerCharacter::Run(float RunSpeed)
 	{
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
 		bRunning = true;
-		Stamina -= 50 * FrameTime;
+		Stamina -= 80 * FrameTime;
 		if (Stamina < 1.f && CheckRunCooldownTimer == 2)
 		{
 			GetWorldTimerManager().SetTimer(RunTimer, this, &APlayerCharacter::RunCooldown, 1.f, true, 0.f);
@@ -184,12 +184,14 @@ void APlayerCharacter::ChangeValues(float Value)
 		Speed -= Value * SpeedMultiplier;
 		Score += Value * ScoreMultiplier;
 	}
-	else if (Value > 0.f)
+	else if (Size < 3.f && Value > 0.f)
 	{
 		Size += Value * SizeMultiplier;
 		Speed -= Value * SpeedMultiplier;
 		Score += Value * ScoreMultiplier;
 	}
+
+	if (Score > 100000.f) Score = 100000.f;
 }
 
 void APlayerCharacter::DashCooldown()
