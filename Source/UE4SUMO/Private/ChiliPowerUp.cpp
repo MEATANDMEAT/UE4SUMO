@@ -68,7 +68,7 @@ void AChiliPowerUp::PlayerRage()
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Repeats > 0)
 	{
-		PlayerCharacter->ChangeValues(-0.005f);
+		PlayerCharacter->ChangeValues(SizeDecreaseOverTime);
 		PlayerCharacter->bPlayerRage = true;
 		Repeats--;
 	}
