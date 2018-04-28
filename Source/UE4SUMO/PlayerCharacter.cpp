@@ -38,6 +38,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina), true);
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("Score: %f"), Score), true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("Size: %f"), Size), true);
 
 	FrameTime = DeltaTime;
 	LungeDirection = GetMesh()->GetComponentRotation();
@@ -66,10 +67,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size() != 0)
 	{
-		Size -= 1.f * (3.f/5.f) * DeltaTime;
-		Speed += 30.f * DeltaTime;
-		PlayerSize -= 5.0f * DeltaTime;
-		Score -= PlayerSize * 8 * DeltaTime;
+		ChangeValues((6 * DeltaTime) * -1);
 	}
 }
 
@@ -168,26 +166,26 @@ void APlayerCharacter::Punch()
 	//TEMP
 }
 
-void APlayerCharacter::EatUnhealthy(float SizeIncrease)
+void APlayerCharacter::ChangeValues(float Value)
 {
-	if (Size <= 2.f) Size += SizeIncrease;
-	Speed -= 30.f * SizeIncrease;
-	Score += PlayerSize * 4;
-}
-
-void APlayerCharacter::EatHealthy(float SizeDecrease)
-{
-	//WHEN SIZEDECREASE CHANGES, REMEMBER TO CHANGE IT IN CHILIPOWERUP
-	if (Size >= 1.f) Size -= SizeDecrease;
-	Speed += 30.f * SizeDecrease;
-	Score -= PlayerSize * 4;
+	if (Size > 1.f && Value < 0.f)
+	{
+		Size += Value * SizeMultiplier;
+		Speed -= Value * SpeedMultiplier;
+		Score += Value * ScoreMultiplier;
+	}
+	else if (Value > 0.f)
+	{
+		Size += Value * SizeMultiplier;
+		Speed -= Value * SpeedMultiplier;
+		Score += Value * ScoreMultiplier;
+	}
 }
 
 void APlayerCharacter::DashCooldown()
 {
 	if (CheckCooldownTimer > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Dash: %i"),CheckCooldownTimer);
 		bCooldown = true;
 		CheckCooldownTimer--;
 	}
@@ -196,7 +194,6 @@ void APlayerCharacter::DashCooldown()
 		bCooldown = false;
 		CheckCooldownTimer = 6;
 		GetWorldTimerManager().ClearTimer(Timer);
-		UE_LOG(LogTemp, Warning, TEXT("Dash: Ready"));
 	}
 }
 
@@ -204,7 +201,6 @@ void APlayerCharacter::RunCooldown()
 {
 	if (CheckRunCooldownTimer > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Stamina: %i"), CheckRunCooldownTimer);
 		Stamina = 0.f;
 		bRunning = false;
 		CheckRunCooldownTimer--;
@@ -212,7 +208,6 @@ void APlayerCharacter::RunCooldown()
 	}
 	else if (CheckRunCooldownTimer <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Stamina done"));
 		bRegainStamina = true;
 		CheckRunCooldownTimer = 2;
 		GetWorldTimerManager().ClearTimer(RunTimer);

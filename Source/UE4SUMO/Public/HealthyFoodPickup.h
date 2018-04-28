@@ -42,7 +42,7 @@ public:
 		UShapeComponent* FoodBox;
 
 	UPROPERTY(EditAnywhere)
-		float SizeDecrease = 0.1f;
+		float SizeDecrease = -0.1f;
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 		UCurveFloat* Curve;

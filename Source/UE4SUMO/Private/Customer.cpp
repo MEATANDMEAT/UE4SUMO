@@ -48,7 +48,6 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 			LungeDirection += FRotator(0.f, 90.f, 0.f);
 			const FVector LungeVelocity = LungeDirection.Vector();
 			//PlayerCharacter->GetMovementComponent()->AddRadialImpulse(GetActorLocation(),100.f, 1000.f, ERadialImpulseFalloff::RIF_Linear, false);
-			UE_LOG(LogTemp, Warning, TEXT("Customer Overlap"), CustomerSize, PlayerCharacter->PlayerSize);
 		}
 		else if (GetMesh()->GetComponentScale().Size() < PlayerCharacter->GetMesh()->GetComponentScale().Size() && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)
 		{

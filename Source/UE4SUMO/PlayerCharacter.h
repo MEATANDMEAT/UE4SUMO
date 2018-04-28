@@ -45,9 +45,7 @@ public:
 
 	void Punch();
 
-	void EatUnhealthy(float SizeIncrease);
-
-	void EatHealthy(float SizeDecrease);
+	void ChangeValues(float Value);
 
 	void DashCooldown();
 
@@ -55,6 +53,15 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
+
+	UPROPERTY(EditAnywhere)
+	float SizeMultiplier = 0.1f;
+
+	UPROPERTY(EditAnywhere)
+	float SpeedMultiplier = 5.f;
+
+	UPROPERTY(EditAnywhere)
+	float ScoreMultiplier = 100.f;
 
 	UPROPERTY(EditAnywhere)
 	float DashValue = 50.f;
@@ -74,9 +81,6 @@ public:
 	FGenericTeamId TeamId;
 
 	virtual FGenericTeamId GetGenericTeamId() const override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float PlayerSize = 60.f;
 
 	bool bSpeedPickup = false;
 

@@ -68,17 +68,14 @@ void AChiliPowerUp::PlayerRage()
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Repeats > 0)
 	{
-		PlayerCharacter->PlayerSize -= 5.f;
+		PlayerCharacter->ChangeValues(-1.f);
 		//REMINDER: if SizeDecrease changes, it has to be also changed here
-		if (PlayerCharacter->Size >= 1.f) PlayerCharacter->Size -= (0.05f/3);
 		PlayerCharacter->bPlayerRage = true;
-		PlayerCharacter->Speed += (50.f/3) * 0.05f;
 		Repeats--;
 	}
 	else if (Repeats <= 0)
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT("Player now calm"))
 		PlayerCharacter->bChiliPickup = false;
 		Destroy();
 	}

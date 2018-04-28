@@ -16,15 +16,20 @@ void AMenuController::BeginPlay()
 	MyMainMenu = CreateWidget<UUserWidget>(this, MainMenu);
 	MyMainMenu->AddToViewport();
 	bShowMouseCursor = true;
-
+	
 }
 
 FString AMenuController::GetPrimaryGPUBrand()
 {
-	return FGenericPlatformMisc::GetPrimaryGPUBrand();
+	return FWindowsPlatformMisc::GetPrimaryGPUBrand();
 }
 
 FString AMenuController::GetCPUBrand()
 {
-	return FGenericPlatformMisc::GetCPUVendor();
+	return FWindowsPlatformMisc::GetCPUBrand();
+}
+
+int32 AMenuController::GetMemoryGB()
+{
+	return FGenericPlatformMemory::GetPhysicalGBRam();
 }

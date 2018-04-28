@@ -36,5 +36,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Hardware")
 		static FString GetCPUBrand();
 
-
+	UFUNCTION(BlueprintPure, Category = "Hardware")
+		static int32 GetMemoryGB();
 };
