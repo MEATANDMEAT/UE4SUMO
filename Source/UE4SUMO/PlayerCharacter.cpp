@@ -16,6 +16,7 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 8.0f;
 
+
 	// Now we create a camera and attach to our spring arm
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
@@ -29,6 +30,11 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	for (int i{}; i<10; i++) {
+		DynMats[i] = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(i), this);
+		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), 0.f);
+		GetMesh()->SetMaterial(i, DynMats[i]);
+	}
 }
 
 // Called every frame
@@ -45,7 +51,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, CaughtRotation)), 6.f * DeltaTime));
-	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size - 1.f)), 1.f * DeltaTime));
+	//GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(Curve->GetFloatValue(Size - 1.f)), 1.f * DeltaTime));
+
+	for (int i{}; i<10; i++) {
+		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/2.f), 1.f*DeltaTime));
+	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, FString::Printf(TEXT("DeltaTime: %f"), DeltaTime), true);
 

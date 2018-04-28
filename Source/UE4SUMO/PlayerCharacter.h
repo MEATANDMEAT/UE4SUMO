@@ -7,7 +7,7 @@
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 #include "GenericTeamAgentInterface.h"
 
 //Required headers
@@ -28,7 +28,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -73,7 +73,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* DashCurve;
-	
+
 	float Size = 1.0f;
 
 	bool bRunning = false;
@@ -99,6 +99,8 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	FTransform CameraTransform;
+
+	UMaterialInstanceDynamic* DynMats[10];
 
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm = nullptr;
