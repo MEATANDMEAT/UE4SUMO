@@ -38,8 +38,6 @@ private:
 
 	FVector Direction = FVector(0.f, 0.f, 0.f);
 
-	float CustomerSize = 70.f;
-
 	FTimerHandle Timer;
 
 	void OnRagdoll();
@@ -47,4 +45,7 @@ private:
 	int Repeats = 0;
 
 	float FallRotation = 0.f;
+
+	float Size = 1.0f;
+
 };

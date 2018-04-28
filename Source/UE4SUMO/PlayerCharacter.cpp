@@ -45,6 +45,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("STAMINA: %f"), Stamina), true);
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SCORE: %f"), Score), true);
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SIZE: %f"), Size), true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SPEED: %f"), Speed), true);
 
 	FrameTime = DeltaTime;
 	LungeDirection = GetMesh()->GetComponentRotation();
@@ -53,7 +54,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, CaughtRotation)), 6.f * DeltaTime));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f), 1.f * DeltaTime));
 
-	for (int i{}; i<10; i++) {
+	for (int i{}; i<10; i++) 
+	{
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/3.f), 1.f*DeltaTime));
 	}
 
@@ -196,15 +198,15 @@ void APlayerCharacter::ChangeValues(float Value)
 
 void APlayerCharacter::DashCooldown()
 {
-	if (CheckCooldownTimer > 0)
+	if (CheckCooldownTimer > 0.f)
 	{
 		bCooldown = true;
-		CheckCooldownTimer--;
+		CheckCooldownTimer -= 1.f;
 	}
-	else if (CheckCooldownTimer <= 0)
+	else if (CheckCooldownTimer <= 0.f)
 	{
 		bCooldown = false;
-		CheckCooldownTimer = 6;
+		CheckCooldownTimer = 6.f;
 		GetWorldTimerManager().ClearTimer(Timer);
 	}
 }

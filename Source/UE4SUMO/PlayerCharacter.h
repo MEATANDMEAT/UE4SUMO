@@ -51,6 +51,8 @@ public:
 
 	void RunCooldown();
 
+	virtual FGenericTeamId GetGenericTeamId() const override;
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.f;
 
@@ -66,25 +68,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	float DashValue = 50.f;
 
-	FVector CurrentLocation;
-
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* DashCurve;
-
-	float Size = 1.0f;
-
-	bool bRunning = false;
-
-	FGenericTeamId TeamId;
-
-	virtual FGenericTeamId GetGenericTeamId() const override;
-
-	bool bSpeedPickup = false;
-
-	bool bChiliPickup = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Stamina = 100.f;
@@ -92,9 +80,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Score = 0.f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float CheckCooldownTimer = 6.f;
+
 	float CaughtRotation = 0.f;
 
 	bool bPlayerRage = false;
+
+	float Size = 1.0f;
+
+	bool bRunning = false;
+
+	FGenericTeamId TeamId;
+
+	bool bSpeedPickup = false;
+
+	bool bChiliPickup = false;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -122,15 +123,13 @@ private:
 
 	FRotator LungeDirection;
 
-	bool bCooldown = false;
-
 	bool bRegainStamina = true;
 
 	FTimerHandle Timer;
 
 	FTimerHandle RunTimer;
 
-	unsigned int CheckCooldownTimer = 6;
-
 	unsigned int CheckRunCooldownTimer = 2;
+
+	bool bCooldown = false;
 };

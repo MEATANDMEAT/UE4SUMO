@@ -24,7 +24,7 @@ void ACustomer::BeginPlay()
 	Super::BeginPlay();
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACustomer::OnPlayerOverlap);
 	GetMesh()->SetWorldScale3D(FVector(FMath::RandRange(1.f, 1.8f)));
-	CustomerSize = FMath::RandRange(40.f, 90.f);
+	Size = FMath::RandRange(1.f, 3.f);
 }
 
 // Called every frame
@@ -42,14 +42,14 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 	if (PlayerCharacter)
 	{
 
-		if (GetMesh()->GetComponentScale().Size() > PlayerCharacter->GetMesh()->GetComponentScale().Size())
+		if (Size > PlayerCharacter->Size)
 		{
 			FRotator LungeDirection = PlayerCharacter->GetMesh()->GetComponentRotation();
 			LungeDirection += FRotator(0.f, 90.f, 0.f);
 			const FVector LungeVelocity = LungeDirection.Vector();
 			//PlayerCharacter->GetMovementComponent()->AddRadialImpulse(GetActorLocation(),100.f, 1000.f, ERadialImpulseFalloff::RIF_Linear, false);
 		}
-		else if (GetMesh()->GetComponentScale().Size() < PlayerCharacter->GetMesh()->GetComponentScale().Size() && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)
+		else if (Size < PlayerCharacter->Size && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)
 		{
 			FallRotation = -90.f;
 			Controller->StopMovement();
