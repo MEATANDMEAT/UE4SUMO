@@ -97,6 +97,10 @@ public:
 
 	bool bChiliPickup = false;
 
+	float PrevSpeed = 0.f;
+
+	bool bDashing = false;
+
 private:
 	UPROPERTY(EditAnywhere)
 	FTransform CameraTransform;
@@ -115,11 +119,7 @@ private:
 
 	float DashAlpha = 0.f;
 
-	bool bDashing = false;
-
 	bool bEnableInput = true;
-
-	float PrevSpeed = 0.f;
 
 	FRotator LungeDirection;
 

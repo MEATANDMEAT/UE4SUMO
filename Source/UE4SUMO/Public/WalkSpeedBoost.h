@@ -60,6 +60,8 @@ public:
 
 	FTimerHandle TimerHandle;
 
+	FTimerHandle DelayTimer;
+
 	unsigned int Repeats = 5;
 
 	bool bUp = true;
@@ -70,4 +72,6 @@ private:
 		void OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	
 	void SpeedBoost();
+
+	void DashDelay();
 };

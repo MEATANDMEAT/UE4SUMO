@@ -56,11 +56,18 @@ void AWalkSpeedBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AAct
 
 	if (PlayerCharacter && !bPickup && !PlayerCharacter->bSpeedPickup)
 	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &AWalkSpeedBoost::SpeedBoost, 1.f, true, 0.f);
 		UGameplayStatics::PlaySound2D(GetWorld(), SpeedBoostSound, 0.2f, 1, 0, nullptr, PlayerCharacter);
-		Player->bSpeedPickup = true;
-		Player->Speed += 100.f;
-		bPickup = true;
+		if (Player->bDashing)
+		{
+			GetWorldTimerManager().SetTimer(DelayTimer, this, &AWalkSpeedBoost::DashDelay, 1.f, false, 0.3f);
+		} 
+		else if (!Player->bDashing)
+		{
+			GetWorldTimerManager().SetTimer(TimerHandle, this, &AWalkSpeedBoost::SpeedBoost, 1.f, true, 0.f);
+			Player->bSpeedPickup = true;
+			Player->Speed += 100.f;
+			bPickup = true;
+		}
 	}
 }
 
@@ -68,7 +75,6 @@ void AWalkSpeedBoost::SpeedBoost()
 {
 	if (Repeats > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Speedboost: %i"), Repeats)
         Repeats--;
 	}
 	else if (Repeats <= 0)
@@ -76,9 +82,17 @@ void AWalkSpeedBoost::SpeedBoost()
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 		Player->Speed -= 100.f;
 		Player->bSpeedPickup = false;
-		UE_LOG(LogTemp, Warning, TEXT("Speedboost: No Longer Active"))
 		Destroy();
 	}
 
+}
+
+void AWalkSpeedBoost::DashDelay()
+{
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AWalkSpeedBoost::SpeedBoost, 1.f, true, 0.f);
+	Player->bSpeedPickup = true;
+	Player->Speed += 100.f;
+	bPickup = true;
+	GetWorldTimerManager().ClearTimer(DelayTimer);
 }
 
