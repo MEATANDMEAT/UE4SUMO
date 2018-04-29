@@ -110,7 +110,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 			MoveToLocation(LastSeenLocation, 1.f, false, true, false, true, 0, false);
 			EnemyCharacter->Exclaimation->SetHiddenInGame(true);
 			EnemyCharacter->Question->SetHiddenInGame(false);
-			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 250;
+			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 350;
 		}
 	}
 	//When the player has not been detected and the AI does not remember any last positions of the player.

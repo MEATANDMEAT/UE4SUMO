@@ -69,9 +69,6 @@ void ACustomer::OnRagdoll()
 		Repeats++;
 		Controller->StopMovement();
 		Controller->PrimaryActorTick.bCanEverTick = false;
-		Controller->StopMovement();
-
-		UE_LOG(LogTemp, Warning, TEXT("Customer on the ground"));
 
 	} else if (Repeats >= 10)
 	{
@@ -87,7 +84,6 @@ void ACustomer::OnRagdoll()
 		//UE_LOG(LogTemp, Warning, TEXT("ColliderRotation after: %s"), *GetCapsuleComponent()->GetComponentRotation().ToString());
 		GetWorldTimerManager().ClearTimer(Timer);
 
-		UE_LOG(LogTemp, Warning, TEXT("Customer got back up"));
 	}
 }
 

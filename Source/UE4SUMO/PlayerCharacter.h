@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Custom headers
+#include "Employees_AI_Controller.h"
+#include "EnemyCharacter.h"
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
@@ -14,6 +17,7 @@
 #include "GameFramework/Character.h"
 #include "CoreMinimal.h"
 #include "PlayerCharacter.generated.h"
+
 
 UCLASS()
 class UE4SUMO_API APlayerCharacter : public ACharacter, public IGenericTeamAgentInterface
@@ -51,22 +55,29 @@ public:
 
 	void RunCooldown();
 
+	void Caught();
+
+	void Respawn();
+
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
-	UPROPERTY(EditAnywhere)
-	float Speed = 300.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	uint8 Lives = 0;
 
 	UPROPERTY(EditAnywhere)
-	float SizeMultiplier = 0.1f;
+	float Speed = 360.f;
 
 	UPROPERTY(EditAnywhere)
-	float SpeedMultiplier = 5.f;
+	float SizeMultiplier = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float ScoreMultiplier = 100.f;
+	float SpeedMultiplier = 90.f;
 
 	UPROPERTY(EditAnywhere)
-	float DashValue = 50.f;
+	float ScoreMultiplier = 50000.f;
+
+	UPROPERTY(EditAnywhere)
+	float DashValue = 37.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
@@ -101,6 +112,10 @@ public:
 
 	bool bDashing = false;
 
+	FTimerHandle RespawnTimer;
+
+	FTimerHandle CaughtTimer;
+
 private:
 	UPROPERTY(EditAnywhere)
 	FTransform CameraTransform;
@@ -131,5 +146,11 @@ private:
 
 	unsigned int CheckRunCooldownTimer = 2;
 
+	uint8 CaughtCooldown = 3;
+
+	uint8 RespawnCooldown = 8;
+
 	bool bCooldown = false;
+
+	bool bMeshVisible = true;
 };

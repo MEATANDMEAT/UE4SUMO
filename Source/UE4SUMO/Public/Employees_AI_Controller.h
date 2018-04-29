@@ -53,7 +53,7 @@ public:
 	bool bBehaviorTreeRunning = false;
 
 	FVector LastSeenLocation;
-
+	
 	bool bAIRemember = false;
 
 	FNavLocation Result;

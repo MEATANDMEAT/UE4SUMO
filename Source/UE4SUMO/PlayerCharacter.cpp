@@ -30,7 +30,8 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (int i{}; i<10; i++) {
+	for (int i{}; i<10; i++) 
+	{
 		DynMats[i] = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(i), this);
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), 0.f);
 		GetMesh()->SetMaterial(i, DynMats[i]);
@@ -198,12 +199,12 @@ void APlayerCharacter::ChangeValues(float Value)
 
 void APlayerCharacter::DashCooldown()
 {
-	if (CheckCooldownTimer > 0.f)
+	if (CheckCooldownTimer > 1.f)
 	{
 		bCooldown = true;
 		CheckCooldownTimer -= 1.f;
 	}
-	else if (CheckCooldownTimer <= 0.f)
+	else if (CheckCooldownTimer <= 1.f)
 	{
 		bCooldown = false;
 		CheckCooldownTimer = 6.f;
@@ -225,6 +226,39 @@ void APlayerCharacter::RunCooldown()
 		bRegainStamina = true;
 		CheckRunCooldownTimer = 2;
 		GetWorldTimerManager().ClearTimer(RunTimer);
+	}
+}
+
+void APlayerCharacter::Caught()
+{
+	if (CaughtCooldown > 1)
+	{
+		CaughtCooldown--;
+		Lives--;
+	}
+	else if (CaughtCooldown <= 1)
+	{
+		GetWorldTimerManager().SetTimer(RespawnTimer, this, &APlayerCharacter::Respawn, 0.4f, true, 0.f);
+		GetWorldTimerManager().ClearTimer(CaughtTimer);
+		SetActorLocation(FVector(-450.f, -1000.f, 0.f));
+		CaughtCooldown = 3;
+		CaughtRotation = 0.f;
+		EnableInput(GetWorld()->GetFirstPlayerController());
+	}
+}
+
+void APlayerCharacter::Respawn()
+{
+	if (RespawnCooldown > 1)
+	{
+		GetMesh()->ToggleVisibility();
+		RespawnCooldown--;
+	}
+	else if (RespawnCooldown <= 1)
+	{
+		GetWorldTimerManager().ClearTimer(RespawnTimer);
+		RespawnCooldown = 8;
+		GetMesh()->SetVisibility(true);
 	}
 }
 

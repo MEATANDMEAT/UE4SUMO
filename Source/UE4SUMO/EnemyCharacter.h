@@ -50,6 +50,7 @@ public:
 	int FunctionRepeats = 0;
 
 	float FallRotation;
+
 private:
 
 
