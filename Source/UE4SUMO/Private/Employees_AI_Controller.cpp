@@ -68,6 +68,7 @@ void AEmployees_AI_Controller::BeginPlay()
 	Super::BeginPlay();
 	EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	PrimaryActorTick.TickInterval = 0.2f;
 }
 
 void AEmployees_AI_Controller::Tick(float DeltaTime)
@@ -102,7 +103,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 			bAIRemember = false;
 			bRandomPointGenerated = true;
 			bMoveToIsRunning = false;
-			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 250;
+			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 350;
 		}
 		//If the AI isn't close the last seen position of the player, then move until it is.
 		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 5.f)

@@ -41,7 +41,7 @@ public:
 		float AILoseSightRadius = AISightRadius + 50.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
-		float AISightAngle = 90.f;
+		float AISightAngle = 75.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI Perception")
 		class UAISenseConfig_Sight* SightConfig;
