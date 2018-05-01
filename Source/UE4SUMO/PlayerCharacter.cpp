@@ -30,7 +30,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (int i{}; i<10; i++) 
+	for (int i{}; i<10; i++)
 	{
 		DynMats[i] = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(i), this);
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), 0.f);
@@ -52,10 +52,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 
+	if (!bCanDash) CheckCooldownTimer -= 60.f* DeltaTime;
+	if (CheckCooldownTimer<=0.f) {CheckCooldownTimer = 0.f; bCanDash = true;}
+
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, CaughtRotation)), 6.f * DeltaTime));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f), 1.f * DeltaTime));
 
-	for (int i{}; i<10; i++) 
+	for (int i{}; i<10; i++)
 	{
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/3.f), 1.f*DeltaTime));
 	}
@@ -165,11 +168,11 @@ void APlayerCharacter::Run(float RunSpeed)
 void APlayerCharacter::Dash()
 {
 
-	if (DashAlpha == 0.f && !bDashing && !bCooldown)
+	if (DashAlpha == 0.f && !bDashing && !bCanDash)
 	{
 		PrevSpeed = Speed;
 		bDashing = true;
-		GetWorldTimerManager().SetTimer(Timer, this, &APlayerCharacter::DashCooldown, 1.f, true, 0.f);
+		bCanDash = false;
 		bEnableInput = false;
 	}
 }
@@ -197,7 +200,7 @@ void APlayerCharacter::ChangeValues(float Value)
 	if (Score > 100000.f) Score = 100000.f;
 }
 
-void APlayerCharacter::DashCooldown()
+/*void APlayerCharacter::DashCooldown()
 {
 	if (CheckCooldownTimer > 1.f)
 	{
@@ -208,7 +211,7 @@ void APlayerCharacter::DashCooldown()
 	{
 		bCooldown = false;
 		CheckCooldownTimer = 6.f;
-		GetWorldTimerManager().ClearTimer(Timer);
+		//GetWorldTimerManager().ClearTimer(Timer);
 	}
 }
 
@@ -227,7 +230,7 @@ void APlayerCharacter::RunCooldown()
 		CheckRunCooldownTimer = 2;
 		GetWorldTimerManager().ClearTimer(RunTimer);
 	}
-}
+}*/
 
 void APlayerCharacter::Caught()
 {

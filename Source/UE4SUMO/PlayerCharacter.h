@@ -150,7 +150,7 @@ private:
 
 	uint8 RespawnCooldown = 8;
 
-	bool bCooldown = false;
-
 	bool bMeshVisible = true;
+
+	bool bCanDash = true;
 };
