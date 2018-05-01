@@ -51,8 +51,6 @@ public:
 
 	void ChangeValues(float Value);
 
-	/*void DashCooldown();*/
-
 	void RunCooldown();
 
 	void Caught();
@@ -92,7 +90,10 @@ public:
 	float Score = 0.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float CheckCooldownTimer = 6.f;
+	float DashCooldown = 6.f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float DashCooldownAlpha = 1.f;
 
 	float CaughtRotation = 0.f;
 
