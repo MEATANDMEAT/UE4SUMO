@@ -213,7 +213,7 @@ void APlayerCharacter::ChangeValues(float Value)
 		CheckCooldownTimer = 6.f;
 		//GetWorldTimerManager().ClearTimer(Timer);
 	}
-}
+}*/
 
 void APlayerCharacter::RunCooldown()
 {
@@ -230,7 +230,7 @@ void APlayerCharacter::RunCooldown()
 		CheckRunCooldownTimer = 2;
 		GetWorldTimerManager().ClearTimer(RunTimer);
 	}
-}*/
+}
 
 void APlayerCharacter::Caught()
 {

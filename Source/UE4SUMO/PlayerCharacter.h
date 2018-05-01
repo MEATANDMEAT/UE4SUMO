@@ -51,7 +51,7 @@ public:
 
 	void ChangeValues(float Value);
 
-	void DashCooldown();
+	/*void DashCooldown();*/
 
 	void RunCooldown();
 
