@@ -49,11 +49,15 @@ void AFoodPickup::Tick(float DeltaTime)
 void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.Owner = this;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	if (PlayerCharacter && !bEat)
 	{
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), EatingSound, PlayerCharacter->GetActorLocation(), 1.f, 1.f, 0.f, nullptr, nullptr);
 		PlayerCharacter->ChangeValues(SizeIncrease);
 		bEat = true;
+		GetWorld()->SpawnActor<AScoreSplash>(ScoreSplash->GetAuthoritativeClass(), FVector(PlayerCharacter->GetActorLocation().X, PlayerCharacter->GetActorLocation().Y, (PlayerCharacter->GetActorLocation().Z * 2) + 10), FRotator(0.f,0.f,0.f), SpawnInfo);
 	}
 	else {
 		//UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));

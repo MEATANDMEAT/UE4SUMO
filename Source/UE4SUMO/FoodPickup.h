@@ -3,6 +3,7 @@
 #pragma once
 //Custom headers
 #include "PlayerCharacter.h"
+#include "ScoreSplash.h"
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/ShapeComponent.h"
@@ -44,6 +45,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TSubclassOf<AScoreSplash> ScoreSplash;
 
 	float Alpha;
 

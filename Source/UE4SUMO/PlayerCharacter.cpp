@@ -46,15 +46,14 @@ void APlayerCharacter::Tick(float DeltaTime)
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("STAMINA: %f"), Stamina), true);
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SCORE: %f"), Score), true);
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SIZE: %f"), Size), true);
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Green, FString::Printf(TEXT("SPEED: %f"), Speed), true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Blue, FString::Printf(TEXT("SPEED: %f"), Speed), true);
 
 	FrameTime = DeltaTime;
 	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 
-	if (DashCooldownAlpha>=1.f) { DashCooldownAlpha = 1.f; bCanDash = true; }
+	if (DashCooldownAlpha >= 1.f) { DashCooldownAlpha = 1.f; bCanDash = true; }
 	else DashCooldownAlpha += DeltaTime / DashCooldown;
-
 
 	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, CaughtRotation)), 6.f * DeltaTime));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f), 1.f * DeltaTime));
@@ -72,13 +71,16 @@ void APlayerCharacter::Tick(float DeltaTime)
 		//ONE OF THE THOSE INCONSISTENCIES IS THE DASH BEIGN LONGER THE HIGHER THE FRAMERATE OF THE ENGINE
 		DashAlpha = FMath::Lerp(DashAlpha, 1.1f, 5.f * DeltaTime);
 		Speed += DashValue * DashCurve->GetFloatValue(DashAlpha);
-		AddMovementInput(LungeDirection.Vector(), 50.f);
+		AddMovementInput(LungeDirection.Vector(), 50.f * DeltaTime);
 		if (DashAlpha >= 1.f)
 		{
 			DashAlpha = 0.f;
 			bDashing = false;
 			Speed = PrevSpeed;
 			bEnableInput = true;
+			NewTEMP = GetActorLocation();
+
+			UE_LOG(LogTemp,Warning,TEXT("DASH MAGNITUDE: %f"),(NewTEMP - TEMP).Size())
 		}
 	}
 
@@ -150,7 +152,7 @@ void APlayerCharacter::Run(float RunSpeed)
 		Cast<UCharacterMovementComponent>(GetCharacterMovement())->MaxWalkSpeed = Speed * 1.6;
 		bRunning = true;
 		Stamina -= 80 * FrameTime;
-		if (Stamina < 1.f && CheckRunCooldownTimer == 2)
+		if (Stamina < 1.f && RunFatigue == 2)
 		{
 			GetWorldTimerManager().SetTimer(RunTimer, this, &APlayerCharacter::RunCooldown, 1.f, true, 0.f);
 		}
@@ -176,6 +178,7 @@ void APlayerCharacter::Dash()
 		DashCooldownAlpha = 0.f;
 		bCanDash = false;
 		bEnableInput = false;
+		TEMP = GetActorLocation();
 	}
 }
 
@@ -204,17 +207,17 @@ void APlayerCharacter::ChangeValues(float Value)
 
 void APlayerCharacter::RunCooldown()
 {
-	if (CheckRunCooldownTimer > 0)
+	if (RunFatigue > 0)
 	{
 		Stamina = 0.f;
 		bRunning = false;
-		CheckRunCooldownTimer--;
+		RunFatigue--;
 		bRegainStamina = false;
 	}
-	else if (CheckRunCooldownTimer <= 0)
+	else if (RunFatigue <= 0)
 	{
 		bRegainStamina = true;
-		CheckRunCooldownTimer = 2;
+		RunFatigue = 2;
 		GetWorldTimerManager().ClearTimer(RunTimer);
 	}
 }

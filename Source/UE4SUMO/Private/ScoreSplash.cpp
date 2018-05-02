@@ -18,7 +18,7 @@ void AScoreSplash::BeginPlay()
 {
 	Super::BeginPlay();
 	APlayerCharacter* Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	SetActorLocation(FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, (Player->GetActorLocation().Z * 2)+10));
+	//SetActorLocation(FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, (Player->GetActorLocation().Z * 2)+10));
 	GetWorldTimerManager().SetTimer(Timer, this, &AScoreSplash::OnTimerEnd, 1.f, true, 0.f);
 }
 
@@ -26,7 +26,7 @@ void AScoreSplash::BeginPlay()
 void AScoreSplash::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	SetActorRelativeLocation(GetActorLocation()+FVector(0.f, 0.f, 50.f * DeltaTime));
+	SetActorRelativeLocation(GetActorLocation()+FVector(0.f, 0.f, 100.f * DeltaTime));
 }
 
 void AScoreSplash::OnTimerEnd()

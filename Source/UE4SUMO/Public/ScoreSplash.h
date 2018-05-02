@@ -40,7 +40,7 @@ private:
 
 	FTimerHandle Timer;
 
-	uint8 Seconds = 3;
+	uint8 Seconds = 2;
 
 	
 };

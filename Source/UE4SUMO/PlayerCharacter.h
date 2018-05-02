@@ -2,8 +2,6 @@
 
 #pragma once
 //Custom headers
-#include "Employees_AI_Controller.h"
-#include "EnemyCharacter.h"
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
@@ -141,17 +139,18 @@ private:
 
 	bool bRegainStamina = true;
 
-	FTimerHandle Timer;
-
 	FTimerHandle RunTimer;
 
-	unsigned int CheckRunCooldownTimer = 2;
+	unsigned int RunFatigue = 2;
 
 	uint8 CaughtCooldown = 3;
 
 	uint8 RespawnCooldown = 8;
 
-	bool bMeshVisible = true;
-
 	bool bCanDash = true;
+
+	FVector TEMP;
+
+	FVector NewTEMP;
+
 };
