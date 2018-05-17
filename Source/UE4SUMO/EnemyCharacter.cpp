@@ -45,13 +45,16 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 	if (PlayerCharacter && PlayerController && !PlayerCharacter->bPlayerRage)
 	{
 		PlayerCharacter->DisableInput(PlayerController);
-		PlayerCharacter->CaughtRotation = -90.f;
+		PlayerCharacter->GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+		PlayerCharacter->GetMesh()->PlayAnimation(PlayerCharacter->KnockedOutAnimation, false);
+		PlayerCharacter->bKnockedOut = true;
 		GetWorldTimerManager().SetTimer(PlayerCharacter->CaughtTimer, PlayerCharacter, &APlayerCharacter::Caught, 1.0, true, 0.f);
 	}
 	else if (PlayerCharacter && PlayerController && PlayerCharacter->bPlayerRage)
 	{
 		FallRotation = -90.f;
-		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.1f, true, 0.f);
+		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.2f, true, 0.f);
+		PlayerCharacter->bPunch = true;
 	}
 }
 
@@ -59,8 +62,7 @@ void AEnemyCharacter::OnPlayerRage()
 {
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	AEmployees_AI_Controller* Controller = Cast<AEmployees_AI_Controller>(GetController());
-
-	if (FunctionRepeats < 100)
+	if (FunctionRepeats < 50)
 	{
 		FunctionRepeats++;
 		Controller->StopMovement();
@@ -68,24 +70,17 @@ void AEnemyCharacter::OnPlayerRage()
 		Controller->bIsPlayerDetected = false;
 		Controller->bAIRemember = false;
 
-		UE_LOG(LogTemp, Warning, TEXT("Employee on the ground"));
-
 	}
-	else if (FunctionRepeats >= 100)
+	else if (FunctionRepeats >= 50)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("MeshRotation before: %s"),*GetMesh()->GetComponentRotation().ToString());
-		//UE_LOG(LogTemp, Warning, TEXT("ColliderRotation before: %s"), *GetCapsuleComponent()->GetComponentRotation().ToString());
 		FallRotation = 0.f;
+
 		Controller->PrimaryActorTick.bCanEverTick = true;
 		Controller->bMoveToIsRunning = false;
 		Controller->bRandomPointGenerated = false;
 		PlayerCharacter->bPlayerRage = false;
 
 		FunctionRepeats = 0;
-		//UE_LOG(LogTemp, Warning, TEXT("MeshRotation after: %s"), *GetMesh()->GetComponentRotation().ToString());
-		//UE_LOG(LogTemp, Warning, TEXT("ColliderRotation after: %s"), *GetCapsuleComponent()->GetComponentRotation().ToString());
 		GetWorldTimerManager().ClearTimer(RageTimer);
-
-		UE_LOG(LogTemp, Warning, TEXT("Employee got back up"));
 	}
 }

@@ -32,6 +32,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimationAsset* FallAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimationAsset* DefaultAnimation;
+
 private:
 	UFUNCTION()
 		void OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
@@ -40,12 +46,12 @@ private:
 
 	FTimerHandle Timer;
 
-	void OnRagdoll();
+	void OnFall();
 
 	int Repeats = 0;
 
-	float FallRotation = 0.f;
-
 	float Size = 1.0f;
+
+	bool bFallPlaying = false;
 
 };

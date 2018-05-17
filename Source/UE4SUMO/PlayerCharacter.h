@@ -2,6 +2,7 @@
 
 #pragma once
 //Custom headers
+#include <cmath>
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
@@ -63,6 +64,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Speed = 360.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bPunch = false;
+
 	UPROPERTY(EditAnywhere)
 	float SizeMultiplier = 1.0f;
 
@@ -93,7 +97,11 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float DashCooldownAlpha = 1.f;
 
-	float CaughtRotation = 0.f;
+	UPROPERTY(EditAnywhere)
+	UClass* DefaultAnimations;
+
+	UPROPERTY(EditAnywhere)
+	UAnimationAsset* KnockedOutAnimation;
 
 	bool bPlayerRage = false;
 
@@ -110,6 +118,8 @@ public:
 	float PrevSpeed = 0.f;
 
 	bool bDashing = false;
+
+	bool bKnockedOut = false;
 
 	FTimerHandle RespawnTimer;
 
@@ -143,7 +153,7 @@ private:
 
 	unsigned int RunFatigue = 2;
 
-	uint8 CaughtCooldown = 3;
+	uint8 CaughtCooldown = 5;
 
 	uint8 RespawnCooldown = 8;
 

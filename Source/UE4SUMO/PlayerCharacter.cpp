@@ -52,13 +52,16 @@ void APlayerCharacter::Tick(float DeltaTime)
 	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 
-	if (DashCooldownAlpha >= 1.f) { DashCooldownAlpha = 1.f; bCanDash = true; }
+	if (DashCooldownAlpha >= 1.f) 
+	{ 
+		DashCooldownAlpha = 1.f; 
+		bCanDash = true; 
+	}
 	else DashCooldownAlpha += DeltaTime / DashCooldown;
 
-	GetMesh()->SetRelativeRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(0.0f, RotationValue, CaughtRotation)), 6.f * DeltaTime));
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f), 1.f * DeltaTime));
 
-	for (int i{}; i<10; i++)
+	for (int i{0}; i<10; i++)
 	{
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/3.f), 1.f*DeltaTime));
 	}
@@ -202,7 +205,10 @@ void APlayerCharacter::ChangeValues(float Value)
 		Score += Value * ScoreMultiplier;
 	}
 
-	if (Score > 100000.f) Score = 100000.f;
+	if (Score >= 100000.f) Score = 100000.f;
+	if (Score <= 0.f) Score = 0.f;
+
+	Score = round(Score);
 }
 
 void APlayerCharacter::RunCooldown()
@@ -227,16 +233,18 @@ void APlayerCharacter::Caught()
 	if (CaughtCooldown > 1)
 	{
 		CaughtCooldown--;
-		Lives--;
 	}
 	else if (CaughtCooldown <= 1)
 	{
 		GetWorldTimerManager().SetTimer(RespawnTimer, this, &APlayerCharacter::Respawn, 0.4f, true, 0.f);
 		GetWorldTimerManager().ClearTimer(CaughtTimer);
 		SetActorLocation(FVector(-450.f, -1000.f, 0.f));
-		CaughtCooldown = 3;
-		CaughtRotation = 0.f;
+		CaughtCooldown = 5;
+		Lives--;
 		EnableInput(GetWorld()->GetFirstPlayerController());
+
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+		GetMesh()->SetAnimInstanceClass(DefaultAnimations);
 	}
 }
 

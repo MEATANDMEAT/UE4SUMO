@@ -7,7 +7,7 @@
 ACustomer::ACustomer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -23,8 +23,7 @@ void ACustomer::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACustomer::OnPlayerOverlap);
-	GetMesh()->SetWorldScale3D(FVector(FMath::RandRange(1.f, 1.8f)));
-	Size = FMath::RandRange(1.f, 3.f);
+	Size = FMath::RandRange(1.f, 1.2f);
 }
 
 // Called every frame
@@ -32,34 +31,38 @@ void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	GetMesh()->SetWorldRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(GetRootComponent()->GetComponentRotation().Pitch, GetRootComponent()->GetComponentRotation().Yaw - 90.f, FallRotation)), 5.f * DeltaTime));
+	//GetMesh()->SetWorldRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(GetRootComponent()->GetComponentRotation().Pitch, GetRootComponent()->GetComponentRotation().Yaw - 90.f, FallRotation)), 5.f * DeltaTime));
 }
 
 void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	if (PlayerCharacter)
 	{
-
 		if (Size > PlayerCharacter->Size)
 		{
 			FRotator LungeDirection = PlayerCharacter->GetMesh()->GetComponentRotation();
 			LungeDirection += FRotator(0.f, 90.f, 0.f);
 			const FVector LungeVelocity = LungeDirection.Vector();
-			//PlayerCharacter->GetMovementComponent()->AddRadialImpulse(GetActorLocation(),100.f, 1000.f, ERadialImpulseFalloff::RIF_Linear, false);
+
+			
 		}
-		else if (Size < PlayerCharacter->Size && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)
+		else if (Size <= PlayerCharacter->Size && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)
 		{
-			FallRotation = -90.f;
+			if (!bFallPlaying)
+			{
+				GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+				GetMesh()->PlayAnimation(FallAnimation, false);
+				bFallPlaying = true;
+			}
 			Controller->StopMovement();
 			Controller->PrimaryActorTick.bCanEverTick = false;
-			GetWorldTimerManager().SetTimer(Timer, this, &ACustomer::OnRagdoll, 0.5f, true, 0.f);
+			GetWorldTimerManager().SetTimer(Timer, this, &ACustomer::OnFall, 0.5f, true, 0.f);
 		}
 	}
 }
 
-void ACustomer::OnRagdoll()
+void ACustomer::OnFall()
 {
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	ACustomer_AI_Controller* Controller = Cast<ACustomer_AI_Controller>(GetController());
@@ -69,19 +72,22 @@ void ACustomer::OnRagdoll()
 		Repeats++;
 		Controller->StopMovement();
 		Controller->PrimaryActorTick.bCanEverTick = false;
+		bUseControllerRotationPitch = true;
+		bUseControllerRotationRoll = true;
+		bUseControllerRotationYaw = true;
 
 	} else if (Repeats >= 10)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("MeshRotation before: %s"),*GetMesh()->GetComponentRotation().ToString());
-		//UE_LOG(LogTemp, Warning, TEXT("ColliderRotation before: %s"), *GetCapsuleComponent()->GetComponentRotation().ToString());
-		FallRotation = 0.f;
 		Controller->PrimaryActorTick.bCanEverTick = true;
 		Controller->bMoveToIsRunning = false;
 		Controller->bRandomPointGenerated = false;
-
+		bUseControllerRotationPitch = false;
+		bUseControllerRotationRoll = false;
+		bUseControllerRotationYaw = false;
 		Repeats = 0;
-		//UE_LOG(LogTemp, Warning, TEXT("MeshRotation after: %s"), *GetMesh()->GetComponentRotation().ToString());
-		//UE_LOG(LogTemp, Warning, TEXT("ColliderRotation after: %s"), *GetCapsuleComponent()->GetComponentRotation().ToString());
+		if (bFallPlaying) bFallPlaying = false;
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+		GetMesh()->SetAnimation(DefaultAnimation);
 		GetWorldTimerManager().ClearTimer(Timer);
 
 	}
