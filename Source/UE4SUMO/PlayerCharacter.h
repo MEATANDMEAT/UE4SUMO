@@ -62,6 +62,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	uint8 Lives = 4;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bShowGameOver = false;
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 360.f;
 
@@ -102,10 +105,10 @@ public:
 	float DashCooldownAlpha = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int TimerSeconds = 300;
+	int TimerSeconds = 120;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int TimerMinutes;
+	int TimerMinutes = 0;
 
 	UPROPERTY(EditAnywhere)
 	UClass* DefaultAnimations;

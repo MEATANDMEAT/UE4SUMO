@@ -44,7 +44,7 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 			FRotator LungeDirection = PlayerCharacter->GetMesh()->GetComponentRotation();
 			LungeDirection += FRotator(0.f, 90.f, 0.f);
 			const FVector LungeVelocity = LungeDirection.Vector();
-
+			PlayerCharacter->LaunchCharacter((LungeVelocity * 1000) * -1, true, true);
 			
 		}
 		else if (Size <= PlayerCharacter->Size && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)

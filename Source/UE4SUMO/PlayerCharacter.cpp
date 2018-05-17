@@ -267,7 +267,12 @@ void APlayerCharacter::Countdown()
 	}
 	else if (TimerSeconds <= 0)
 	{
-		//
+		DisableInput(GetWorld()->GetFirstPlayerController());
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+		GetMesh()->PlayAnimation(KnockedOutAnimation, false);
+		Lives = 0;
+		bShowGameOver = true;
+		GetWorldTimerManager().ClearTimer(LevelTimerHandle);
 	}
 }
 
