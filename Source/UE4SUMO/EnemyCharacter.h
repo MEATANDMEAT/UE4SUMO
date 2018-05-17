@@ -51,6 +51,7 @@ public:
 
 	float FallRotation;
 
+	bool bOnGround = false;
 private:
 
 

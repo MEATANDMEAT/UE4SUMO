@@ -36,6 +36,8 @@ void APlayerCharacter::BeginPlay()
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), 0.f);
 		GetMesh()->SetMaterial(i, DynMats[i]);
 	}
+
+	GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &APlayerCharacter::Countdown, 1.0, true, 0.f);
 }
 
 // Called every frame
@@ -102,7 +104,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	InputComponent->BindAxis("Run", this, &APlayerCharacter::Run);
 	InputComponent->BindAction("Dash", IE_Released, this, &APlayerCharacter::Dash);
-	InputComponent->BindAction("Punch", IE_Pressed, this, &APlayerCharacter::Punch);
 
 }
 
@@ -185,11 +186,6 @@ void APlayerCharacter::Dash()
 	}
 }
 
-void APlayerCharacter::Punch()
-{
-	//TEMP
-}
-
 void APlayerCharacter::ChangeValues(float Value)
 {
 	if (Size > 1.f && Value < 0.f)
@@ -260,6 +256,18 @@ void APlayerCharacter::Respawn()
 		GetWorldTimerManager().ClearTimer(RespawnTimer);
 		RespawnCooldown = 8;
 		GetMesh()->SetVisibility(true);
+	}
+}
+
+void APlayerCharacter::Countdown()
+{
+	if (TimerSeconds > 0) 
+	{ 
+		TimerSeconds--; TimerMinutes = TimerSeconds / 60; 
+	}
+	else if (TimerSeconds <= 0)
+	{
+		//
 	}
 }
 

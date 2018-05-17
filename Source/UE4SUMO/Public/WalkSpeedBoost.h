@@ -52,6 +52,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class USoundBase* SpeedBoostSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class USoundBase* SodaSound;
+
 	APlayerCharacter* Player = nullptr;
 
 	float Alpha = 0.f;

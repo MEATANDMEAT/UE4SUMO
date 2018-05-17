@@ -56,7 +56,8 @@ void AWalkSpeedBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AAct
 
 	if (PlayerCharacter && !bPickup && !PlayerCharacter->bSpeedPickup)
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), SpeedBoostSound, 0.2f, 1, 0, nullptr, PlayerCharacter);
+		UGameplayStatics::PlaySound2D(GetWorld(), SpeedBoostSound, 0.2f, 1.f, 0, nullptr, PlayerCharacter);
+		UGameplayStatics::PlaySound2D(GetWorld(), SodaSound, 1.f, 1.f, 0.5f, nullptr, PlayerCharacter);
 		if (Player->bDashing)
 		{
 			GetWorldTimerManager().SetTimer(DelayTimer, this, &AWalkSpeedBoost::DashDelay, 1.f, false, 0.3f);

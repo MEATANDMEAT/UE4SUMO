@@ -11,6 +11,7 @@
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 #include "GenericTeamAgentInterface.h"
+#include "Runtime/Engine/Classes/Engine/TextRenderActor.h"
 
 //Required headers
 #include "GameFramework/Character.h"
@@ -46,8 +47,6 @@ public:
 
 	void Dash();
 
-	void Punch();
-
 	void ChangeValues(float Value);
 
 	void RunCooldown();
@@ -56,10 +55,12 @@ public:
 
 	void Respawn();
 
+	void Countdown();
+
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	uint8 Lives = 0;
+	uint8 Lives = 4;
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 360.f;
@@ -85,6 +86,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* DashCurve;
 
+	UPROPERTY(EditAnywhere)
+	ATextRenderActor* ScoreText;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Stamina = 100.f;
 
@@ -96,6 +100,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	float DashCooldownAlpha = 1.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int TimerSeconds = 300;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int TimerMinutes;
 
 	UPROPERTY(EditAnywhere)
 	UClass* DefaultAnimations;
@@ -124,6 +134,8 @@ public:
 	FTimerHandle RespawnTimer;
 
 	FTimerHandle CaughtTimer;
+
+	FTimerHandle LevelTimerHandle;
 
 private:
 	UPROPERTY(EditAnywhere)
