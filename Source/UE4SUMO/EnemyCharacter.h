@@ -49,10 +49,16 @@ public:
 
 	int FunctionRepeats = 0;
 
-	float FallRotation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimationAsset* FallAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimationAsset* DefaultAnimation;
 
 	bool bOnGround = false;
 private:
+
+	bool bFallPlaying = false;
 
 
 };

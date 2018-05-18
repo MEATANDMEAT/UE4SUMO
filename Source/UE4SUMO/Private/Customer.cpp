@@ -30,8 +30,6 @@ void ACustomer::BeginPlay()
 void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//GetMesh()->SetWorldRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(GetRootComponent()->GetComponentRotation().Pitch, GetRootComponent()->GetComponentRotation().Yaw - 90.f, FallRotation)), 5.f * DeltaTime));
 }
 
 void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -85,7 +83,7 @@ void ACustomer::OnFall()
 		bUseControllerRotationRoll = false;
 		bUseControllerRotationYaw = false;
 		Repeats = 0;
-		if (bFallPlaying) bFallPlaying = false;
+		bFallPlaying = false;
 		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 		GetMesh()->SetAnimation(DefaultAnimation);
 		GetWorldTimerManager().ClearTimer(Timer);
