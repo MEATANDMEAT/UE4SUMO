@@ -34,8 +34,6 @@ void AEnemyCharacter::BeginPlay()
 void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	GetMesh()->SetWorldRotation(FMath::Lerp(FQuat(GetMesh()->GetComponentRotation()), FQuat(FRotator(GetRootComponent()->GetComponentRotation().Pitch, GetRootComponent()->GetComponentRotation().Yaw - 90.f, FallRotation)), 5.f * DeltaTime));
 }
 
 void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -52,7 +50,12 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 	}
 	else if (PlayerCharacter && PlayerController && PlayerCharacter->bPlayerRage)
 	{
-		FallRotation = -90.f;
+		if (!bFallPlaying)
+		{
+			GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+			GetMesh()->PlayAnimation(FallAnimation, false);
+			bFallPlaying = true;
+		}
 		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.2f, true, 0.f);
 		PlayerCharacter->bPunch = true;
 		bOnGround = true;
@@ -71,20 +74,19 @@ void AEnemyCharacter::OnPlayerRage()
 {
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	AEmployees_AI_Controller* Controller = Cast<AEmployees_AI_Controller>(GetController());
-	if (FunctionRepeats < 50)
+	if (FunctionRepeats < 30)
 	{
 		FunctionRepeats++;
 		Controller->StopMovement();
 		Controller->PrimaryActorTick.bCanEverTick = false;
 		Controller->bIsPlayerDetected = false;
 		Controller->bAIRemember = false;
-
-
 	}
-	else if (FunctionRepeats >= 50)
+	else if (FunctionRepeats >= 30)
 	{
-		FallRotation = 0.f;
-
+		bFallPlaying = false;
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+		GetMesh()->SetAnimation(DefaultAnimation);
 		Controller->PrimaryActorTick.bCanEverTick = true;
 		Controller->bMoveToIsRunning = false;
 		Controller->bRandomPointGenerated = false;
