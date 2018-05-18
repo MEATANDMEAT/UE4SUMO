@@ -46,21 +46,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* Curve;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TSubclassOf<AScoreSplash> ScoreSplash;
-
 	float Alpha;
 
 	bool bEat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class USoundBase* GrowingSound;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USoundBase* EatingSound;
 
 	UPROPERTY(EditAnywhere)
-		float SizeIncrease = 0.1f;
+	float SizeIncrease = 0.01f;
 
 private:
 	UFUNCTION()

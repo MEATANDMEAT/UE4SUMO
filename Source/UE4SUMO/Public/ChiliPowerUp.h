@@ -49,7 +49,7 @@ protected:
 		class USoundBase* SpeedBoostSound;
 
 	UPROPERTY(EditAnywhere)
-		float SizeDecreaseOverTime = -0.005f;
+		float SizeDecreaseOverTime = -0.02f;
 
 	float Alpha = 0.f;
 
@@ -57,7 +57,7 @@ protected:
 
 	FTimerHandle TimerHandle;
 
-	unsigned int Repeats = 5;
+	uint8 Repeats = 7;
 
 	bool bUp = true;
 

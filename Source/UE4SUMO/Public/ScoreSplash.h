@@ -5,7 +5,7 @@
 #include "PlayerCharacter.h"
 
 //Engine headers
-#include "Components/BillboardComponent.h"
+#include "Runtime/Engine/Classes/Engine/TextRenderActor.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -33,7 +33,7 @@ public:
 	USceneComponent* FoodRoot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UBillboardComponent* Score;
+	ATextRenderActor* Score;
 
 private:
 	void OnTimerEnd();

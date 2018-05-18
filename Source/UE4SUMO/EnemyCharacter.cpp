@@ -42,7 +42,7 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	if (PlayerCharacter && PlayerController && !PlayerCharacter->bPlayerRage)
+	if (PlayerCharacter && PlayerController && !PlayerCharacter->bPlayerRage && !bOnGround && PlayerCharacter->Lives > 1)
 	{
 		PlayerCharacter->DisableInput(PlayerController);
 		PlayerCharacter->GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
@@ -55,6 +55,15 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 		FallRotation = -90.f;
 		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.2f, true, 0.f);
 		PlayerCharacter->bPunch = true;
+		bOnGround = true;
+	}
+	else if (PlayerCharacter && PlayerController && PlayerCharacter->Lives <= 1)
+	{
+		PlayerCharacter->DisableInput(PlayerController);
+		PlayerCharacter->GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+		PlayerCharacter->GetMesh()->PlayAnimation(PlayerCharacter->KnockedOutAnimation, false);
+		PlayerCharacter->Lives = 0;
+		PlayerCharacter->bShowGameOver = true;
 	}
 }
 
@@ -70,6 +79,7 @@ void AEnemyCharacter::OnPlayerRage()
 		Controller->bIsPlayerDetected = false;
 		Controller->bAIRemember = false;
 
+
 	}
 	else if (FunctionRepeats >= 50)
 	{
@@ -78,8 +88,7 @@ void AEnemyCharacter::OnPlayerRage()
 		Controller->PrimaryActorTick.bCanEverTick = true;
 		Controller->bMoveToIsRunning = false;
 		Controller->bRandomPointGenerated = false;
-		PlayerCharacter->bPlayerRage = false;
-
+		bOnGround = false;
 		FunctionRepeats = 0;
 		GetWorldTimerManager().ClearTimer(RageTimer);
 	}

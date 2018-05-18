@@ -54,10 +54,10 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	if (PlayerCharacter && !bEat)
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), EatingSound, PlayerCharacter->GetActorLocation(), 1.f, 1.f, 0.f, nullptr, nullptr);
+		UGameplayStatics::PlaySound2D(GetWorld(), EatingSound, 1.f, 1.f);
 		PlayerCharacter->ChangeValues(SizeIncrease);
 		bEat = true;
-		GetWorld()->SpawnActor<AScoreSplash>(ScoreSplash->GetAuthoritativeClass(), FVector(PlayerCharacter->GetActorLocation().X, PlayerCharacter->GetActorLocation().Y, (PlayerCharacter->GetActorLocation().Z * 2) + 10), FRotator(0.f,0.f,0.f), SpawnInfo);
+		//PlayerCharacter->SpawnText();
 	}
 	else {
 		//UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
