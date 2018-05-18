@@ -54,10 +54,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 	LungeDirection = GetMesh()->GetComponentRotation();
 	LungeDirection += FRotator(0.f, 90.f, 0.f);
 
-	if (DashCooldownAlpha >= 1.f) 
-	{ 
-		DashCooldownAlpha = 1.f; 
-		bCanDash = true; 
+	if (DashCooldownAlpha >= 1.f)
+	{
+		DashCooldownAlpha = 1.f;
+		bCanDash = true;
 	}
 	else DashCooldownAlpha += DeltaTime / DashCooldown;
 
@@ -261,9 +261,9 @@ void APlayerCharacter::Respawn()
 
 void APlayerCharacter::Countdown()
 {
-	if (TimerSeconds > 0) 
-	{ 
-		TimerSeconds--; TimerMinutes = TimerSeconds / 60; 
+	if (TimerSeconds > 0)
+	{
+		TimerSeconds--; TimerMinutes = TimerSeconds / 60;
 	}
 	else if (TimerSeconds <= 0)
 	{

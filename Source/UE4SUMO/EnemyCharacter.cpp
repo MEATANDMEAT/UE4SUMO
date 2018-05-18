@@ -54,7 +54,6 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 	{
 		FallRotation = -90.f;
 		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.2f, true, 0.f);
-		PlayerCharacter->bPunch = true;
 		bOnGround = true;
 	}
 	else if (PlayerCharacter && PlayerController && PlayerCharacter->Lives <= 1)

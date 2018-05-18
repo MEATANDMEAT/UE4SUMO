@@ -68,9 +68,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Speed = 360.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bPunch = false;
-
 	UPROPERTY(EditAnywhere)
 	float SizeMultiplier = 1.0f;
 

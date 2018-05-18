@@ -38,7 +38,7 @@ void AWalkSpeedBoost::Tick(float DeltaTime)
 		Mesh->SetWorldScale3D(FVector(Curve->GetFloatValue(Alpha)));
 	}
 
-	if (Beta >= 1.f) 
+	if (Beta >= 1.f)
 	{
 		bUp = !bUp;
 		Beta = 0.f;
@@ -61,7 +61,7 @@ void AWalkSpeedBoost::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AAct
 		if (Player->bDashing)
 		{
 			GetWorldTimerManager().SetTimer(DelayTimer, this, &AWalkSpeedBoost::DashDelay, 1.f, false, 0.3f);
-		} 
+		}
 		else if (!Player->bDashing)
 		{
 			GetWorldTimerManager().SetTimer(TimerHandle, this, &AWalkSpeedBoost::SpeedBoost, 1.f, true, 0.f);
