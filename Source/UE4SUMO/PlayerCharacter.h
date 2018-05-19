@@ -81,9 +81,6 @@ public:
 	float DashValue = 37.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
-	UCurveFloat* Curve;
-
-	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* DashCurve;
 
 	UPROPERTY(EditAnywhere)
@@ -108,7 +105,7 @@ public:
 	int TimerMinutes = 0;
 
 	UPROPERTY(EditAnywhere)
-	UClass* DefaultAnimations;
+	UAnimationAsset* DefaultAnimations;
 
 	UPROPERTY(EditAnywhere)
 	UAnimationAsset* KnockedOutAnimation;
