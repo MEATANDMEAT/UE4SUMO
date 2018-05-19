@@ -240,7 +240,7 @@ void APlayerCharacter::Caught()
 		EnableInput(GetWorld()->GetFirstPlayerController());
 
 		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-		GetMesh()->SetAnimInstanceClass(DefaultAnimations);
+		GetMesh()->SetAnimation(DefaultAnimations);
 	}
 }
 
