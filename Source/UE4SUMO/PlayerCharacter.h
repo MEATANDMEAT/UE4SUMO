@@ -93,7 +93,7 @@ public:
 	float Score = 0.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float DashCooldown = 6.f;
+	float DashCooldown = 3.f;
 
 	UPROPERTY(BlueprintReadWrite)
 	float DashCooldownAlpha = 1.f;

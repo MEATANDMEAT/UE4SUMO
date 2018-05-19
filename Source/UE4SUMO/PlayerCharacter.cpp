@@ -84,6 +84,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 			Speed = PrevSpeed;
 			bEnableInput = true;
 			NewTEMP = GetActorLocation();
+			ChangeValues(-.04f);
 
 			UE_LOG(LogTemp,Warning,TEXT("DASH MAGNITUDE: %f"),(NewTEMP - TEMP).Size())
 		}
