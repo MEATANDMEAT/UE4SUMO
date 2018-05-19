@@ -81,7 +81,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 	if (bIsPlayerDetected && PlayerCharacter)
 	{
 		MoveToActor(PlayerCharacter, 0.f, false, true, true, 0, false);
-		EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 350;
+		EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 300;
 		LastSeenLocation = PlayerCharacter->GetActorLocation();
 		//Set AIRemember to true, so it has to move to LastSeenLocation.
 		bAIRemember = true;
@@ -103,7 +103,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 			bAIRemember = false;
 			bRandomPointGenerated = true;
 			bMoveToIsRunning = false;
-			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 350;
+			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 300;
 		}
 		//If the AI isn't close the last seen position of the player, then move until it is.
 		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 5.f)
@@ -111,7 +111,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 			MoveToLocation(LastSeenLocation, 1.f, false, true, false, true, 0, false);
 			EnemyCharacter->Exclaimation->SetHiddenInGame(true);
 			EnemyCharacter->Question->SetHiddenInGame(false);
-			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 350;
+			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 300;
 		}
 	}
 	//When the player has not been detected and the AI does not remember any last positions of the player.

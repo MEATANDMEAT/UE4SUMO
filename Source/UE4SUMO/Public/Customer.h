@@ -8,7 +8,7 @@
 //Engine specific headers
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
-#include "AI/Navigation/NavigationSystem.h"
+#include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -28,7 +28,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -51,6 +51,8 @@ private:
 	int Repeats = 0;
 
 	float Size = 1.0f;
+
+	UMaterialInstanceDynamic* DynMats[9];
 
 	bool bFallPlaying = false;
 

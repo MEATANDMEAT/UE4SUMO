@@ -23,7 +23,16 @@ void ACustomer::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACustomer::OnPlayerOverlap);
-	Size = FMath::RandRange(1.f, 1.2f);
+	Size = FMath::RandRange(1.f, 2.0f);
+
+	for (int i{}; i<9; i++)
+	{
+		DynMats[i] = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(i), this);
+		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), ((Size-1.f)/2.f));
+		GetMesh()->SetMaterial(i, DynMats[i]);
+	}
+	GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f));
+
 }
 
 // Called every frame
@@ -43,7 +52,7 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 			LungeDirection += FRotator(0.f, 90.f, 0.f);
 			const FVector LungeVelocity = LungeDirection.Vector();
 			PlayerCharacter->LaunchCharacter((LungeVelocity * 1000) * -1, true, true);
-			
+
 		}
 		else if (Size <= PlayerCharacter->Size && PlayerCharacter->GetCharacterMovement()->Velocity.Size() != 0.f)
 		{
