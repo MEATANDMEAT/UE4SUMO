@@ -66,11 +66,11 @@ void AChiliPowerUp::OnPlayerEnterPickupBox(UPrimitiveComponent* HitComp, AActor*
 void AChiliPowerUp::PlayerRage()
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	UE_LOG(LogTemp, Warning, TEXT("RAGE: %i"), PlayerCharacter->bPlayerRage);
 	if (Repeats > 0)
 	{
 		PlayerCharacter->ChangeValues(SizeDecreaseOverTime);
 		PlayerCharacter->bPlayerRage = true;
+		PlayerCharacter->RageSprite->SetHiddenInGame(false);
 		Repeats--;
 	}
 	else if (Repeats <= 0)
@@ -78,6 +78,7 @@ void AChiliPowerUp::PlayerRage()
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 		PlayerCharacter->bPlayerRage = false;
 		PlayerCharacter->bChiliPickup = false;
+		PlayerCharacter->RageSprite->SetHiddenInGame(true);
 		Destroy();
 	}
 

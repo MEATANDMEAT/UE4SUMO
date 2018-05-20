@@ -22,6 +22,9 @@ APlayerCharacter::APlayerCharacter()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+	RageSprite = CreateDefaultSubobject<UBillboardComponent>(TEXT("RageSprite"));
+	RageSprite->SetupAttachment(RootComponent);
+
 	TeamId = FGenericTeamId(1);
 }
 
@@ -227,6 +230,7 @@ void APlayerCharacter::RunCooldown()
 
 void APlayerCharacter::Caught()
 {
+	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
 	if (CaughtCooldown > 1)
 	{
 		CaughtCooldown--;
@@ -235,7 +239,9 @@ void APlayerCharacter::Caught()
 	{
 		GetWorldTimerManager().SetTimer(RespawnTimer, this, &APlayerCharacter::Respawn, 0.4f, true, 0.f);
 		GetWorldTimerManager().ClearTimer(CaughtTimer);
-		SetActorLocation(FVector(-450.f, -1000.f, 0.f));
+		Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetActorLocation(), 2000.f);
+		Result.Location.Z = GetActorLocation().Z;
+		SetActorLocation(Result.Location);
 		CaughtCooldown = 5;
 		Lives--;
 		EnableInput(GetWorld()->GetFirstPlayerController());

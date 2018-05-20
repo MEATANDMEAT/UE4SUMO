@@ -1,8 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-//Custom headers
-#include <cmath>
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
@@ -12,6 +10,8 @@
 #include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 #include "GenericTeamAgentInterface.h"
 #include "Runtime/Engine/Classes/Engine/TextRenderActor.h"
+#include "AI/Navigation/NavigationSystem.h"
+#include "Components/BillboardComponent.h"
 
 //Required headers
 #include "GameFramework/Character.h"
@@ -62,6 +62,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	uint8 Lives = 4;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UBillboardComponent* RageSprite;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShowGameOver = false;
 
@@ -82,9 +85,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Curve)
 	UCurveFloat* DashCurve;
-
-	UPROPERTY(EditAnywhere)
-	ATextRenderActor* ScoreText;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Stamina = 100.f;
@@ -109,6 +109,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UAnimationAsset* KnockedOutAnimation;
+
+	FNavLocation Result;
 
 	bool bPlayerRage = false;
 
