@@ -81,6 +81,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float SizeMultiplier = 1.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bDestroyedByEnemy = false;
+
 	UPROPERTY(EditAnywhere)
 	float SpeedMultiplier = 90.f;
 

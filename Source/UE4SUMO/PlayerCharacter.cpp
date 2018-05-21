@@ -192,12 +192,14 @@ void APlayerCharacter::ChangeValues(float Value)
 		Size += Value * SizeMultiplier;
 		Speed -= Value * SpeedMultiplier;
 		Score += Value * ScoreMultiplier;
+		GetMesh()->SetWorldLocation(GetMesh()->GetComponentLocation()+FVector(0.f, 0.f, -40.f*Value));
 	}
 	else if (Size < 3.f && Value > 0.f)
 	{
 		Size += Value * SizeMultiplier;
 		Speed -= Value * SpeedMultiplier;
 		Score += Value * ScoreMultiplier;
+		GetMesh()->SetWorldLocation(GetMesh()->GetComponentLocation()+FVector(0.f, 0.f, -40.f*Value));
 	}
 
 	if (Score >= 100000.f) Score = 100000.f;

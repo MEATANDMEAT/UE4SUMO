@@ -32,6 +32,7 @@ void ACustomer::BeginPlay()
 		GetMesh()->SetMaterial(i, DynMats[i]);
 	}
 	GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f));
+	GetMesh()->SetWorldLocation(GetMesh()->GetComponentLocation()+FVector(0.f, 0.f, -40.f*(Size-1)));
 
 }
 
