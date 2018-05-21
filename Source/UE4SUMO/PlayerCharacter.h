@@ -68,6 +68,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShowGameOver = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bShowRoundEnd = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bNotEnoughScoreText = false;
+
 	UPROPERTY(EditAnywhere)
 	float Speed = 360.f;
 

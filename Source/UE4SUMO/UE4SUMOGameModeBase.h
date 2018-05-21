@@ -2,6 +2,10 @@
 
 #pragma once
 
+//Engine headers
+#include "Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
+
 //Required headers
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
@@ -19,5 +23,8 @@ private:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* Music;
 
 };
