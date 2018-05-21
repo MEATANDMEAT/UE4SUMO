@@ -16,7 +16,7 @@ void AScoreSplash::BeginPlay()
 {
 	Super::BeginPlay();
 	APlayerCharacter* Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	//SetActorLocation(FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, (Player->GetActorLocation().Z * 2)+10));
+	SetActorLocation(FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, (Player->GetActorLocation().Z * 2)+10));
 	GetWorldTimerManager().SetTimer(Timer, this, &AScoreSplash::OnTimerEnd, 1.f, true, 0.f);
 }
 

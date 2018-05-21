@@ -32,15 +32,18 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	GameInstance = Cast<USUMOGameInstance>(GetGameInstance());
+	Lives = GameInstance->PlayerLives;
 
-	for (int i{}; i<10; i++)
+	for (int i {}; i < 10; i++)
 	{
 		DynMats[i] = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(i), this);
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), 0.f);
 		GetMesh()->SetMaterial(i, DynMats[i]);
 	}
 
-	GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &APlayerCharacter::Countdown, 1.0, true, 0.f);
+	GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &APlayerCharacter::CountdownTimer, 1.0, true, 0.f);
 }
 
 // Called every frame
@@ -66,8 +69,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/3.f), 1.f*DeltaTime));
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, FString::Printf(TEXT("DeltaTime: %f"), DeltaTime), true);
-
 	if (bDashing)
 	{
 		//USE OF DELTATIME HERE FOR SOME REASON PRODUCES INCONSISTENT RESULTS WHEN FRAMERATE CHANGES!
@@ -83,12 +84,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 			bEnableInput = true;
 			NewTEMP = GetActorLocation();
 			ChangeValues(-.04f);
-
-			UE_LOG(LogTemp,Warning,TEXT("DASH MAGNITUDE: %f"),(NewTEMP - TEMP).Size())
 		}
 	}
 
-	if (bRunning == true && Size > 1.f && GetCharacterMovement()->Velocity.Size() != 0)
+	if (bRunning && Size > 1.f && GetCharacterMovement()->Velocity.Size() != NULL)
 	{
 		ChangeValues((DeltaTime / 10.f) * -1);
 	}
@@ -103,7 +102,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	InputComponent->BindAxis("Run", this, &APlayerCharacter::Run);
 	InputComponent->BindAction("Dash", IE_Released, this, &APlayerCharacter::Dash);
-
+	InputComponent->BindAction("PauseMenu", IE_Released, this, &APlayerCharacter::PauseMenu);
 }
 
 void APlayerCharacter::MoveForward(float MoveAmount)
@@ -185,6 +184,20 @@ void APlayerCharacter::Dash()
 	}
 }
 
+void APlayerCharacter::PauseMenu()
+{
+	if (bShowPauseMenu)
+	{
+		bShowPauseMenu = false;
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+	}
+	else if (!bShowPauseMenu)
+	{
+		bShowPauseMenu = true;
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+	}
+}
+
 void APlayerCharacter::ChangeValues(float Value)
 {
 	if (Size > 1.f && Value < 0.f)
@@ -227,42 +240,20 @@ void APlayerCharacter::RunCooldown()
 
 void APlayerCharacter::Caught()
 {
-	UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
 	if (CaughtCooldown > 1)
 	{
 		CaughtCooldown--;
 	}
 	else if (CaughtCooldown <= 1)
 	{
-		GetWorldTimerManager().SetTimer(RespawnTimer, this, &APlayerCharacter::Respawn, 0.4f, true, 0.f);
 		GetWorldTimerManager().ClearTimer(CaughtTimer);
-		Result.Location = NavSys->GetRandomReachablePointInRadius(GetWorld(), GetActorLocation(), 2000.f);
-		Result.Location.Z = GetActorLocation().Z;
-		SetActorLocation(Result.Location);
-		CaughtCooldown = 5;
-		Lives--;
-		EnableInput(GetWorld()->GetFirstPlayerController());
-		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-		GetMesh()->SetAnimation(DefaultAnimations);
+		GameInstance->PlayerLives--;
+		FName CurrentLevel = *(UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
+		UGameplayStatics::OpenLevel(GetWorld(), CurrentLevel, true);
 	}
 }
 
-void APlayerCharacter::Respawn()
-{
-	if (RespawnCooldown > 1)
-	{
-		GetMesh()->ToggleVisibility();
-		RespawnCooldown--;
-	}
-	else if (RespawnCooldown <= 1)
-	{
-		GetWorldTimerManager().ClearTimer(RespawnTimer);
-		RespawnCooldown = 8;
-		GetMesh()->SetVisibility(true);
-	}
-}
-
-void APlayerCharacter::Countdown()
+void APlayerCharacter::CountdownTimer()
 {
 	if (TimerSeconds > 0)
 	{

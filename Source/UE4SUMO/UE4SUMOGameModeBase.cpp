@@ -5,12 +5,13 @@
 void AUE4SUMOGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-     
-	UGameplayStatics::PlaySound2D(GetWorld(), Music, 1.f, 1.f, 0.f, nullptr, nullptr);
+	if (UGameplayStatics::GetCurrentLevelName(GetWorld(), true) != FString("Main"))
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), Music, 1.f, 1.f, 0.f, nullptr, nullptr);
+	}
 }
 
 void AUE4SUMOGameModeBase::Tick(float DeltaSeconds)
 {
-
 	Super::Tick(DeltaSeconds);
 }

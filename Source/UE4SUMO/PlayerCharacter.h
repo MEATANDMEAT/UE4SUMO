@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Custom headers
+#include "SUMOGameInstance.h"
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
@@ -10,8 +12,6 @@
 #include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 #include "GenericTeamAgentInterface.h"
 #include "Kismet/GameplayStatics.h"
-#include "Runtime/Engine/Classes/Engine/TextRenderActor.h"
-#include "AI/Navigation/NavigationSystem.h"
 #include "Components/BillboardComponent.h"
 
 //Required headers
@@ -48,20 +48,22 @@ public:
 
 	void Dash();
 
+	void PauseMenu();
+
 	void ChangeValues(float Value);
 
 	void RunCooldown();
 
 	void Caught();
 
-	void Respawn();
-
-	void Countdown();
+	void CountdownTimer();
 
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
+	USUMOGameInstance* GameInstance;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	uint8 Lives = 4;
+	uint8 Lives;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBillboardComponent* RageSprite;
@@ -73,6 +75,9 @@ public:
 	bool bShowRoundEnd = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bShowPauseMenu = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bNotEnoughScoreText = false;
 
 	UPROPERTY(EditAnywhere)
@@ -80,9 +85,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float SizeMultiplier = 1.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bDestroyedByEnemy = false;
 
 	UPROPERTY(EditAnywhere)
 	float SpeedMultiplier = 90.f;
@@ -119,8 +121,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UAnimationAsset* KnockedOutAnimation;
-
-	FNavLocation Result;
 
 	bool bPlayerRage = false;
 

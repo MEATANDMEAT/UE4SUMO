@@ -30,7 +30,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	USceneComponent* FoodRoot;
+	USceneComponent* ScoreRoot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ATextRenderActor* Score;
