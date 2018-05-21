@@ -243,7 +243,7 @@ void APlayerCharacter::Caught()
 		Result.Location.Z = GetActorLocation().Z;
 		SetActorLocation(Result.Location);
 		CaughtCooldown = 5;
-		Lives--;
+		Destroy();
 		EnableInput(GetWorld()->GetFirstPlayerController());
 
 		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);

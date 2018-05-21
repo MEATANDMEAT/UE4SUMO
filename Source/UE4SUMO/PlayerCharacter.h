@@ -9,6 +9,7 @@
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 #include "GenericTeamAgentInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Engine/TextRenderActor.h"
 #include "AI/Navigation/NavigationSystem.h"
 #include "Components/BillboardComponent.h"
