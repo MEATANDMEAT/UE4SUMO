@@ -53,6 +53,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USoundBase* EatingSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = VisualEffects)
+	TSubclassOf<AScoreSplash> ScoreSplash;
+
 	UPROPERTY(EditAnywhere)
 	float SizeIncrease = 0.01f;
 

@@ -34,7 +34,7 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	GameInstance = Cast<USUMOGameInstance>(GetGameInstance());
-	Lives = GameInstance->PlayerLives;
+	PlayerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 
 	for (int i {}; i < 10; i++)
 	{
@@ -64,7 +64,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	GetMesh()->SetRelativeScale3D(FMath::Lerp(FVector(GetMesh()->GetComponentScale()), FVector(1.f, 1.f, 1.f+(Size-1.f)/4.f), 1.f * DeltaTime));
 
-	for (int i{0}; i<10; i++)
+	for (int i {0}; i < 10; i++)
 	{
 		DynMats[i]->SetScalarParameterValue(FName(TEXT("Value")), FMath::Lerp((DynMats[i]->K2_GetScalarParameterValue(FName(TEXT("Value")))), ((Size-1.f)/3.f), 1.f*DeltaTime));
 	}
@@ -82,7 +82,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 			bDashing = false;
 			Speed = PrevSpeed;
 			bEnableInput = true;
-			NewTEMP = GetActorLocation();
 			ChangeValues(-.04f);
 		}
 	}
@@ -102,7 +101,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	InputComponent->BindAxis("Run", this, &APlayerCharacter::Run);
 	InputComponent->BindAction("Dash", IE_Released, this, &APlayerCharacter::Dash);
-	InputComponent->BindAction("PauseMenu", IE_Released, this, &APlayerCharacter::PauseMenu);
+	FInputActionBinding& Toggle = InputComponent->BindAction("PauseMenu", IE_Released, this, &APlayerCharacter::PauseMenu); 
+	Toggle.bExecuteWhenPaused = true;
+	
 }
 
 void APlayerCharacter::MoveForward(float MoveAmount)
@@ -180,7 +181,6 @@ void APlayerCharacter::Dash()
 		DashCooldownAlpha = 0.f;
 		bCanDash = false;
 		bEnableInput = false;
-		TEMP = GetActorLocation();
 	}
 }
 
@@ -190,11 +190,13 @@ void APlayerCharacter::PauseMenu()
 	{
 		bShowPauseMenu = false;
 		UGameplayStatics::SetGamePaused(GetWorld(), false);
+		PlayerController->bShowMouseCursor = false;
 	}
 	else if (!bShowPauseMenu)
 	{
 		bShowPauseMenu = true;
 		UGameplayStatics::SetGamePaused(GetWorld(), true);
+		PlayerController->bShowMouseCursor = true;
 	}
 }
 
@@ -244,12 +246,12 @@ void APlayerCharacter::Caught()
 	{
 		CaughtCooldown--;
 	}
-	else if (CaughtCooldown <= 1)
+	else if (CaughtCooldown <= 1 && TimerSeconds > 1 && GameInstance->PlayerLives > 1)
 	{
 		GetWorldTimerManager().ClearTimer(CaughtTimer);
 		GameInstance->PlayerLives--;
-		FName CurrentLevel = *(UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
-		UGameplayStatics::OpenLevel(GetWorld(), CurrentLevel, true);
+		bShowCaughtScreen = true;
+		GetWorldTimerManager().PauseTimer(LevelTimerHandle);
 	}
 }
 
@@ -257,16 +259,26 @@ void APlayerCharacter::CountdownTimer()
 {
 	if (TimerSeconds > 0)
 	{
-		TimerSeconds--; TimerMinutes = TimerSeconds / 60;
+		TimerSeconds--; 
+		TimerMinutes = TimerSeconds / 60;
 	}
-	else if (TimerSeconds <= 0)
+	else if (TimerSeconds <= 0 && GameInstance->PlayerLives > 1)
 	{
 		DisableInput(GetWorld()->GetFirstPlayerController());
 		GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 		GetMesh()->PlayAnimation(KnockedOutAnimation, false);
-		Lives = 0;
-		bShowGameOver = true;
+		GameInstance->PlayerLives--;
+		bShowTimerRanOutScreen = true;
 		GetWorldTimerManager().ClearTimer(LevelTimerHandle);
+	}
+	else if (TimerSeconds <= 0 && GameInstance->PlayerLives <= 1)
+	{
+		DisableInput(PlayerController);
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+		GetMesh()->PlayAnimation(KnockedOutAnimation, false);
+		GameInstance->PlayerLives = 0;
+		bShowGameOver = true;
+		UGameplayStatics::PlaySound2D(GetWorld(), DefeatSound, 1.f, 1.f);
 	}
 }
 

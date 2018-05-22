@@ -4,6 +4,7 @@
 //Custom headers
 #include "PlayerCharacter.h"
 #include "Employees_AI_Controller.h"
+#include "SUMOGameInstance.h"
 
 //Engine specific headers
 #include "Components/CapsuleComponent.h"

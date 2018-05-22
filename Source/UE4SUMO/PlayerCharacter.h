@@ -13,6 +13,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/BillboardComponent.h"
+#include "TimerManager.h"
 
 //Required headers
 #include "GameFramework/Character.h"
@@ -62,8 +63,7 @@ public:
 
 	USUMOGameInstance* GameInstance;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	uint8 Lives;
+	APlayerController* PlayerController;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBillboardComponent* RageSprite;
@@ -72,7 +72,13 @@ public:
 	bool bShowGameOver = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bShowTimerRanOutScreen = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShowRoundEnd = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bShowCaughtScreen = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShowPauseMenu = false;
@@ -122,7 +128,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	UAnimationAsset* KnockedOutAnimation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USoundBase* DefeatSound;
+
 	bool bPlayerRage = false;
+
+	bool bKnockedOut = false;
 
 	float Size = 1.0f;
 
@@ -137,8 +148,6 @@ public:
 	float PrevSpeed = 0.f;
 
 	bool bDashing = false;
-
-	bool bKnockedOut = false;
 
 	FTimerHandle RespawnTimer;
 
@@ -179,9 +188,5 @@ private:
 	uint8 RespawnCooldown = 8;
 
 	bool bCanDash = true;
-
-	FVector TEMP;
-
-	FVector NewTEMP;
 
 };

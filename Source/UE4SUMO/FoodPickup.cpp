@@ -57,9 +57,10 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 		UGameplayStatics::PlaySound2D(GetWorld(), EatingSound, 1.f, 1.f);
 		PlayerCharacter->ChangeValues(SizeIncrease);
 		bEat = true;
-		//PlayerCharacter->SpawnText();
-	}
-	else {
-		//UE_LOG(LogTemp, Error, TEXT("A Non-Player stepped on this FoodPickup"));
+		GetWorld()->SpawnActor<AScoreSplash>(
+			ScoreSplash->GetAuthoritativeClass(), 
+			FVector((PlayerCharacter->GetActorLocation().X) + FMath::RandRange(50.f, 150.f), (PlayerCharacter->GetActorLocation().Y) + FMath::RandRange(50.f, 150.f), PlayerCharacter->GetActorLocation().Z * 2), 
+			FRotator(0.f, 0.f, 0.f), 
+			SpawnInfo);
 	}
 }

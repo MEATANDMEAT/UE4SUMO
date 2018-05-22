@@ -35,11 +35,17 @@ void ALevelExit::Tick(float DeltaTime)
 void ALevelExit::OnPlayerEnterPickupBox(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-
-	if (PlayerCharacter && !PlayerCharacter->bChiliPickup)
+	USUMOGameInstance* GameInstance = Cast<USUMOGameInstance>(GetGameInstance());
+	APlayerController* PlayerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+	if (PlayerCharacter)
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), OverlapSound, 0.2f, 1, 0, nullptr, PlayerCharacter);
-		if (PlayerCharacter->Score >= ScoreNeeded) PlayerCharacter->bShowRoundEnd = true;
+		if (PlayerCharacter->Score >= ScoreNeeded)
+		{
+			PlayerCharacter->bShowRoundEnd = true;
+			UGameplayStatics::SetGamePaused(GetWorld(), true);
+			PlayerController->bShowMouseCursor = true;
+			GameInstance->TotalPlayerScore += PlayerCharacter->Score;
+		}
 		else PlayerCharacter->bNotEnoughScoreText = true;
 	}
 }

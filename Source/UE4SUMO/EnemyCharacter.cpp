@@ -6,7 +6,7 @@
 AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -40,7 +40,8 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 {
 	APlayerCharacter *PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	if (PlayerCharacter && PlayerController && !PlayerCharacter->bPlayerRage && !bOnGround && PlayerCharacter->Lives > 1)
+	USUMOGameInstance* GameInstance = Cast<USUMOGameInstance>(GetGameInstance());
+	if (PlayerCharacter && PlayerController && !PlayerCharacter->bPlayerRage && !bOnGround && GameInstance->PlayerLives > 1 && PlayerCharacter->TimerSeconds > 1)
 	{
 		PlayerCharacter->DisableInput(PlayerController);
 		PlayerCharacter->GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
@@ -48,8 +49,9 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 		{
 			PlayerCharacter->GetMesh()->PlayAnimation(PlayerCharacter->KnockedOutAnimation, false);
 			PlayerCharacter->bKnockedOut = true;
-		}	
+		}
 		GetWorldTimerManager().SetTimer(PlayerCharacter->CaughtTimer, PlayerCharacter, &APlayerCharacter::Caught, 1.0, true, 0.f);
+		UGameplayStatics::PlaySound2D(GetWorld(), PlayerCharacter->DefeatSound, 1.f, 1.f);
 	}
 	else if (PlayerCharacter && PlayerController && PlayerCharacter->bPlayerRage)
 	{
@@ -62,13 +64,14 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.2f, true, 0.f);
 		bOnGround = true;
 	}
-	else if (PlayerCharacter && PlayerController && PlayerCharacter->Lives <= 1)
+	else if (PlayerCharacter && PlayerController && GameInstance->PlayerLives <= 1 && PlayerCharacter->TimerSeconds > 1)
 	{
 		PlayerCharacter->DisableInput(PlayerController);
 		PlayerCharacter->GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 		PlayerCharacter->GetMesh()->PlayAnimation(PlayerCharacter->KnockedOutAnimation, false);
-		PlayerCharacter->Lives = 0;
+		GameInstance->PlayerLives = 0;
 		PlayerCharacter->bShowGameOver = true;
+		GetWorldTimerManager().PauseTimer(PlayerCharacter->LevelTimerHandle);
 	}
 }
 

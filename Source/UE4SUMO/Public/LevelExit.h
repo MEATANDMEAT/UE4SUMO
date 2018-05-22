@@ -3,6 +3,7 @@
 #pragma once
 //Custom headers
 #include "PlayerCharacter.h"
+#include "SUMOGameInstance.h"
 
 //Engine specific headers
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
@@ -27,9 +28,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UShapeComponent* Box;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class USoundBase* OverlapSound;
 
 protected:
 	// Called when the game starts or when spawned

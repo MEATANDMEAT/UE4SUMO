@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Custom headers
 
-//Engine headers
-#include "Kismet/GameplayStatics.h"
-#include "Runtime/Engine/Classes/Engine/World.h"
 
 //Required headers
 #include "CoreMinimal.h"
@@ -23,8 +21,8 @@ private:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USoundBase* Music;
+
 
 };
