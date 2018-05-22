@@ -59,7 +59,7 @@ void AFoodPickup::OnPlayerEnterPickupBox(class UPrimitiveComponent* HitComp, cla
 		bEat = true;
 		GetWorld()->SpawnActor<AScoreSplash>(
 			ScoreSplash->GetAuthoritativeClass(), 
-			FVector((PlayerCharacter->GetActorLocation().X) + FMath::RandRange(50.f, 150.f), (PlayerCharacter->GetActorLocation().Y) + FMath::RandRange(50.f, 150.f), PlayerCharacter->GetActorLocation().Z * 2), 
+			FVector((PlayerCharacter->GetActorLocation().X) + FMath::RandRange(0.f, 200.f), (PlayerCharacter->GetActorLocation().Y) + FMath::RandRange(0.f, 200.f), PlayerCharacter->GetActorLocation().Z * 2), 
 			FRotator(0.f, 0.f, 0.f), 
 			SpawnInfo);
 	}
