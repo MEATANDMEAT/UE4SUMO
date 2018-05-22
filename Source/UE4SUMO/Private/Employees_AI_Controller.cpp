@@ -63,12 +63,29 @@ void AEmployees_AI_Controller::MoveToRandomPoint()
 	MoveToLocation(Result.Location, 5.f, false, true, true, true, 0, true);
 }
 
+void AEmployees_AI_Controller::Delay()
+{
+	if (DelayFunctionRepeats < DelaySeconds)
+	{
+		DelayFunctionRepeats++;
+	}
+	else if (DelayFunctionRepeats >= DelaySeconds)
+	{
+		bRandomPointGenerated = false;
+		bMoveToIsRunning = false;
+		DelayFunctionRepeats = 0;
+		GetWorldTimerManager().ClearTimer(DelayTimer);
+	}
+}
+
 void AEmployees_AI_Controller::BeginPlay()
 {
 	Super::BeginPlay();
+	FMath::SRand();
 	EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	PrimaryActorTick.TickInterval = 0.2f;
+	DelaySeconds = FMath::RandRange(1,5);
 }
 
 void AEmployees_AI_Controller::Tick(float DeltaTime)
@@ -138,8 +155,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 		//Repeat the whole process again.
 		if ((EnemyCharacter->GetActorLocation() - Result.Location).Size() < 10.f)
 		{
-			bRandomPointGenerated = false;
-			bMoveToIsRunning = false;
+			GetWorldTimerManager().SetTimer(DelayTimer, this, &AEmployees_AI_Controller::Delay, 1.0f, true, 0.f);
 		}
 	}
 }

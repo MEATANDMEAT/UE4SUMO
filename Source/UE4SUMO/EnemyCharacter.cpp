@@ -49,9 +49,9 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 		{
 			PlayerCharacter->GetMesh()->PlayAnimation(PlayerCharacter->KnockedOutAnimation, false);
 			PlayerCharacter->bKnockedOut = true;
+			GetWorldTimerManager().SetTimer(PlayerCharacter->CaughtTimer, PlayerCharacter, &APlayerCharacter::Caught, 1.0, true, 0.f);
+			UGameplayStatics::PlaySound2D(GetWorld(), PlayerCharacter->DefeatSound, 1.f, 1.f);
 		}
-		GetWorldTimerManager().SetTimer(PlayerCharacter->CaughtTimer, PlayerCharacter, &APlayerCharacter::Caught, 1.0, true, 0.f);
-		UGameplayStatics::PlaySound2D(GetWorld(), PlayerCharacter->DefeatSound, 1.f, 1.f);
 	}
 	else if (PlayerCharacter && PlayerController && PlayerCharacter->bPlayerRage)
 	{

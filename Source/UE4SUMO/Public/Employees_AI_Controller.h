@@ -64,11 +64,19 @@ public:
 
 	void MoveToRandomPoint();
 
+	void Delay();
+
 	bool bMoveToIsRunning = false;
 
 	AEnemyCharacter* EnemyCharacter;
 
 	APlayerCharacter* PlayerCharacter;
+
+	FTimerHandle DelayTimer;
+
+	int DelayFunctionRepeats = 0;
+
+	int DelaySeconds;
 
 protected:
 	// Called when the game starts or when the actor is spawned in the world
