@@ -105,6 +105,13 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 
 		EnemyCharacter->Exclaimation->SetHiddenInGame(false);
 		EnemyCharacter->Question->SetHiddenInGame(true);
+
+		//Make sure to play the alert sound once
+		if (!bAlertSoundPlaying)
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), AlertSound, 1.f, 1.f);
+			bAlertSoundPlaying = true;
+		}
 	}
 	//After the AI loses sight of the player, it moves to the LastSeenLocation vector.
 	//Which is the last position the AI recorded of Player's position.
@@ -121,6 +128,7 @@ void AEmployees_AI_Controller::Tick(float DeltaTime)
 			bRandomPointGenerated = true;
 			bMoveToIsRunning = false;
 			EnemyCharacter->GetCharacterMovement()->MaxWalkSpeed = 300;
+			bAlertSoundPlaying = false;
 		}
 		//If the AI isn't close the last seen position of the player, then move until it is.
 		else if ((EnemyCharacter->GetActorLocation() - LastSeenLocation).Size() > 5.f)

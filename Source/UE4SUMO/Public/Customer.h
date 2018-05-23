@@ -38,6 +38,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UAnimationAsset* DefaultAnimation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* PunchSound;
+
 private:
 	UFUNCTION()
 		void OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);

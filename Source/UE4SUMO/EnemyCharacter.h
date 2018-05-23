@@ -56,6 +56,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UAnimationAsset* DefaultAnimation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* PunchSound;
+
 	bool bOnGround = false;
 private:
 

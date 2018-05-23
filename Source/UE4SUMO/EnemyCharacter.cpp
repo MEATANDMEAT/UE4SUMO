@@ -60,8 +60,9 @@ void AEnemyCharacter::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent,
 			GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 			GetMesh()->PlayAnimation(FallAnimation, false);
 			bFallPlaying = true;
+			UGameplayStatics::PlaySound2D(GetWorld(), PunchSound, 1.f, FMath::RandRange(0.8f,1.2f));
 		}
-		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.2f, true, 0.f);
+		GetWorldTimerManager().SetTimer(RageTimer, this, &AEnemyCharacter::OnPlayerRage, 0.2f, true, 0.f);	
 		bOnGround = true;
 	}
 	else if (PlayerCharacter && PlayerController && GameInstance->PlayerLives <= 1 && PlayerCharacter->TimerSeconds > 1)

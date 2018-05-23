@@ -61,6 +61,7 @@ void ACustomer::OnPlayerOverlap(UPrimitiveComponent * OverlappedComponent, AActo
 				GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 				GetMesh()->PlayAnimation(FallAnimation, false);
 				bFallPlaying = true;
+				UGameplayStatics::PlaySound2D(GetWorld(), PunchSound, 1.f, FMath::RandRange(0.8f, 1.2f));
 			}
 			Controller->StopMovement();
 			Controller->PrimaryActorTick.bCanEverTick = false;

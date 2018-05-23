@@ -68,6 +68,11 @@ public:
 
 	bool bMoveToIsRunning = false;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* AlertSound;
+
+	bool bAlertSoundPlaying = false;
+
 	AEnemyCharacter* EnemyCharacter;
 
 	APlayerCharacter* PlayerCharacter;
